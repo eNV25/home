@@ -1,0 +1,2 @@
+#!/bin/sh
+exec /usr/bin/luaformatterfiveone --tabs 1 "$@"

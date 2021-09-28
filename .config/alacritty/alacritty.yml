@@ -1,0 +1,15 @@
+#!/usr/bin/alacritty --config-file
+
+import:
+  - ~/.config/alacritty/colors/github-vscode-dark.yml
+
+env:
+  COLORTERM: truecolor
+  TERM: alacritty
+
+font:
+  normal:
+    family: JetBrains Mono
+
+window:
+  dynamic_padding: true

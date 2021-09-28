@@ -1,0 +1,5 @@
+#!/bin/sh
+case "$TERM" in
+alacritty*) export TERM=color ;;
+esac
+exec /usr/bin/dircolors "$@"

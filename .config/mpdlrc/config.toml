@@ -1,0 +1,7 @@
+MusicDir = "$HOME/Music"
+LyricsDir = "$HOME/Music"
+Debug = true
+
+[MPD]
+Connection = "unix"
+Address = "${XDG_RUNTIME_DIR}/mpd/socket"

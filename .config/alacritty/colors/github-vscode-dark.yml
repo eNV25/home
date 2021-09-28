@@ -1,0 +1,29 @@
+# Colors (github-vscode-dark)
+colors:
+  bright:
+    black: '#666666'
+    blue: '#2e8df1'
+    cyan: '#00badf'
+    green: '#00d684'
+    magenta: '#e163dc'
+    red: '#fe3646'
+    white: '#e5e5e5'
+    yellow: '#f2f800'
+  cursor:
+    cursor: '#e5e5e5'
+    text: '#1e2429'
+  normal:
+    black: '#000000'
+    blue: '#1571ce'
+    cyan: '#00aad1'
+    green: '#00c172'
+    magenta: '#c824c2'
+    red: '#d81029'
+    white: '#e5e5e5'
+    yellow: '#e2e800'
+  primary:
+    background: '#1e2429'
+    foreground: '#d1d5da'
+  selection:
+    background: '#5b5f62'
+    text: '#dde0e3'

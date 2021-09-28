@@ -1,0 +1,27 @@
+#!/usr/bin/python3
+import argparse
+import urllib.parse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("string")
+parser.add_argument(
+    "--plus",
+    action=argparse.BooleanOptionalAction,
+    default=True,
+    help="convert  +  to space",
+)
+
+protocols = {"http://": "", "https://": ""}
+
+if __name__ == "__main__":
+    args = parser.parse_args()
+    string = args.string
+    urldecode = urllib.parse.unquote_plus if args.plus else urllib.parse.unquote
+    for proto, new in protocols.items():
+        if str.startswith(string, proto):
+            proto = proto
+            string = str.replace(string, proto, new)
+            break
+        proto = ""
+    encoded = urldecode(string)
+    print(proto + encoded)

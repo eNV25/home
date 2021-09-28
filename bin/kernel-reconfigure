@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [ "$EUID" != 0 ]; then
+	exec sudo "$0" "$@"
+	exit $?
+fi
+
+for path in /usr/lib/modules/*; do
+	version=$(basename "${path}")
+	read -r kernel < "${path}/pkgbase"
+	vmlinuz="${path}/vmlinuz"
+
+	echo ":: Reconfiguring $kernel-$version"
+
+	kernel-install add "${version}" "${vmlinuz}"
+done

@@ -1,0 +1,26 @@
+#!/usr/bin/python3
+import argparse
+from signal import signal, SIGINT
+
+
+def die(*_, **__):
+    exit()
+
+
+signal(SIGINT, die)
+
+parser = argparse.ArgumentParser()
+parser.add_argument("sep", nargs="?", default=None, help="argument for split")
+excl = parser.add_mutually_exclusive_group()
+excl.add_argument(
+    "-", "-i", "--stdin", action="store_true", help="take input from stdin"
+)
+excl.add_argument("file", nargs="?", default="/dev/stdin", help="input file")
+
+if __name__ == "__main__":
+    args = parser.parse_args()
+    file = args.file
+    sep = args.sep if args.sep else None
+    with open(file) as f:
+        for item in f.read().split(sep):
+            print(item)

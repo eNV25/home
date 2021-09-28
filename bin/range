@@ -1,0 +1,21 @@
+#!/usr/bin/python3
+import sys
+import argparse
+
+
+def integer(val):
+    return int(val)
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument("start", type=integer, nargs="?", default=0)
+parser.add_argument("stop", type=integer, default=0)
+parser.add_argument("step", type=integer, nargs="?", default=1)
+parser.add_argument("-e", "--end", nargs="?", default=" ")
+
+if __name__ == "__main__":
+    args = parser.parse_args()
+    for i in range(args.start, args.stop, args.step):
+        print(i, end=args.end)
+    if sys.stdout.isatty() and args.end is not None and args.end != "\n":
+        print("\n", end="")

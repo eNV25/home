@@ -1,0 +1,27 @@
+#!/usr/bin/python3
+import argparse
+import urllib.parse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("string")
+parser.add_argument(
+    "--plus",
+    action=argparse.BooleanOptionalAction,
+    default=True,
+    help="convert space to  +",
+)
+
+replace = {"http://": "", "https://": ""}
+
+if __name__ == "__main__":
+    args = parser.parse_args()
+    string = args.string
+    urlencode = urllib.parse.quote_plus if args.plus else urllib.parse.quote
+    for proto, new in replace.items():
+        if str.startswith(string, proto):
+            proto = proto
+            string = str.replace(string, proto, new)
+            break
+        proto = ""
+    encoded = urlencode(string)
+    print(proto + encoded)

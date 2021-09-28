@@ -1,0 +1,143 @@
+#!/bin/bash
+
+# This file was copied and edited from the vis text editor:
+# https://github.com/martanne/vis/blob/cbd23b9cad7729cc05fa759faa54dd76a48c06ab/vis-clipboard
+
+# Copyright (C) 2016 Richard Burke, ISC licensed
+
+function clip_fatal {
+	echo "$@" >&2
+	exit 1
+}
+
+function clip_usage {
+	clip_fatal "$(basename "$0") copy|paste [--selection <sel>]"
+}
+
+function clip_determine_command {
+	if [[ -n "$WAYLAND_DISPLAY" ]]; then
+		for c in wl-copy wl-paste; do
+			if type "$c" >/dev/null 2>&1; then
+				echo "wlclipboard"
+				return 0
+			fi
+		done
+	fi
+	
+	if [[ -n "$DISPLAY" ]]; then
+		for c in xclip xsel; do
+			if type "$c" >/dev/null 2>&1; then
+				echo "$c"
+				return 0
+			fi
+		done
+	fi
+
+	if [[ "$sel" = "primary" ]]; then
+		clip_fatal "clipboard primary selection is not supported on your platform"
+	fi
+
+	if type pbcopy >/dev/null 2>&1; then
+		echo 'mac'
+		return 0
+	fi
+
+	if [[ -c /dev/clipboard ]]; then
+		echo 'cygwin'
+		return 0
+	fi
+
+	return 1
+}
+
+function clip_copy {
+	COPY_CMD="$(clip_determine_command 2>/dev/null)"
+
+	if [[ $? -ne 0 ]] || [[ -z "$COPY_CMD" ]]; then
+		clip_fatal 'System clipboard not supported'
+	fi
+
+	"clip_${COPY_CMD}_copy"
+
+	exit $?
+}
+
+function clip_paste {
+	PASTE_CMD="$(clip_determine_command 2>/dev/null)"
+
+	if [[ $? -ne 0 ]] || [[ -z "$PASTE_CMD" ]]; then
+		clip_fatal 'System clipboard not supported'
+	fi
+
+	"clip_${PASTE_CMD}_paste"
+
+	exit $?
+}
+
+function clip_wlclipboard_copy {
+	if [[ "$sel" = "primary" ]]; then
+		wl-copy --primary -t TEXT
+	else
+		wl-copy -t TEXT
+	fi
+}
+
+function clip_wlclipboard_paste {
+	if [[ "$sel" = "primary" ]]; then
+		wl-paste --primary -t text
+	else
+		wl-paste -t text
+	fi
+}
+
+function clip_xsel_copy {
+	xsel --"$sel" -bi
+}
+
+function clip_xsel_paste {
+	xsel --"$sel" -bo
+}
+
+function clip_xclip_copy {
+	xclip -selection "$sel" -i >/dev/null 2>&1
+}
+
+function clip_xclip_paste {
+	xclip -selection "$sel" -o
+}
+
+function clip_mac_copy {
+	pbcopy
+}
+
+function clip_mac_paste {
+	pbpaste
+}
+
+function clip_cygwin_copy {
+	cat >/dev/clipboard
+}
+
+function clip_cygwin_paste {
+	cat /dev/clipboard
+}
+
+case "$1" in
+	paste) fn=clip_paste ;;
+	copy) fn=clip_copy ;;
+	*) clip_usage ;;
+esac
+shift
+
+while [[ $# -gt 0 ]]; do
+	case "$1" in
+	--selection=*) sel="${1##--selection=}" ;;
+	--selection) shift && sel="$1" ;;
+	*) clip_usage ;;
+	esac
+	shift
+done
+
+sel=${sel:-"clipboard"} $fn
+
+clip_usage

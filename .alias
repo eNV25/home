@@ -15,13 +15,14 @@ alias usv='SVDIR=~/service sv'
 alias sudo='sudo '
 alias doas='doas '
 alias echo='echo '
-alias open=xdg-open
 alias pager='$PAGER'
+alias pac=paru
+alias open=xdg-open
 alias o='$PAGER'
 alias h=head
 alias t=tail
 
-alias config='git --git-dir=$HOME/.dotgit/ --work-tree=$HOME'
+alias conf='git --git-dir=$HOME/.dotgit/ --work-tree=$HOME'
 
 case "$TERM" in
 alacritty*)

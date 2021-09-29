@@ -91,6 +91,7 @@ autocmd BufEnter go.mod set ft=gomod
 
 nnoremap <silent> q :quit<Return>
 nnoremap <C-G> 11<C-G>
+nnoremap <Return> :nohlsearch<Return><Return>
 
 cabbrev make :!make
 nmap <Leader>m :make<Return>
@@ -106,4 +107,3 @@ nmap <Leader>sd <Plug>(ale_go_to_definition_in_split)
 nmap <Leader>vd <Plug>(ale_go_to_definition_in_vsplit)
 nmap <Leader>st <Plug>(ale_go_to_type_definition_in_split)
 nmap <Leader>vt <Plug>(ale_go_to_type_definition_in_vsplit)
-nmap <Return> :nohlsearch<Return><Return>

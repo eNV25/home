@@ -91,7 +91,7 @@ autocmd BufEnter go.mod set ft=gomod
 
 nnoremap <silent> q :quit<Return>
 nnoremap <C-G> 11<C-G>
-nnoremap <Return> :nohlsearch<Return><Return>
+nnoremap <silent> <Return> :nohlsearch<Return><Return>
 
 cabbrev make :!make
 nmap <Leader>m :make<Return>

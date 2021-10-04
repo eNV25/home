@@ -32,11 +32,13 @@ let g:ale_java_eclipselsp_path = '$HOME/.local/eclipse.jdt.ls'
 let g:ale_sh_shfmt_options = ''
 let g:ale_linters = {
 	\   'go': ['gopls', 'golangci-lint'],
+	\   'rust': ['analyzer'],
 	\   'c': ['clangd'],
 	\   'python': ['pylsp', 'mypy', 'black'],
 	\ }
 let g:ale_fixers = {
 	\   'go': ['goimports'],
+	\   'rust': ['rustfmt'],
 	\   'markdown': ['prettier'],
 	\   'sh': ['shfmt'],
 	\ }
@@ -86,18 +88,27 @@ command! Update source $MYVIMRC | call minpac#update()
 command! Clean  source $MYVIMRC | call minpac#clean()
 command! Status call minpac#status()
 
+command! TreeHide if exists(':GuiTreeviewHide') | exe 'GuiTreeviewHide' | else | NERDTreeClose | endif
+command! TreeShow if exists(':GuiTreeviewShow') | exe 'GuiTreeviewShow' | else | NERDTreeFocus | endif
+command! TreeToggle if exists(':GuiTreeviewToggle') | exe 'GuiTreeviewToggle' | else | NERDTreeToggle | endif
+
 autocmd BufWritePre *.go :ALEFix
 autocmd BufEnter go.mod set ft=gomod
 
-nnoremap <silent> q :quit<Return>
 nnoremap <C-G> 11<C-G>
 nnoremap <silent> <Return> :nohlsearch<Return><Return>
 
-cabbrev make :!make
+nmap <silent> q :quit<Return>
+nmap <silent> ts :TreeShow<Return>
+nmap <silent> th :TreeHide<Return>
+nmap <silent> tt :TreeToggle<Return>
+
+cabbrev make !make
 nmap <Leader>m :make<Return>
 nmap <Leader>f <Plug>(ale_fix)
 nmap <Leader>l <Plug>(ale_lint)
 nmap <Leader>h <Plug>(ale_hover)
+nmap <Leader>r <Plug>(ale_rename)
 nmap <Leader>n <Plug>(ale_next_wrap)
 nmap <Leader>p <Plug>(ale_prev_wrap)
 nmap <Leader>a <Plug>(ale_code_action)

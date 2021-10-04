@@ -35,19 +35,9 @@ if [[ -s /usr/share/zsh/share/antigen.zsh ]] {
 if [[ -s /usr/share/git/completion/git-prompt.sh ]] \
 	source /usr/share/git/completion/git-prompt.sh
 
-function prompt {
-	if [[ "$PWD" == "/" || "$PWD" == "$HOME" ]]
-	then PROMPT=" %~ %# "
-	else PROMPT=" %~/ %# "
-	fi
-	if [[ $NNNLVL -gt 0 ]]; then
-		PROMPT="NNNLVL=$NNNLVL$PROMPT"
-	elif [[ $SHLVL -gt 1 ]]; then
-		PROMPT="SHLVL=$SHLVL$PROMPT"
-	fi
-}; chpwd_functions+=(prompt); prompt
+PROMPT="%m:%~/%# "
 
 function rprompt {
-	local gitps1="$(__git_ps1 '[%s]')"
-	RPROMPT="${gitps1/ /}"
+	RPROMPT="${"$(__git_ps1 '[%s]')"/ /} SHLVL=$SHLVL${NNNLVL:+" NNNLVL=$NNNLVL"}"
 }; precmd_functions+=(rprompt)
+

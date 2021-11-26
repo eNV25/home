@@ -1,5 +1,5 @@
-MusicDir = "$HOME/Music"
-LyricsDir = "$HOME/Music"
+MusicDir = "/home/media/Music"
+LyricsDir = "/home/media/Music"
 Debug = true
 
 [MPD]

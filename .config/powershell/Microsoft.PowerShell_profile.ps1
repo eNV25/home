@@ -1,6 +1,6 @@
 
 # change annoyting colors
-Set-PSReadLineOption -Colors @{
+Set-PSReadLineOption -colors @{
     # None      = 'white';
     # Comment   = 'white';
     Keyword   = 'white';
@@ -14,16 +14,15 @@ Set-PSReadLineOption -Colors @{
     # Member    = 'white';
 }
 
-
+# »
 function Global:Prompt {
     $regex = [regex]::Escape($home) + "(/.*)*$"
-    $dir = "$($pwd.Path -Replace $regex, '~$1')"
-    Write-Host "PowerShell" -ForegroundColor green -NoNewLine
-    Write-Host " " -NoNewLine
-    Write-Host "$dir" -ForegroundColor blue -NoNewLine
-    if (Get-Command Write-VcsStatus -errorAction SilentlyContinue) { Write-VcsStatus }
-    Write-Host " " -NoNewLine
-    return "» "
+    $pwd = "$($pwd.Path -replace $regex, '~$1')"
+    Write-Host "PowerShell" -foregroundColor green -noNewLine
+    Write-Host " " -noNewLine
+    Write-Host "$pwd" -foregroundColor blue -noNewLine
+    try { Write-VcsStatus } catch { }
+    return " » "
 }
 
 # vim: ft=powershell

@@ -45,12 +45,17 @@ let g:ale_fixers = {
 
 packadd minpac
 
+function! Install()
+	call minpac#add('mattn/vim-gomod')
+	call minpac#add('spolu/dwm.vim')
+	call minpac#add('k-takata/minpac', {'type': 'opt'})
+endfunction
+
 if exists('g:loaded_minpac')
 	call minpac#init({
 		\   'package_name': 'plugins',
 		\ })
-	call minpac#add('mattn/vim-gomod')
-	call minpac#add('spolu/dwm.vim')
+	call Install()
 endif
 
 " asyncomplete.vim setup ale autocmd {{{
@@ -84,8 +89,8 @@ noremap <3-LeftMouse> <NOP>
 noremap <4-LeftMouse> <NOP>
 " }}}
 
-command! Update source $MYVIMRC | call minpac#update()
-command! Clean  source $MYVIMRC | call minpac#clean()
+command! Update call minpac#update()
+command! Clean  call minpac#clean()
 command! Status call minpac#status()
 
 command! TreeHide if exists(':GuiTreeviewHide') | exe 'GuiTreeviewHide' | else | NERDTreeClose | endif

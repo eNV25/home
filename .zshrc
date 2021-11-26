@@ -28,16 +28,18 @@ if [[ -s /usr/share/zsh/share/antigen.zsh ]] {
 	source /usr/share/zsh/share/antigen.zsh
 	antigen use oh-my-zsh
 	antigen bundle direnv
-	antigen bundle micha/resty
 	antigen apply
 }
 
 if [[ -s /usr/share/git/completion/git-prompt.sh ]] \
 	source /usr/share/git/completion/git-prompt.sh
 
-PROMPT="%m:%~/%# "
+PROMPT="%n@%m:%~/%# "
 
 function rprompt {
 	RPROMPT="${"$(__git_ps1 '[%s]')"/ /} SHLVL=$SHLVL${NNNLVL:+" NNNLVL=$NNNLVL"}"
 }; precmd_functions+=(rprompt)
 
+function _clear() { clear; zle clear-screen }
+zle -N _clear
+bindkey '^l' _clear

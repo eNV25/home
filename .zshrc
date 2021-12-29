@@ -9,9 +9,6 @@ autoload -Uz bashcompinit && bashcompinit
 
 fpath=(~/.zsh/functions/ "${fpath[@]}")
 
-if [[ -s ~/.env ]] source ~/.env
-if [[ -s ~/.alias ]] source ~/.alias
-
 autoload -Uz command_not_found_handler
 autoload -Uz zmv pick-web-browser run-help
 unalias run-help 2>/dev/null 1>/dev/null
@@ -43,3 +40,6 @@ function rprompt {
 function _clear() { clear; zle clear-screen }
 zle -N _clear
 bindkey '^l' _clear
+
+if [[ -s ~/.environment ]] source ~/.environment
+if [[ -s ~/.alias ]] source ~/.alias

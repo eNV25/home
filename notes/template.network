@@ -1,0 +1,6 @@
+[Match]
+Name=interface
+[Network]
+DHCP=ipv4
+IPv6PrivacyExtensions=yes
+MulticastDNS=yes

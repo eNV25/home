@@ -2,11 +2,11 @@
 local purple="\e[1;35m" bright="\e[0;1m" green="\e[1;32m" reset="$(tput sgr0)"
 printf 'zsh: command not found: %s\n' "$1"
 local entries=(
-	${(f)"$(/usr/bin/pacman -F --machinereadable -- "/usr/bin/$1")"}
+	${(f)"$(/usr/bin/pacman -Fx --machinereadable -- "bin/$1$")"}
 )
 if ((${#entries[@]}))
 then
-	printf "${bright}$1${reset} may be found in the following packages:\n"
+	printf "${bright}bin/$1${reset} may be found in the following packages:\n"
 	local pkg
 	for entry in "${entries[@]}"
 	do

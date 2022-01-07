@@ -24,36 +24,39 @@ syntax on
 color jellybeans
 
 let g:airline#extensions#tabline#enabled = 1
-let g:jellybeans_use_term_italics = 1
 let g:asyncomplete_auto_popup = 0
 let g:ale_go_golangci_lint_package = 1
 let g:ale_go_golangci_lint_options = ''
 let g:ale_java_eclipselsp_path = '$HOME/.local/eclipse.jdt.ls'
 let g:ale_sh_shfmt_options = ''
 let g:ale_linters = {
-	\   'go': ['gopls', 'golangci-lint'],
-	\   'rust': ['analyzer'],
-	\   'c': ['clangd'],
-	\   'python': ['pylsp', 'mypy', 'black'],
+	\     'go': ['gopls', 'golangci-lint'],
+	\     'rust': ['analyzer'],
+	\     'c': ['clangd'],
+	\     'python': ['pylsp', 'mypy', 'black'],
 	\ }
 let g:ale_fixers = {
-	\   'go': ['goimports'],
-	\   'rust': ['rustfmt'],
-	\   'markdown': ['prettier'],
-	\   'sh': ['shfmt'],
+	\     'go': ['goimports'],
+	\     'rust': ['rustfmt'],
+	\     'markdown': ['prettier'],
+	\     'sh': ['shfmt'],
 	\ }
+let g:jellybeans_use_term_italics = 1
+let g:nnn#set_default_mappings = 0
+let g:loaded_netrwPlugin = 1
 
 packadd minpac
 
 function! Install()
 	call minpac#add('mattn/vim-gomod')
 	call minpac#add('spolu/dwm.vim')
+	call minpac#add('mcchrish/nnn.vim')
 	call minpac#add('k-takata/minpac', {'type': 'opt'})
 endfunction
 
 if exists('g:loaded_minpac')
 	call minpac#init({
-		\   'package_name': 'plugins',
+		\     'package_name': 'plugins',
 		\ })
 	call Install()
 endif
@@ -93,33 +96,35 @@ command! Update call minpac#update()
 command! Clean  call minpac#clean()
 command! Status call minpac#status()
 
-command! TreeHide if exists(':GuiTreeviewHide') | exe 'GuiTreeviewHide' | else | NERDTreeClose | endif
-command! TreeShow if exists(':GuiTreeviewShow') | exe 'GuiTreeviewShow' | else | NERDTreeFocus | endif
-command! TreeToggle if exists(':GuiTreeviewToggle') | exe 'GuiTreeviewToggle' | else | NERDTreeToggle | endif
-
-autocmd BufWritePre *.go :ALEFix
 autocmd BufEnter go.mod set ft=gomod
+autocmd StdinReadPre * let s:std_in=1
+autocmd BufWritePre *.go,*.rs if exists(':ALEFix') | ALEFix | endif
+autocmd VimEnter *
+	\ if (@% == "" || !filereadable(@%) || (line('$') == 1 && col('$') == 1)) && !exists("s:std_in") && exists(':NnnPicker') |
+	\     call nnn#explorer('.', { 'layout': 'silent' }) | only |
+	\ endif
 
 nnoremap <C-G> 11<C-G>
 nnoremap <silent> <Return> :nohlsearch<Return><Return>
 
-nmap <silent> q :quit<Return>
-nmap <silent> ts :TreeShow<Return>
-nmap <silent> th :TreeHide<Return>
-nmap <silent> tt :TreeToggle<Return>
-
 cabbrev make !make
+nmap <silent> q :quit<Return>
 nmap <Leader>m :make<Return>
-nmap <Leader>f <Plug>(ale_fix)
-nmap <Leader>l <Plug>(ale_lint)
-nmap <Leader>h <Plug>(ale_hover)
-nmap <Leader>r <Plug>(ale_rename)
-nmap <Leader>n <Plug>(ale_next_wrap)
-nmap <Leader>p <Plug>(ale_prev_wrap)
-nmap <Leader>a <Plug>(ale_code_action)
-nmap <Leader>d <Plug>(ale_go_to_definition)
-nmap <Leader>t <Plug>(ale_go_to_type_definition)
-nmap <Leader>sd <Plug>(ale_go_to_definition_in_split)
-nmap <Leader>vd <Plug>(ale_go_to_definition_in_vsplit)
-nmap <Leader>st <Plug>(ale_go_to_type_definition_in_split)
-nmap <Leader>vt <Plug>(ale_go_to_type_definition_in_vsplit)
+
+nmap <Leader>af <Plug>(ale_fix)
+nmap <Leader>al <Plug>(ale_lint)
+nmap <Leader>ah <Plug>(ale_hover)
+nmap <Leader>ar <Plug>(ale_rename)
+nmap <Leader>an <Plug>(ale_next_wrap)
+nmap <Leader>ap <Plug>(ale_prev_wrap)
+nmap <Leader>aa <Plug>(ale_code_action)
+nmap <Leader>ad <Plug>(ale_go_to_definition)
+nmap <Leader>at <Plug>(ale_go_to_type_definition)
+nmap <Leader>asd <Plug>(ale_go_to_definition_in_split)
+nmap <Leader>avd <Plug>(ale_go_to_definition_in_vsplit)
+nmap <Leader>ast <Plug>(ale_go_to_type_definition_in_split)
+nmap <Leader>avt <Plug>(ale_go_to_type_definition_in_vsplit)
+
+nmap <silent> <Leader>nnn :NnnPicker<CR>
+nmap <silent> <Leader>nnd :NnnPicker %:p:h<CR>
+

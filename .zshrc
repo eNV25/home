@@ -31,10 +31,10 @@ if [[ -s /usr/share/zsh/share/antigen.zsh ]] {
 if [[ -s /usr/share/git/completion/git-prompt.sh ]] \
 	source /usr/share/git/completion/git-prompt.sh
 
-PROMPT="%n@%m:%~/%# "
+PROMPT="%B%F{green}%n@%m%f:%F{blue}%~/%f%#%b "
 
 function rprompt {
-	RPROMPT="${"$(__git_ps1 '[%s]')"/ /} SHLVL=$SHLVL${NNNLVL:+" NNNLVL=$NNNLVL"}"
+	RPROMPT="${"$(__git_ps1 '[%s]')"/ /} SH${SHLVL}${NNNLVL:+N${NNNLVL}}"
 }; precmd_functions+=(rprompt)
 
 function _clear() { clear; zle clear-screen }

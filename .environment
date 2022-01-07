@@ -13,9 +13,9 @@ export GIT_PS1_SHOWUPSTREAM=auto
 export GOFLAGS="-ldflags=-w -buildmode=pie -trimpath -mod=readonly -modcacherw"
 export GPG_TTY="$(tty)"
 export LESSOPEN="|lesspipe.sh %s"
-export MANPAGER=less
-export MPD_HOST="${XDG_RUNTIME_DIR:-/usr/user/$UID}/mpd/socket"
-export PAGER=nvimpager
+export MPD_HOST="${XDG_RUNTIME_DIR}/mpd/socket"
+export NNN_FIFO="/tmp/$UID.nnn.fifo"
+export PAGER='nvimpager -p'
 export PYTHONSTARTUP="$(python3 -m jedi repl)"
 export SHELL=zsh
 export SSH_ASKPASS=/usr/bin/ksshaskpass

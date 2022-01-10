@@ -113,7 +113,6 @@ nmap <silent> <Leader>m :make<Return>
 nmap <silent> <Leader>nnn :NnnPicker<CR>
 nmap <silent> <Leader>nnd :NnnPicker %:p:h<CR>
 
-
 nmap <Leader>af <Plug>(ale_fix)
 nmap <Leader>al <Plug>(ale_lint)
 nmap <Leader>ah <Plug>(ale_hover)

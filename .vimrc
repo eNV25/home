@@ -109,7 +109,10 @@ nnoremap <silent> <Return> :nohlsearch<Return><Return>
 
 cabbrev make !make
 nmap <silent> q :quit<Return>
-nmap <Leader>m :make<Return>
+nmap <silent> <Leader>m :make<Return>
+nmap <silent> <Leader>nnn :NnnPicker<CR>
+nmap <silent> <Leader>nnd :NnnPicker %:p:h<CR>
+
 
 nmap <Leader>af <Plug>(ale_fix)
 nmap <Leader>al <Plug>(ale_lint)
@@ -124,7 +127,4 @@ nmap <Leader>sd <Plug>(ale_go_to_definition_in_split)
 nmap <Leader>vd <Plug>(ale_go_to_definition_in_vsplit)
 nmap <Leader>st <Plug>(ale_go_to_type_definition_in_split)
 nmap <Leader>vt <Plug>(ale_go_to_type_definition_in_vsplit)
-
-nmap <silent> <Leader>nnn :NnnPicker<CR>
-nmap <silent> <Leader>nnd :NnnPicker %:p:h<CR>
 

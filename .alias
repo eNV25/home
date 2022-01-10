@@ -15,8 +15,9 @@ alias usv='SVDIR=~/service sv'
 alias sudo='sudo '
 alias doas='doas '
 alias echo='echo '
-alias pager='$PAGER'
+alias nvimpager='nvimpager -p'
 alias pac=paru
+alias pager='$PAGER'
 alias open=xdg-open
 alias o='$PAGER'
 alias h=head

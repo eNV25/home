@@ -100,7 +100,7 @@ autocmd BufEnter go.mod set ft=gomod
 autocmd StdinReadPre * let s:std_in=1
 autocmd BufWritePre *.go,*.rs if exists(':ALEFix') | ALEFix | endif
 autocmd VimEnter *
-	\ if (@% == "" || !filereadable(@%) || (line('$') == 1 && col('$') == 1)) && !exists("s:std_in") && exists(':NnnPicker') |
+	\ if @% == '' && !exists('s:std_in') && exists(':NnnExplorer') |
 	\     call nnn#explorer('.', { 'layout': 'silent' }) | only |
 	\ endif
 
@@ -120,10 +120,10 @@ nmap <Leader>ap <Plug>(ale_prev_wrap)
 nmap <Leader>aa <Plug>(ale_code_action)
 nmap <Leader>ad <Plug>(ale_go_to_definition)
 nmap <Leader>at <Plug>(ale_go_to_type_definition)
-nmap <Leader>asd <Plug>(ale_go_to_definition_in_split)
-nmap <Leader>avd <Plug>(ale_go_to_definition_in_vsplit)
-nmap <Leader>ast <Plug>(ale_go_to_type_definition_in_split)
-nmap <Leader>avt <Plug>(ale_go_to_type_definition_in_vsplit)
+nmap <Leader>sd <Plug>(ale_go_to_definition_in_split)
+nmap <Leader>vd <Plug>(ale_go_to_definition_in_vsplit)
+nmap <Leader>st <Plug>(ale_go_to_type_definition_in_split)
+nmap <Leader>vt <Plug>(ale_go_to_type_definition_in_vsplit)
 
 nmap <silent> <Leader>nnn :NnnPicker<CR>
 nmap <silent> <Leader>nnd :NnnPicker %:p:h<CR>

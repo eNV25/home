@@ -10,12 +10,12 @@ export GIT_PS1_SHOWDIRTYSTATE=auto
 export GIT_PS1_SHOWSTASHSTATE=auto
 export GIT_PS1_SHOWUNTRACKEDFILES=auto
 export GIT_PS1_SHOWUPSTREAM=auto
-export GOFLAGS="-ldflags=-w -buildmode=pie -trimpath -mod=readonly -modcacherw"
+export GOFLAGS="-buildmode=pie -trimpath"
 export GPG_TTY="$(tty)"
 export LESSOPEN="|lesspipe.sh %s"
 export MPD_HOST="${XDG_RUNTIME_DIR}/mpd/socket"
 export NNN_FIFO="/tmp/$UID.nnn.fifo"
-export PAGER='nvimpager'
+export PAGER='less'
 export PYTHONSTARTUP="$(python3 -m jedi repl)"
 export SHELL=zsh
 export SSH_ASKPASS=/usr/bin/ksshaskpass

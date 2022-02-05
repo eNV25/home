@@ -1,0 +1,11 @@
+[Unit]
+Description=Service for rclone mount %I
+
+[Service]
+Environment="ARGS=%I"
+ExecStartPre=sh -c 'exec mkdir -p $$1' $ARGS
+ExecStart=rclone mount $ARGS
+SuccessExitStatus=130 143
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,15 @@
+[Unit]
+Description=Runit service supervision - BusyBox implementation
+Documentation=man:busybox(1) http://smarden.org/runit/
+
+[Service]
+Environment=HOME=%h
+Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/bin
+ExecStart=/usr/local/bin/runsvdir -P %h/service
+KillSignal=SIGHUP
+KillMode=process
+Restart=always
+SuccessExitStatus=111
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,9 @@
+[Unit]
+Description=Spotlight
+Wants=graphical-session.target
+After=graphical-session.target
+
+[Service]
+Type=simple
+SyslogIdentifier=spotlight
+ExecStart=/bin/bash %E/systemd/user/spotlight.sh

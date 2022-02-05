@@ -3,6 +3,25 @@ if &compatible
 	set nocompatible
 endif
 
+packadd minpac
+
+function! Install()
+	call minpac#add('mattn/vim-gomod')
+	call minpac#add('spolu/dwm.vim')
+	call minpac#add('mcchrish/nnn.vim')
+	call minpac#add('fladson/vim-kitty')
+	call minpac#add('sbdchd/neoformat')
+	call minpac#add('direnv/direnv.vim')
+	call minpac#add('k-takata/minpac', {'type': 'opt'})
+endfunction
+
+if exists('g:loaded_minpac')
+	call minpac#init({
+		\     'package_name': 'plugins',
+		\ })
+	call Install()
+endif
+
 set hidden
 set autowrite
 set nobackup nowritebackup
@@ -29,37 +48,21 @@ let g:ale_go_golangci_lint_package = 1
 let g:ale_go_golangci_lint_options = ''
 let g:ale_java_eclipselsp_path = '$HOME/.local/eclipse.jdt.ls'
 let g:ale_sh_shfmt_options = ''
+let g:shfmt_opts = ''
 let g:ale_linters = {
+	\     'c': ['clangd'],
 	\     'go': ['gopls', 'golangci-lint'],
 	\     'rust': ['analyzer'],
-	\     'c': ['clangd'],
-	\     'python': ['pylsp', 'mypy', 'black'],
 	\ }
 let g:ale_fixers = {
 	\     'go': ['goimports'],
-	\     'rust': ['rustfmt'],
 	\     'markdown': ['prettier'],
+	\     'rust': ['rustfmt'],
 	\     'sh': ['shfmt'],
 	\ }
 let g:jellybeans_use_term_italics = 1
 let g:nnn#set_default_mappings = 0
 let g:loaded_netrwPlugin = 1
-
-packadd minpac
-
-function! Install()
-	call minpac#add('mattn/vim-gomod')
-	call minpac#add('spolu/dwm.vim')
-	call minpac#add('mcchrish/nnn.vim')
-	call minpac#add('k-takata/minpac', {'type': 'opt'})
-endfunction
-
-if exists('g:loaded_minpac')
-	call minpac#init({
-		\     'package_name': 'plugins',
-		\ })
-	call Install()
-endif
 
 " asyncomplete.vim setup ale autocmd {{{
 autocmd User asyncomplete_setup call asyncomplete#register_source(
@@ -68,8 +71,6 @@ autocmd User asyncomplete_setup call asyncomplete#register_source(
 		\ }),
 	\ )
 " }}}
-
-packloadall!
 
 " asyncomplete.vim tab completion maps {{{
 function! s:is_prev_space() abort
@@ -96,17 +97,29 @@ command! Update call minpac#update()
 command! Clean  call minpac#clean()
 command! Status call minpac#status()
 
-autocmd BufEnter go.mod set ft=gomod
-autocmd StdinReadPre * let s:std_in=1
-autocmd BufWritePre *.go,*.rs if exists(':ALEFix') | ALEFix | endif
-autocmd VimEnter *
-	\ if @% == '' && !exists('s:std_in') && exists(':NnnExplorer') |
-	\     call nnn#explorer('.', { 'layout': 'silent' }) | only |
-	\ endif
+augroup vimrc
+	autocmd!
+	autocmd BufEnter go.mod set ft=gomod
+	autocmd StdinReadPre * let s:std_in=1
+	autocmd BufWritePre *.go,*.rs undojoin | Neoformat
+	autocmd VimEnter *
+		\ if exists('s:stdin') || !exists(':NnnExplorer') |
+		\ elseif @% == '' |
+		\     call nnn#explorer('.', { 'layout': 'silent' }) |
+		\ elseif isdirectory(@%) |
+		\     call nnn#explorer(@%, { 'layout': 'silent' }) |
+		\ endif
+augroup END
 
 nnoremap <C-G> 11<C-G>
 nnoremap <silent> <Return> :nohlsearch<Return><Return>
 
+cabbrev W w
+cabbrev Wq wq
+cabbrev WQ wq
+cabbrev Wqa wqa
+cabbrev WQa wqa
+cabbrev WQA wqa
 cabbrev make !make
 nmap <silent> q :quit<Return>
 nmap <silent> <Leader>m :make<Return>

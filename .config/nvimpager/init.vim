@@ -35,7 +35,4 @@ nnoremap <silent> q :quit<Return>
 nnoremap <C-G> 11<C-G>
 nnoremap <Return> :nohlsearch<Return><Return>
 
-au VimEnter * silent! nunmap j
-au VimEnter * silent! nunmap k
-
 " vim: ft=vim

@@ -1,7 +1,7 @@
 #!/usr/bin/alacritty --config-file
 
 import:
-  - ~/.config/alacritty/colors/github-vscode-dark.yml
+  - ~/.config/colors/alacritty/github-vscode-dark.yml
 
 env:
   COLORTERM: truecolor

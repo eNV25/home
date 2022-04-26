@@ -1,0 +1,29 @@
+# Colors (Nord)
+colors:
+  bright:
+    black: '#3b4457'
+    blue: '#6f8fb4'
+    cyan: '#7eafad'
+    green: '#93b379'
+    magenta: '#a4799d'
+    red: '#b04b57'
+    white: '#e7ebf1'
+    yellow: '#e5c179'
+  cursor:
+    cursor: '#cfd6e4'
+    text: '#2d3241'
+  normal:
+    black: '#2d3241'
+    blue: '#6f8fb4'
+    cyan: '#77b3c5'
+    green: '#93b379'
+    magenta: '#a4799d'
+    red: '#b04b57'
+    white: '#dfe3ec'
+    yellow: '#e5c179'
+  primary:
+    background: '#232731'
+    foreground: '#cfd6e4'
+  selection:
+    background: '#3b4457'
+    text: '#cfd6e4'

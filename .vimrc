@@ -38,11 +38,6 @@ set shortmess+=ac
 set autoindent smarttab
 filetype plugin indent on
 
-set termguicolors
-syntax on
-color jellybeans
-
-let g:airline#extensions#tabline#enabled = 1
 let g:asyncomplete_auto_popup = 0
 let g:ale_go_golangci_lint_package = 1
 let g:ale_go_golangci_lint_options = ''
@@ -63,6 +58,10 @@ let g:ale_fixers = {
 let g:jellybeans_use_term_italics = 1
 let g:nnn#set_default_mappings = 0
 let g:loaded_netrwPlugin = 1
+
+set termguicolors
+syntax on
+color jellybeans
 
 " asyncomplete.vim setup ale autocmd {{{
 autocmd User asyncomplete_setup call asyncomplete#register_source(

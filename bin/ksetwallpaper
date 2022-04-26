@@ -10,7 +10,7 @@ def setwallpaper(filepath, plugin="org.kde.image"):
       desktopsForActivity(aid).forEach((d) => {{
         d.wallpaperPlugin = { repr(plugin) };
         d.currentConfigGroup = Array("Wallpaper", { repr(plugin) }, "General");
-        d.writeConfig("Image", { repr("file://" + filepath) };
+        d.writeConfig("Image", { repr("file://" + filepath) });
       }});
     }});
     """

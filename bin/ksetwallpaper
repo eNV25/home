@@ -1,0 +1,35 @@
+#!/usr/bin/env python3
+
+import argparse
+import dbus
+
+
+def setwallpaper(filepath, plugin="org.kde.image"):
+    jscript = rf"""
+    activities().forEach((aid) => {{
+      desktopsForActivity(aid).forEach((d) => {{
+        d.wallpaperPlugin = { repr(plugin) };
+        d.currentConfigGroup = Array("Wallpaper", { repr(plugin) }, "General");
+        d.writeConfig("Image", { repr("file://" + filepath) };
+      }});
+    }});
+    """
+    bus = dbus.SessionBus()
+    plasma = dbus.Interface(
+        bus.get_object("org.kde.plasmashell", "/PlasmaShell"),
+        dbus_interface="org.kde.PlasmaShell",
+    )
+    plasma.evaluateScript(jscript)
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="KDE Wallpaper setter")
+    parser.add_argument("file", help="Wallpaper file name")
+    parser.add_argument(
+        "--plugin",
+        "-p",
+        help="Wallpaper plugin (default is org.kde.image)",
+        default="org.kde.image",
+    )
+    args = parser.parse_args()
+    setwallpaper(args.file, args.plugin)

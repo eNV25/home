@@ -14,10 +14,12 @@ alias curl='curl -s'
 alias usv='SVDIR=~/service sv'
 alias sudo='sudo '
 alias doas='doas '
-alias echo='echo '
+alias tsocks='tsocks '
+alias echoa='echo '
 alias nvimpager='nvimpager -p'
-alias pac=paru
 alias pager='$PAGER'
+alias cat=bat
+alias pac=paru
 alias open=xdg-open
 alias o='$PAGER'
 alias h=head

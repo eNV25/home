@@ -17,7 +17,6 @@ export MPD_HOST="${XDG_RUNTIME_DIR}/mpd/socket"
 export NNN_FIFO="/tmp/$UID.nnn.fifo"
 export PAGER=bat
 export PYTHONSTARTUP="$(python3 -m jedi repl)"
-export SHELL=zsh
 export SSH_ASKPASS=/usr/bin/ksshaskpass
 export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR:-/run/user/$UID}/ssh-agent.socket"
 export VAGRANT_DEFAULT_PROVIDER=libvirt

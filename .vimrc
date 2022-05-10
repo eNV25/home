@@ -45,7 +45,7 @@ let g:ale_java_eclipselsp_path = '$HOME/.local/eclipse.jdt.ls'
 let g:ale_sh_shfmt_options = ''
 let g:shfmt_opts = ''
 let g:ale_linters = {
-	\     'c': ['clangd'],
+	\     'c': ['clangd', 'clang'],
 	\     'go': ['gopls', 'golangci-lint'],
 	\     'rust': ['analyzer'],
 	\ }

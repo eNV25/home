@@ -8,6 +8,7 @@ alias diff='diff --color=auto'
 alias grep='grep --color=auto'
 alias ip='ip --color=auto'
 alias nvlc='nvlc --no-color'
+alias tree='tree -C'
 
 alias pwsh='pwsh -NoLogo'
 alias curl='curl -s'

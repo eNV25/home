@@ -7,11 +7,11 @@ packadd minpac
 
 function! Install()
 	call minpac#add('mattn/vim-gomod')
-	call minpac#add('spolu/dwm.vim')
 	call minpac#add('mcchrish/nnn.vim')
 	call minpac#add('fladson/vim-kitty')
 	call minpac#add('sbdchd/neoformat')
 	call minpac#add('direnv/direnv.vim')
+	call minpac#add('norcalli/nvim-terminal.lua')
 	call minpac#add('k-takata/minpac', {'type': 'opt'})
 endfunction
 
@@ -62,6 +62,8 @@ let g:loaded_netrwPlugin = 1
 set termguicolors
 syntax on
 color jellybeans
+
+lua require'terminal'.setup()
 
 " asyncomplete.vim setup ale autocmd {{{
 autocmd User asyncomplete_setup call asyncomplete#register_source(

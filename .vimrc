@@ -38,6 +38,8 @@ set shortmess+=ac
 set autoindent smarttab
 filetype plugin indent on
 
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#buffer_idx_mode = 1
 let g:asyncomplete_auto_popup = 0
 let g:ale_go_golangci_lint_package = 1
 let g:ale_go_golangci_lint_options = ''
@@ -140,4 +142,16 @@ nmap <Leader>asd <Plug>(ale_go_to_definition_in_split)
 nmap <Leader>avd <Plug>(ale_go_to_definition_in_vsplit)
 nmap <Leader>ast <Plug>(ale_go_to_type_definition_in_split)
 nmap <Leader>avt <Plug>(ale_go_to_type_definition_in_vsplit)
+
+nmap <Leader>1 <Plug>AirlineSelectTab1
+nmap <Leader>2 <Plug>AirlineSelectTab2
+nmap <Leader>3 <Plug>AirlineSelectTab3
+nmap <Leader>4 <Plug>AirlineSelectTab4
+nmap <Leader>5 <Plug>AirlineSelectTab5
+nmap <Leader>6 <Plug>AirlineSelectTab6
+nmap <Leader>7 <Plug>AirlineSelectTab7
+nmap <Leader>8 <Plug>AirlineSelectTab8
+nmap <Leader>9 <Plug>AirlineSelectTab9
+nmap <Leader>- <Plug>AirlineSelectPrevTab
+nmap <Leader>+ <Plug>AirlineSelectNextTab
 

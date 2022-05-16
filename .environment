@@ -10,7 +10,7 @@ export GIT_PS1_SHOWDIRTYSTATE=auto
 export GIT_PS1_SHOWSTASHSTATE=auto
 export GIT_PS1_SHOWUNTRACKEDFILES=auto
 export GIT_PS1_SHOWUPSTREAM=auto
-export GOFLAGS="-buildmode=pie -trimpath"
+export GOFLAGS="-trimpath"
 export GPG_TTY="$(tty)"
 export LESSOPEN="|lesspipe.sh %s"
 export MPD_HOST="${XDG_RUNTIME_DIR}/mpd/socket"
@@ -29,6 +29,6 @@ export XDG_STATE_HOME="$HOME/.local/state"
 for p in "$HOME/go/bin" "$HOME/.local/bin" "$HOME/bin"; do
 	PATH="${PATH//":$p:"/:}"                              # remove from middle
 	PATH="${PATH%%":$p"}"                                 # remove from end
-	case "$PATH" in "$p:"*) ;; *) PATH="$p:$PATH" ;; esac # prepend
+	case "$PATH" in "$p:"*) ;; *) PATH="$p:$PATH" ;; esac # prepend if
 done
 export PATH

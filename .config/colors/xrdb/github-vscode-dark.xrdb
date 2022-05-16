@@ -14,7 +14,7 @@
 #define Ansi_13_Color #e163dc
 #define Ansi_14_Color #00badf
 #define Ansi_15_Color #e5e5e5
-#define Background_Color #1e2429
+#define Background_Color #151515
 #define Cursor_Text_Color #1e2429
 #define Cursor_Color #e5e5e5
 #define Foreground_Color #d1d5da

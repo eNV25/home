@@ -28,6 +28,8 @@ zinit snippet OMZ::plugins/direnv
 
 fpath=(~/.zsh/functions/ "${fpath[@]}")
 
+eval "$(dircolors)"
+
 HISTFILE=~/.zhistory
 HISTSIZE=100
 SAVEHIST=100
@@ -85,14 +87,16 @@ function proxy_on {
 	echo -n "port: "
 	read port
 	local proxy="$pre$server:$port"
-	export http_proxy=$proxy \
-		https_proxy=$proxy \
-		ftp_proxy=$proxy \
-		rsync_proxy=$proxy \
-		HTTP_PROXY=$proxy \
-		HTTPS_PROXY=$proxy \
-		FTP_PROXY=$proxy \
-		RSYNC_PROXY=$proxy
+	export all_proxy="$proxy" \
+		ALL_PROXY="$proxy"
+		http_proxy="$proxy" \
+		HTTP_PROXY="$proxy" \
+		https_proxy="$proxy" \
+		HTTPS_PROXY="$proxy" \
+		ftp_proxy="$proxy" \
+		FTP_PROXY="$proxy" \
+		rsync_proxy="$proxy" \
+		RSYNC_PROXY="$proxy"
 }
 
 function proxy_off {

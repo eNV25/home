@@ -50,6 +50,7 @@ let g:ale_linters = {
 	\     'c': ['clangd', 'clang'],
 	\     'go': ['gopls', 'golangci-lint'],
 	\     'rust': ['analyzer'],
+	\     'typescript': ['cspell', '_deno', 'eslint', 'standard', 'tslint', 'tsserver', 'typecheck', 'xo'],
 	\ }
 let g:ale_fixers = {
 	\     'go': ['goimports'],

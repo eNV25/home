@@ -6,8 +6,8 @@ if [ "$EUID" != 0 ]; then
 fi
 
 for path in /usr/lib/modules/*; do
-	version=$(basename "${path}")
-	read -r kernel < "${path}/pkgbase"
+	version="${path##*/}"
+	read -r kernel < "${path}/pkgbase" || continue
 	vmlinuz="${path}/vmlinuz"
 
 	echo ":: Reconfiguring $kernel-$version"

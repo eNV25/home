@@ -1,0 +1,37 @@
+#!/usr/bin/php
+<?php
+// Found on stackoverflow edited by me.
+
+/**
+ * This command line tool encodes all images contained in the specified HTML file.
+ * The encoded contents will be returned on standard output.
+ * Use redirection to store it into a file.
+ * @author Massimiliano Alessandri <m.alessandri@spaziocolore.it>
+ */
+
+/**
+ * Converts a "src" property embedding the referenced image.
+ * This way, the recipient won't have to click on "display images" to view the images.
+ * @param array $matches the array sent by the preg_replace_callback function
+ * @return string the encoded "src" property
+ */
+function base64images($matches) {
+        return 'src="data:'.mime_content_type($matches[1]).';base64,'.base64_encode(file_get_contents($matches[1])).'"';
+}
+
+if ($argc < 2) {
+    echo 'Usage: '.$argv[0].' [file to be encoded]';
+    echo 'The encoded file will be returned to standard output.';
+    exit;
+}
+
+if (!chdir(dirname($argv[1])))
+    exit (1);
+
+$filename = basename($argv[1]);
+
+if (file_exists($filename))
+    echo preg_replace_callback('/src="([^"]+)"/', 'base64images', file_get_contents($filename));
+else
+    echo 'File not found: '.$filename."\n";
+

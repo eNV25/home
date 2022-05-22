@@ -11,7 +11,6 @@ function! Install()
 	call minpac#add('fladson/vim-kitty')
 	call minpac#add('sbdchd/neoformat')
 	call minpac#add('direnv/direnv.vim')
-	call minpac#add('norcalli/nvim-terminal.lua')
 	call minpac#add('k-takata/minpac', {'type': 'opt'})
 endfunction
 
@@ -43,13 +42,15 @@ let g:airline#extensions#tabline#buffer_idx_mode = 1
 let g:asyncomplete_auto_popup = 0
 let g:ale_go_golangci_lint_package = 1
 let g:ale_go_golangci_lint_options = ''
-let g:ale_java_eclipselsp_path = '$HOME/.local/eclipse.jdt.ls'
+let g:ale_java_eclipselsp_path = '/usr/share/java/jdtls'
+let g:ele_java_eclipselsp_config_path = '$HOME/.config/jdtls'
 let g:ale_sh_shfmt_options = ''
 let g:shfmt_opts = ''
 let g:ale_linters = {
 	\     'c': ['clangd', 'clang'],
 	\     'go': ['gopls', 'golangci-lint'],
 	\     'rust': ['analyzer'],
+	\     'python': ['pylsp', 'mypy'],
 	\     'typescript': ['cspell', '_deno', 'eslint', 'standard', 'tslint', 'tsserver', 'typecheck', 'xo'],
 	\ }
 let g:ale_fixers = {
@@ -65,8 +66,6 @@ let g:loaded_netrwPlugin = 1
 set termguicolors
 syntax on
 color jellybeans
-
-lua require'terminal'.setup()
 
 " asyncomplete.vim setup ale autocmd {{{
 autocmd User asyncomplete_setup call asyncomplete#register_source(

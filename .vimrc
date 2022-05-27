@@ -42,8 +42,9 @@ let g:airline#extensions#tabline#buffer_idx_mode = 1
 let g:asyncomplete_auto_popup = 0
 let g:ale_go_golangci_lint_package = 1
 let g:ale_go_golangci_lint_options = ''
-let g:ale_java_eclipselsp_path = '/usr/share/java/jdtls'
-let g:ele_java_eclipselsp_config_path = '$HOME/.config/jdtls'
+let g:ale_java_eclipselsp_config_path = '/home/nv/.config/jdtls'
+let g:ale_java_eclipselsp_workspace_path = '/home/nv/src'
+let g:ale_java_javalsp_executable = '/usr/bin/java-language-server'
 let g:ale_sh_shfmt_options = ''
 let g:shfmt_opts = ''
 let g:ale_linters = {
@@ -126,6 +127,7 @@ cabbrev WQA wqa
 cabbrev make !make
 nmap <silent> q :quit<Return>
 nmap <silent> <Leader>m :make<Return>
+nmap <silent> <Leader>f :Neoformat<Return>
 nmap <silent> <Leader>nnn :NnnPicker<CR>
 nmap <silent> <Leader>nnd :NnnPicker %:p:h<CR>
 

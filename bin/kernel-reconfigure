@@ -6,11 +6,16 @@ if [ "$EUID" != 0 ]; then
 fi
 
 for path in /usr/lib/modules/*; do
-	version="${path##*/}"
-	read -r kernel < "${path}/pkgbase" || continue
+	kver="${path##*/}"
+	read -r kernel <"${path}/pkgbase" || continue
 	vmlinuz="${path}/vmlinuz"
 
-	echo ":: Reconfiguring $kernel $version"
+	echo ":: Reconfiguring $kernel $kver"
 
-	kernel-install add "${version}" "${vmlinuz}"
+	kernel-install -v add "$@" "$kver" "$vmlinuz" | while read -r line; do
+		case "$line" in
+		'+'*) ;;
+		*) echo "$line" ;;
+		esac
+	done
 done

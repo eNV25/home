@@ -23,7 +23,7 @@ function clip_determine_command {
 			fi
 		done
 	fi
-	
+
 	if [[ -n "$DISPLAY" ]]; then
 		for c in xclip xsel; do
 			if type "$c" >/dev/null 2>&1; then
@@ -123,9 +123,9 @@ function clip_cygwin_paste {
 }
 
 case "$1" in
-	paste) fn=clip_paste ;;
-	copy) fn=clip_copy ;;
-	*) clip_usage ;;
+paste) fn=clip_paste ;;
+copy) fn=clip_copy ;;
+*) clip_usage ;;
 esac
 shift
 

@@ -1,9 +1,8 @@
-
 if [[ ! -f "$HOME/.local/share/zinit/zinit.git/zinit.zsh" ]]; then
 	print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
 	command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
-	command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
-		print -P "%F{33} %F{34}Installation successful.%f%b" || \
+	command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" &&
+		print -P "%F{33} %F{34}Installation successful.%f%b" ||
 		print -P "%F{160} The clone has failed.%f%b"
 fi
 
@@ -18,7 +17,7 @@ zinit light-mode for \
 	zdharma-continuum/zinit-annex-rust
 
 zinit snippet /usr/share/git/completion/git-prompt.sh
-zinit snippet ~/.environment
+zinit snippet ~/.environment.sh
 zinit snippet ~/.alias
 
 zinit load jeffreytse/zsh-vi-mode
@@ -33,6 +32,7 @@ eval "$(dircolors)"
 HISTFILE=~/.zhistory
 HISTSIZE=100
 SAVEHIST=100
+READNULLCMD="$PAGER"
 unsetopt beep nomatch
 setopt autocd extendedglob combiningchars magicequalsubst
 
@@ -58,37 +58,30 @@ bindkey "^[[B" history-beginning-search-forward-end
 PROMPT="%B%F{green}%n@%m%f:%F{blue}%~/%f%#%b "
 
 function rprompt {
-	RPROMPT="${"$(__git_ps1 '[%s]')"/ /} SH${SHLVL}${NNNLVL:+N${NNNLVL}}"
-}; precmd_functions+=(rprompt)
+	RPROMPT="$(__git_ps1 '[%s]')"
+	RPROMPT="${RPROMPT/ /} SH${SHLVL}${NNNLVL:+N${NNNLVL}}"
+}
+precmd_functions+=(rprompt)
 
 function proxy_on {
 	export no_proxy="localhost,127.0.0.1,localaddress,.localdomain.com"
-
-	if (($# > 0)); then
-		local proxy="$1"
-		export http_proxy=$proxy \
-			https_proxy=$proxy \
-			ftp_proxy=$proxy \
-			rsync_proxy=$proxy
-		echo "Proxy environment variable set."
-		return 0
+	local proxy="$1"
+	if [[ "$proxy" == "" ]]; then
+		echo -n "server: "
+		read server
+		echo -n "port: "
+		read port
+		echo -n "username: "
+		read username
+		if [[ "$username" != "" ]]; then
+			echo -n "password: "
+			read -es password
+			local pre="$username:$password@"
+		fi
+		proxy="$pre$server:$port"
 	fi
-
-	echo -n "username: "
-	read username
-	if [[ "$username" != "" ]]; then
-		echo -n "password: "
-		read -es password
-		local pre="$username:$password@"
-	fi
-
-	echo -n "server: "
-	read server
-	echo -n "port: "
-	read port
-	local proxy="$pre$server:$port"
 	export all_proxy="$proxy" \
-		ALL_PROXY="$proxy"
+		ALL_PROXY="$proxy" \
 		http_proxy="$proxy" \
 		HTTP_PROXY="$proxy" \
 		https_proxy="$proxy" \
@@ -97,12 +90,24 @@ function proxy_on {
 		FTP_PROXY="$proxy" \
 		rsync_proxy="$proxy" \
 		RSYNC_PROXY="$proxy"
+	echo "Proxy environment variable set." >&2
 }
 
 function proxy_off {
 	unset all_proxy http_proxy https_proxy ftp_proxy rsync_proxy \
 		ALL_PROXY HTTP_PROXY HTTPS_PROXY FTP_PROXY RSYNC_PROXY
-	echo -e "Proxy environment variable removed."
+	echo "Proxy environment variable removed." >&2
 }
 
+function with_proxy { (
+	proxy_on
+	"$@"
+); }
 
+function without_proxy { (
+	proxy_off
+	"$@"
+); }
+
+function pac { without_proxy paru "$@"; }
+compdef pac=paru

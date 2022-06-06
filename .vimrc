@@ -6,6 +6,23 @@ endif
 packadd minpac
 
 function! Install()
+	" System package plugins:
+	" - vim-airline
+	" - vim-airline-themes
+	" - vim-ale
+	" - vim-asyncomplete
+	" - vim-diffchar
+	" - vim-editorconfig
+	" - vim-eunuch
+	" - vim-fugitive
+	" - vim-gitgutter
+	" - vim-indent-object
+	" - vim-jellybeans
+	" - vim-nerdcommenter
+	" - vim-repeat
+	" - vim-seti
+	" - vim-surround
+	" - vim-toml-git
 	call minpac#add('mattn/vim-gomod')
 	call minpac#add('mcchrish/nnn.vim')
 	call minpac#add('fladson/vim-kitty')
@@ -16,7 +33,7 @@ endfunction
 
 if exists('g:loaded_minpac')
 	call minpac#init({
-		\     'package_name': 'plugins',
+		\   'package_name': 'plugins',
 		\ })
 	call Install()
 endif
@@ -44,21 +61,21 @@ let g:ale_go_golangci_lint_package = 1
 let g:ale_go_golangci_lint_options = ''
 let g:ale_java_eclipselsp_config_path = '/home/nv/.config/jdtls'
 let g:ale_java_eclipselsp_workspace_path = '/home/nv/src'
-let g:ale_java_javalsp_executable = '/usr/bin/java-language-server'
+let g:ale_java_javalsp_executable = '/usr/local/bin/java-language-server'
 let g:ale_sh_shfmt_options = ''
-let g:shfmt_opts = ''
+let g:shfmt_opt = ''
 let g:ale_linters = {
-	\     'c': ['clangd', 'clang'],
-	\     'go': ['gopls', 'golangci-lint'],
-	\     'rust': ['analyzer'],
-	\     'python': ['pylsp', 'mypy'],
-	\     'typescript': ['cspell', '_deno', 'eslint', 'standard', 'tslint', 'tsserver', 'typecheck', 'xo'],
+	\   'c': ['clangd', 'clang'],
+	\   'go': ['gopls', 'golangci-lint'],
+	\   'rust': ['analyzer'],
+	\   'python': ['pylsp', 'mypy'],
+	\   'typescript': ['cspell', '_deno', 'eslint', 'standard', 'tslint', 'tsserver', 'typecheck', 'xo'],
 	\ }
 let g:ale_fixers = {
-	\     'go': ['goimports'],
-	\     'markdown': ['prettier'],
-	\     'rust': ['rustfmt'],
-	\     'sh': ['shfmt'],
+	\   'go': ['goimports'],
+	\   'markdown': ['prettier'],
+	\   'rust': ['rustfmt'],
+	\   'sh': ['shfmt'],
 	\ }
 let g:jellybeans_use_term_italics = 1
 let g:nnn#set_default_mappings = 0
@@ -68,12 +85,13 @@ set termguicolors
 syntax on
 color jellybeans
 
-" asyncomplete.vim setup ale autocmd {{{
-autocmd User asyncomplete_setup call asyncomplete#register_source(
-	\ asyncomplete#sources#ale#get_source_options({
+" asyncomplete.vim setup autocmd {{{
+augroup asyncomplete_setup
+	autocmd!
+	autocmd User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#ale#get_source_options({
 		\   'priority': 10,
-		\ }),
-	\ )
+		\ }))
+augroup END
 " }}}
 
 " asyncomplete.vim tab completion maps {{{
@@ -109,9 +127,9 @@ augroup vimrc
 	autocmd VimEnter *
 		\ if exists('s:stdin') || !exists(':NnnExplorer') |
 		\ elseif @% == '' |
-		\     call nnn#explorer('.', { 'layout': 'silent' }) |
+		\   call nnn#explorer('.', { 'layout': 'silent' }) |
 		\ elseif isdirectory(@%) |
-		\     call nnn#explorer(@%, { 'layout': 'silent' }) |
+		\   call nnn#explorer(@%, { 'layout': 'silent' }) |
 		\ endif
 augroup END
 

@@ -1,0 +1,4 @@
+#!/bin/sh
+tr '\n' '\0' |
+	xargs -0 -I@ printf '%s\0%s\0' @ @ |
+	xargs -0 kdialog --menu test

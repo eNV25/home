@@ -14,6 +14,7 @@ export GOFLAGS="-trimpath"
 export GPG_TTY="$(tty)"
 export LESSOPEN="|lesspipe.sh %s"
 export MPD_HOST="${XDG_RUNTIME_DIR}/mpd/socket"
+export NNN_ARCHIVE="\\.(tar|zip|jar|rar|lha|7z|alz|ace|a|ar|arj|arc|rpm|deb|cab|cpio|iso|mtree|xar|warc|t?(gz|grz|bz|bz2|Z|lzma|lzo|lz|lz4|lrz|xz|rz|uu|zst))"
 export NNN_FIFO="/tmp/$UID.nnn.fifo"
 export PAGER=bat
 export PYTHONSTARTUP="$(python3 -m jedi repl)"

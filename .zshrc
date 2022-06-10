@@ -16,6 +16,7 @@ zinit light-mode for \
 	zdharma-continuum/zinit-annex-patch-dl \
 	zdharma-continuum/zinit-annex-rust
 
+zinit snippet /usr/share/nnn/quitcd/quitcd.bash_zsh
 zinit snippet /usr/share/git/completion/git-prompt.sh
 zinit snippet ~/.environment.sh
 zinit snippet ~/.alias

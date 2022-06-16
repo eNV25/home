@@ -10,6 +10,7 @@ alias ip='ip --color=auto'
 alias nvlc='nvlc --no-color'
 alias tree='tree -C'
 
+alias podman='sudo podman'
 alias pwsh='pwsh -NoLogo'
 alias curl='curl -s'
 alias usv='SVDIR=~/service sv'

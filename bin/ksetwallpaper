@@ -7,12 +7,10 @@ from urllib.parse import quote as urlquote
 
 def ksetwallpaper(filepath, plugin="org.kde.image"):
     jscript = rf"""
-    activities().forEach((aid) => {{
-      desktopsForActivity(aid).forEach((d) => {{
+    desktops().forEach((d) => {{
         d.wallpaperPlugin = { repr(plugin) };
         d.currentConfigGroup = Array("Wallpaper", { repr(plugin) }, "General");
         d.writeConfig("Image", { repr("file://" + urlquote(filepath)) });
-      }});
     }});
     """
     print(jscript)

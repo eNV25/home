@@ -3,13 +3,9 @@
 import:
   - ~/.config/colors/alacritty/github-vscode-dark.yml
 
-env:
-  COLORTERM: truecolor
-  TERM: xterm-256color
-
 font:
   normal:
-    family: JetBrains Mono
+    family: JetBrains Mono NL
 
 window:
   dynamic_padding: true

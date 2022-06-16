@@ -10,12 +10,14 @@ export GIT_PS1_SHOWDIRTYSTATE=auto
 export GIT_PS1_SHOWSTASHSTATE=auto
 export GIT_PS1_SHOWUNTRACKEDFILES=auto
 export GIT_PS1_SHOWUPSTREAM=auto
-export GOFLAGS="-trimpath"
+export GOFLAGS='-trimpath'
 export GPG_TTY="$(tty)"
+export LESS='--mouse --wheel-lines=5'
 export LESSOPEN="|lesspipe.sh %s"
-export MPD_HOST="${XDG_RUNTIME_DIR}/mpd/socket"
+export MPD_HOST="$XDG_RUNTIME_DIR/mpd/socket"
 export NNN_ARCHIVE="\\.(tar|zip|jar|rar|lha|7z|alz|ace|a|ar|arj|arc|rpm|deb|cab|cpio|iso|mtree|xar|warc|t?(gz|grz|bz|bz2|Z|lzma|lzo|lz|lz4|lrz|xz|rz|uu|zst))"
-export NNN_FIFO="/tmp/$UID.nnn.fifo"
+export NNN_FIFO="$XDG_RUNTIME_DIR/nnn.fifo"
+export NNN_PLUG='l:nuke;o:fzplug'
 export PAGER=bat
 export PYTHONSTARTUP="$(python3 -m jedi repl)"
 export SSH_ASKPASS=/usr/bin/ksshaskpass

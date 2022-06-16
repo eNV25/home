@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
 
-import argparse
 import dbus
+from argparse import ArgumentParser
+from urllib.parse import quote as urlquote
 
 
-def setwallpaper(filepath, plugin="org.kde.image"):
+def ksetwallpaper(filepath, plugin="org.kde.image"):
     jscript = rf"""
     activities().forEach((aid) => {{
       desktopsForActivity(aid).forEach((d) => {{
         d.wallpaperPlugin = { repr(plugin) };
         d.currentConfigGroup = Array("Wallpaper", { repr(plugin) }, "General");
-        d.writeConfig("Image", { repr("file://" + filepath) });
+        d.writeConfig("Image", { repr("file://" + urlquote(filepath)) });
       }});
     }});
     """
+    print(jscript)
     bus = dbus.SessionBus()
     plasma = dbus.Interface(
         bus.get_object("org.kde.plasmashell", "/PlasmaShell"),
@@ -23,7 +25,7 @@ def setwallpaper(filepath, plugin="org.kde.image"):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="KDE Wallpaper setter")
+    parser = ArgumentParser(description="KDE Wallpaper setter")
     parser.add_argument("file", help="Wallpaper file name")
     parser.add_argument(
         "--plugin",
@@ -32,4 +34,4 @@ if __name__ == "__main__":
         default="org.kde.image",
     )
     args = parser.parse_args()
-    setwallpaper(args.file, args.plugin)
+    ksetwallpaper(args.file, args.plugin)

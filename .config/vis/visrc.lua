@@ -1,9 +1,9 @@
 require 'vis'
 
 local function config_global()
-	vis:command[[
-	set theme gruvbox
-	]]
+	-- vis:command[[
+	-- set theme gruvbox
+	-- ]]
 end
 
 local function config_window(win)

@@ -1,2 +1,7 @@
-#!/bin/sh
-for arg; do echo "$arg"; done
+#!//usr/bin/tcc -run
+#include <stdio.h> // vi: ft=c
+int main(int argc, char **argv) {
+	for (int i = 1; i < argc; i++) {
+		printf("%s\n", argv[i]);
+	}
+}

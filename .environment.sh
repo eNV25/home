@@ -15,6 +15,7 @@ export GPG_TTY="$(tty)"
 export LESS='--mouse --wheel-lines=5'
 export LESSOPEN="|lesspipe.sh %s"
 export MPD_HOST="$XDG_RUNTIME_DIR/mpd/socket"
+export NNN_OPTS=r
 export NNN_ARCHIVE="\\.(tar|zip|jar|rar|lha|7z|alz|ace|a|ar|arj|arc|rpm|deb|cab|cpio|iso|mtree|xar|warc|t?(gz|grz|bz|bz2|Z|lzma|lzo|lz|lz4|lrz|xz|rz|uu|zst))"
 export NNN_FIFO="$XDG_RUNTIME_DIR/nnn.fifo"
 export NNN_PLUG='l:nuke;o:fzplug'

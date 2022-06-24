@@ -31,26 +31,26 @@ function decode_url {
 
 { exec {sleep}<> <(:); while ! : >/dev/tcp/arc.msn.com/80; do read -r -t 1 -u $sleep; done; } 2>/dev/null || true
 
-response=$(curl -sL -A "WindowsShellClient/0" "https://arc.msn.com/v3/Delivery/Placement?pid=209567&fmt=json&cdm=1&lc=en,en-US&ctry=US")
-status=$?
+response="$(curl -sL -A "WindowsShellClient/0" "https://arc.msn.com/v3/Delivery/Placement?pid=209567&fmt=json&cdm=1&lc=en,en-US&ctry=US")"
+status="$?"
 
 if [[ $status -ne 0 ]]; then
 	echo "Query failed"
 	exit $status
 fi
 
-item=$(jq -r ".batchrsp.items[0].item" <<<"$response")
+item="$(jq -r ".batchrsp.items[0].item" <<<"$response")"
 
-landscape_url=$(jq -r ".ad.image_fullscreen_001_landscape.u" <<<"$item")
-sha256=$(jq -r ".ad.image_fullscreen_001_landscape.sha256" <<<"$item" | base64 -d | hexdump -ve "1/1 \"%.2x\"")
-title=$(jq -r ".ad.title_text.tx" <<<"$item")
-search_terms=$(jq -r ".ad.title_destination_url.u" <<<"$item" | sed "s/.*q=\([^&]*\).*/\1/" | decode_url)
+landscape_url="$(jq -r ".ad.image_fullscreen_001_landscape.u" <<<"$item")"
+sha256="$(jq -r ".ad.image_fullscreen_001_landscape.sha256" <<<"$item" | base64 -d | hexdump -ve "1/1 \"%.2x\"")"
+title="$(jq -r ".ad.title_text.tx" <<<"$item")"
+search_terms="$(jq -r ".ad.title_destination_url.u" <<<"$item" | sed "s/.*q=\([^&]*\).*/\1/" | decode_url)"
 
 mkdir -p "$backgrounds_path"
 image_path="$backgrounds_path/$(date +%y-%m-%d-%H-%M-%S)-$title ($search_terms).jpg"
 
 curl -sL "$landscape_url" -o "$image_path"
-sha256calculated=$(sha256sum "$image_path" | cut -d " " -f 1)
+sha256calculated="$(sha256sum "$image_path" | cut -d " " -f 1)"
 
 if [[ "$sha256" != "$sha256calculated" ]]; then
 	echo "Checksum incorrect"
@@ -59,5 +59,5 @@ fi
 
 ksetwallpaper "$image_path"
 
-notify-send "Background changed" "$title ($search_terms)" --icon=preferences-desktop-wallpaper --urgency=low --hint=string:desktop-entry:spotlight
+notify-send "Background changed" "$title ($search_terms)" --app-name=spotlight --icon=preferences-desktop-wallpaper --urgency=low
 echo "Background changed to $title ($search_terms)"

@@ -1,6 +1,0 @@
-MusicDir = "/home/media/Music"
-LyricsDir = "/home/media/Music"
-
-#[MPD]
-#Connection = "unix"
-#Address = "${XDG_RUNTIME_DIR}/mpd/socket"

@@ -18,9 +18,12 @@ function! Install()
 	" - vim-gitgutter
 	" - vim-indent-object
 	" - vim-jellybeans
+	" - vim-lastplace
 	" - vim-nerdcommenter
+	" - vim-plugins-profiler
 	" - vim-repeat
 	" - vim-seti
+	" - vim-sleuth
 	" - vim-surround
 	" - vim-toml-git
 	call minpac#add('mattn/vim-gomod')

@@ -31,6 +31,7 @@ function! Install()
 	call minpac#add('fladson/vim-kitty')
 	call minpac#add('sbdchd/neoformat')
 	call minpac#add('direnv/direnv.vim')
+	call minpac#add('zigford/vim-powershell')
 	call minpac#add('k-takata/minpac', {'type': 'opt'})
 endfunction
 

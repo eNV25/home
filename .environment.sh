@@ -19,6 +19,9 @@ export NNN_OPTS=r
 export NNN_ARCHIVE="\\.(tar|zip|jar|rar|lha|7z|alz|ace|a|ar|arj|arc|rpm|deb|cab|cpio|iso|mtree|xar|warc|t?(gz|grz|bz|bz2|Z|lzma|lzo|lz|lz4|lrz|xz|rz|uu|zst))"
 export NNN_FIFO="$XDG_RUNTIME_DIR/nnn.fifo"
 export NNN_PLUG='l:nuke;o:fzplug'
+export NNN_FCOLORS=0B0B04060006060009060B06
+export NNN_SSHFS='mount -t sshfs'
+export NNN_RCLONE='mount -t rclone -o args2env,vfs-cache-mode=writes'
 export PAGER=bat
 export PYTHONSTARTUP="$(python3 -m jedi repl)"
 export SSH_ASKPASS=/usr/bin/ksshaskpass

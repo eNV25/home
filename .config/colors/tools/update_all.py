@@ -34,7 +34,6 @@ if __name__ == "__main__":
             ret_code = subprocess.Popen(["./iterm2xrdb", f], stdout=fout).wait()
             print(ret_code and "ERROR" or "OK" + " --> " + xrdb_filepath)
 
-    print()
     xrdb2konsole.main("../xrdb/", "../konsole/")
     print("OK --> " + "../konsole/")
     # xrdb2terminator.main('../xrdb/', '../terminator/')

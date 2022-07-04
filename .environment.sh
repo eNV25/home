@@ -21,6 +21,7 @@ export NNN_FIFO="$XDG_RUNTIME_DIR/nnn.fifo"
 export NNN_PLUG='l:nuke;o:fzplug'
 export NNN_SSHFS='mount -t sshfs'
 export NNN_RCLONE='mount -t rclone -o args2env,vfs-cache-mode=writes'
+export NNN_FCOLORS=030304020000060001030501
 export PAGER=bat
 export PYTHONSTARTUP="$(python3 -m jedi repl)"
 export SSH_ASKPASS=/usr/bin/ksshaskpass

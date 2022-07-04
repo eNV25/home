@@ -68,7 +68,7 @@ let g:ale_java_eclipselsp_workspace_path = '/home/nv/src'
 let g:ale_java_javalsp_executable = '/usr/local/bin/java-language-server'
 let g:ale_sh_shfmt_options = ''
 let g:shfmt_opt = ''
-let g:ale_linters = {
+let g:ale_linters = { 
 	\   'c': ['clangd', 'clang'],
 	\   'go': ['gopls', 'golangci-lint'],
 	\   'rust': ['analyzer'],
@@ -80,6 +80,10 @@ let g:ale_fixers = {
 	\   'markdown': ['prettier'],
 	\   'rust': ['rustfmt'],
 	\   'sh': ['shfmt'],
+	\ }
+let g:rust_analyzer_config = {
+	\   'rust-analyzer.cargo.features': 'all',
+	\   'rust-analyzer.checkOnSave.features': 'all',
 	\ }
 let g:jellybeans_use_term_italics = 1
 let g:nnn#set_default_mappings = 0

@@ -10,7 +10,7 @@ export GIT_PS1_SHOWDIRTYSTATE=auto
 export GIT_PS1_SHOWSTASHSTATE=auto
 export GIT_PS1_SHOWUNTRACKEDFILES=auto
 export GIT_PS1_SHOWUPSTREAM=auto
-export GOFLAGS='-trimpath'
+export GOFLAGS='-trimpath -ldflags=-linkmode=external'
 export GPG_TTY="$(tty)"
 export LESS='--mouse --wheel-lines=5'
 export LESSOPEN="|lesspipe.sh %s"

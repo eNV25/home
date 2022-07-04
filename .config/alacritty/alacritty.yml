@@ -1,7 +1,7 @@
 #!/usr/bin/alacritty --config-file
 
-import:
-  - ~/.config/colors/alacritty/github-vscode-dark.yml
+#import:
+#  - ~/.config/colors/alacritty/github-vscode-dark.yml
 
 font:
   normal:

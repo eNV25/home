@@ -39,7 +39,7 @@ if __name__ == "__main__":
     print("OK --> " + "../konsole/")
     # xrdb2terminator.main('../xrdb/', '../terminator/')
     # print('OK --> ' + '../terminator/')
-    # xrdb2Xresources.main('../xrdb/', '../Xresources/')
+    xrdb2Xresources.main('../xrdb/', '../Xresources/')
     # print('OK --> ' + '../Xresources/')
     # xrdb2putty.main('../xrdb/', '../putty/')
     # print('OK --> ' + '../putty/')

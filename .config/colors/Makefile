@@ -1,5 +1,4 @@
 
 all:
-	(cd tools/; ./update_all.py)
+	./update_all.py
 
-xrdb:

@@ -6,33 +6,31 @@ endif
 packadd minpac
 
 function! Install()
-	" System package plugins:
-	" - vim-airline
-	" - vim-airline-themes
-	" - vim-ale
-	" - vim-asyncomplete
-	" - vim-diffchar
-	" - vim-editorconfig
-	" - vim-eunuch
-	" - vim-fugitive
-	" - vim-gitgutter
-	" - vim-indent-object
-	" - vim-jellybeans
-	" - vim-lastplace
-	" - vim-nerdcommenter
-	" - vim-plugins-profiler
-	" - vim-repeat
-	" - vim-seti
-	" - vim-sleuth
-	" - vim-surround
-	" - vim-toml-git
+	call minpac#add('airblade/vim-gitgutter')
+	call minpac#add('arcticicestudio/nord-vim')
+	call minpac#add('cespare/vim-toml')
+	call minpac#add('direnv/direnv.vim')
+	call minpac#add('dense-analysis/ale')
+	call minpac#add('editorconfig/editorconfig-vim')
+	call minpac#add('farmergreg/vim-lastplace')
+	call minpac#add('fladson/vim-kitty')
+	call minpac#add('nanotech/jellybeans.vim')
 	call minpac#add('mattn/vim-gomod')
 	call minpac#add('mcchrish/nnn.vim')
-	call minpac#add('fladson/vim-kitty')
+	call minpac#add('michaeljsmith/vim-indent-object')
 	call minpac#add('sbdchd/neoformat')
-	call minpac#add('direnv/direnv.vim')
+	call minpac#add('prabirshrestha/asyncomplete.vim')
+	call minpac#add('rickhowe/diffchar.vim')
+	call minpac#add('tpope/vim-commentary')
+	call minpac#add('tpope/vim-eunuch')
+	call minpac#add('tpope/vim-fugitive')
+	call minpac#add('tpope/vim-repeat')
+	call minpac#add('tpope/vim-sleuth')
+	call minpac#add('tpope/vim-surround')
 	call minpac#add('zigford/vim-powershell')
-	call minpac#add('k-takata/minpac', {'type': 'opt'})
+	call minpac#add('vim-airline/vim-airline')
+	call minpac#add('vim-airline/vim-airline-themes')
+	call minpac#add('k-takata/minpac', { 'type': 'opt' })
 endfunction
 
 if exists('g:loaded_minpac')
@@ -51,11 +49,12 @@ set belloff=all
 set mouse=a
 
 set nowrap number list ruler noshowmode
+set autoindent smarttab
 set completeopt=menu,noinsert
 set listchars=trail:·,tab:→\ ,extends:>,precedes:<,nbsp:␣
 set foldmethod=marker
 set shortmess+=ac
-set autoindent smarttab
+set guifont=JetBrains\ Mono:h11
 filetype plugin indent on
 
 let g:airline#extensions#tabline#enabled = 1
@@ -68,9 +67,9 @@ let g:ale_java_eclipselsp_workspace_path = '/home/nv/src'
 let g:ale_java_javalsp_executable = '/usr/local/bin/java-language-server'
 let g:ale_sh_shfmt_options = ''
 let g:shfmt_opt = ''
-let g:ale_linters = { 
+let g:ale_linters = {
 	\   'c': ['clangd', 'clang'],
-	\   'go': ['gopls', 'golangci-lint'],
+	\   'go': ['gopls', 'gobuild', 'govet', 'golangci-lint'],
 	\   'rust': ['analyzer'],
 	\   'python': ['pylsp', 'mypy'],
 	\   'typescript': ['cspell', '_deno', 'eslint', 'standard', 'tslint', 'tsserver', 'typecheck', 'xo'],
@@ -89,9 +88,33 @@ let g:jellybeans_use_term_italics = 1
 let g:nnn#set_default_mappings = 0
 let g:loaded_netrwPlugin = 1
 
+augroup nord-theme-overrides
+	autocmd!
+	autocmd ColorScheme nord highlight Normal guibg=#151515
+	autocmd ColorScheme nord highlight NonText guibg=#151515
+augroup END
+
 set termguicolors
 syntax on
-color jellybeans
+color nord
+
+augroup vimrc
+	autocmd!
+	autocmd BufEnter go.mod set ft=gomod
+	autocmd StdinReadPre * let s:std_in=1
+	autocmd BufWritePre *.go,*.rs undojoin | Neoformat
+	autocmd VimEnter *
+		\ if exists('s:stdin') || !exists(':NnnExplorer') |
+		\ elseif isdirectory(@%) |
+		\   call nnn#explorer(@%, { 'layout': 'silent' }) |
+		\ endif
+		" \ elseif @% == '' |
+		" \   call nnn#explorer('.', { 'layout': 'silent' }) |
+augroup END
+
+command! Update call minpac#update()
+command! Clean  call minpac#clean()
+command! Status call minpac#status()
 
 " asyncomplete.vim setup autocmd {{{
 augroup asyncomplete_setup
@@ -123,24 +146,6 @@ noremap <3-LeftMouse> <NOP>
 noremap <4-LeftMouse> <NOP>
 " }}}
 
-command! Update call minpac#update()
-command! Clean  call minpac#clean()
-command! Status call minpac#status()
-
-augroup vimrc
-	autocmd!
-	autocmd BufEnter go.mod set ft=gomod
-	autocmd StdinReadPre * let s:std_in=1
-	autocmd BufWritePre *.go,*.rs undojoin | Neoformat
-	autocmd VimEnter *
-		\ if exists('s:stdin') || !exists(':NnnExplorer') |
-		\ elseif @% == '' |
-		\   call nnn#explorer('.', { 'layout': 'silent' }) |
-		\ elseif isdirectory(@%) |
-		\   call nnn#explorer(@%, { 'layout': 'silent' }) |
-		\ endif
-augroup END
-
 nnoremap <C-G> 11<C-G>
 nnoremap <silent> <Return> :nohlsearch<Return><Return>
 
@@ -157,6 +162,9 @@ nmap <silent> <Leader>f :Neoformat<Return>
 nmap <silent> <Leader>nnn :NnnPicker<CR>
 nmap <silent> <Leader>nnd :NnnPicker %:p:h<CR>
 
+nmap <silent> <Leader>s :split<CR>
+nmap <silent> <Leader>v :vsplit<CR>
+
 nmap <Leader>af <Plug>(ale_fix)
 nmap <Leader>al <Plug>(ale_lint)
 nmap <Leader>ah <Plug>(ale_hover)
@@ -166,10 +174,6 @@ nmap <Leader>ap <Plug>(ale_prev_wrap)
 nmap <Leader>aa <Plug>(ale_code_action)
 nmap <Leader>ad <Plug>(ale_go_to_definition)
 nmap <Leader>at <Plug>(ale_go_to_type_definition)
-nmap <Leader>asd <Plug>(ale_go_to_definition_in_split)
-nmap <Leader>avd <Plug>(ale_go_to_definition_in_vsplit)
-nmap <Leader>ast <Plug>(ale_go_to_type_definition_in_split)
-nmap <Leader>avt <Plug>(ale_go_to_type_definition_in_vsplit)
 
 nmap <Leader>1 <Plug>AirlineSelectTab1
 nmap <Leader>2 <Plug>AirlineSelectTab2

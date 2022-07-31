@@ -28,7 +28,7 @@ zinit snippet OMZ::plugins/direnv
 
 fpath=(~/.zsh/functions/ "${fpath[@]}")
 
-eval "$(dircolors)"
+eval "$(/usr/bin/dircolors)"
 
 HISTFILE=~/.zhistory
 HISTSIZE=100
@@ -65,7 +65,7 @@ function rprompt {
 precmd_functions+=(rprompt)
 
 function proxy_on {
-	export no_proxy="localhost,127.0.0.1,localaddress,.localdomain.com"
+	export no_proxy="127.0.0.1,::1,localhost,localhost.localdomain,.localhost,.localhost.localdomain"
 	local proxy="$1"
 	if [[ "$proxy" == "" ]]; then
 		echo -n "server: "
@@ -109,6 +109,3 @@ function without_proxy { (
 	proxy_off
 	"$@"
 ); }
-
-function pac { without_proxy paru "$@"; }
-compdef pac=paru

@@ -1,0 +1,19 @@
+--- /usr/share/kwin/scripts/bismuth/contents/code/index.mjs
++++ /usr/share/kwin/scripts/bismuth/contents/code/index.mjs
+@@ -1987,14 +1987,14 @@ var DriverWindowImpl = class {
+     }
+     if (noBorder !== void 0) {
+       if (!this.noBorderManaged && noBorder) {
+-        this.noBorderOriginal = this.client.noBorder;
++        this.noBorderOriginal = true;
+       } else if (this.noBorderManaged && !this.client.noBorder) {
+         this.noBorderOriginal = false;
+       }
+       if (noBorder) {
+         this.client.noBorder = true;
+       } else if (this.noBorderManaged) {
+-        this.client.noBorder = this.noBorderOriginal;
++        this.client.noBorder = false;
+       }
+       this.noBorderManaged = noBorder;
+     }

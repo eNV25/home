@@ -10,6 +10,7 @@ alias ip='ip --color=auto'
 alias nvlc='nvlc --no-color'
 alias tree='tree -C'
 
+alias pac=paru
 alias podman='sudo podman'
 alias pwsh='pwsh -NoLogo'
 alias curl='curl -s'
@@ -22,6 +23,7 @@ alias nvimpager='nvimpager -p'
 alias cat=bat
 alias open=xdg-open
 alias pager='$PAGER'
+alias r=ranger
 alias o='$PAGER'
 alias h=head
 alias t=tail

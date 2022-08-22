@@ -19,16 +19,16 @@ zinit light-mode for \
 zinit snippet /usr/share/nnn/quitcd/quitcd.bash_zsh
 zinit snippet /usr/share/git/completion/git-prompt.sh
 zinit snippet ~/.environment.sh
-zinit snippet ~/.alias
+zinit snippet ~/.alias.sh
 
 zinit load jeffreytse/zsh-vi-mode
 
 zinit ice svn wait lucid
-zinit snippet OMZ::plugins/direnv
 
 fpath=(~/.zsh/functions/ "${fpath[@]}")
 
 eval "$(/usr/bin/dircolors)"
+eval "$(/usr/bin/direnv hook zsh)"
 
 HISTFILE=~/.zhistory
 HISTSIZE=100

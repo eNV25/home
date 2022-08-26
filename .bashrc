@@ -5,5 +5,6 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-alias ls='ls --color=auto'
+source ~/.environment.sh
+source ~/.alias.sh
 PS1='[\u@\h \W]\$ '

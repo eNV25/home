@@ -16,14 +16,12 @@ zinit light-mode for \
 	zdharma-continuum/zinit-annex-patch-dl \
 	zdharma-continuum/zinit-annex-rust
 
-zinit snippet /usr/share/nnn/quitcd/quitcd.bash_zsh
 zinit snippet /usr/share/git/completion/git-prompt.sh
+zinit snippet ~/.config/nnn/quitcd.sh
 zinit snippet ~/.environment.sh
 zinit snippet ~/.alias.sh
 
 zinit load jeffreytse/zsh-vi-mode
-
-zinit ice svn wait lucid
 
 fpath=(~/.zsh/functions/ "${fpath[@]}")
 
@@ -50,19 +48,52 @@ autoload -Uz zmv pick-web-browser run-help
 unalias run-help 2>/dev/null 1>/dev/null
 unalias 9 2>/dev/null 1>/dev/null
 
-autoload -U history-search-end
-zle -N history-beginning-search-backward-end history-search-end
-zle -N history-beginning-search-forward-end history-search-end
-bindkey "^[[A" history-beginning-search-backward-end
-bindkey "^[[B" history-beginning-search-forward-end
-
-PROMPT="%B%F{green}%n@%m%f:%F{blue}%~/%f%#%b "
-
 function rprompt {
 	RPROMPT="$(__git_ps1 '[%s]')"
 	RPROMPT="${RPROMPT/ /} SH${SHLVL}${NNNLVL:+N${NNNLVL}}"
 }
 precmd_functions+=(rprompt)
+PROMPT="%B%F{green}%n@%m%f:%F{blue}%~/%f%#%b "
+
+typeset -g -A key
+
+key[Home]="${terminfo[khome]}"
+key[End]="${terminfo[kend]}"
+key[Insert]="${terminfo[kich1]}"
+key[Backspace]="${terminfo[kbs]}"
+key[Delete]="${terminfo[kdch1]}"
+key[Up]="${terminfo[kcuu1]}"
+key[Down]="${terminfo[kcud1]}"
+key[Left]="${terminfo[kcub1]}"
+key[Right]="${terminfo[kcuf1]}"
+key[PageUp]="${terminfo[kpp]}"
+key[PageDown]="${terminfo[knp]}"
+key[Shift-Tab]="${terminfo[kcbt]}"
+
+autoload -Uz history-search-end
+zle -N history-beginning-search-backward-end history-search-end
+zle -N history-beginning-search-forward-end history-search-end
+
+[[ -n "${key[Home]}" ]] && bindkey -- "${key[Home]}" beginning-of-line
+[[ -n "${key[End]}" ]] && bindkey -- "${key[End]}" end-of-line
+[[ -n "${key[Insert]}" ]] && bindkey -- "${key[Insert]}" overwrite-mode
+[[ -n "${key[Backspace]}" ]] && bindkey -- "${key[Backspace]}" backward-delete-char
+[[ -n "${key[Delete]}" ]] && bindkey -- "${key[Delete]}" delete-char
+[[ -n "${key[Up]}" ]] && bindkey -- "${key[Up]}" history-beginning-search-backward-end # up-line-or-history
+[[ -n "${key[Down]}" ]] && bindkey -- "${key[Down]}" history-beginning-search-forward-end # down-line-or-history
+[[ -n "${key[Left]}" ]] && bindkey -- "${key[Left]}" backward-char
+[[ -n "${key[Right]}" ]] && bindkey -- "${key[Right]}" forward-char
+[[ -n "${key[PageUp]}" ]] && bindkey -- "${key[PageUp]}" beginning-of-buffer-or-history
+[[ -n "${key[PageDown]}" ]] && bindkey -- "${key[PageDown]}" end-of-buffer-or-history
+[[ -n "${key[Shift-Tab]}" ]] && bindkey -- "${key[Shift-Tab]}" reverse-menu-complete
+
+if (( ${+terminfo[smkx]} && ${+terminfo[rmkx]} )); then
+	autoload -Uz add-zle-hook-widget
+	function zle_application_mode_start { echoti smkx }
+	function zle_application_mode_stop { echoti rmkx }
+	add-zle-hook-widget -Uz zle-line-init zle_application_mode_start
+	add-zle-hook-widget -Uz zle-line-finish zle_application_mode_stop
+fi
 
 function proxy_on {
 	export no_proxy="127.0.0.1,::1,localhost,localhost.localdomain,.localhost,.localhost.localdomain"

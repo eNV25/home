@@ -68,7 +68,7 @@ key[Left]="${terminfo[kcub1]}"
 key[Right]="${terminfo[kcuf1]}"
 key[PageUp]="${terminfo[kpp]}"
 key[PageDown]="${terminfo[knp]}"
-key[Shift-Tab]="${terminfo[kcbt]}"
+key[ShiftTab]="${terminfo[kcbt]}"
 
 autoload -Uz history-search-end
 zle -N history-beginning-search-backward-end history-search-end
@@ -85,7 +85,7 @@ zle -N history-beginning-search-forward-end history-search-end
 [[ -n "${key[Right]}" ]] && bindkey -- "${key[Right]}" forward-char
 [[ -n "${key[PageUp]}" ]] && bindkey -- "${key[PageUp]}" beginning-of-buffer-or-history
 [[ -n "${key[PageDown]}" ]] && bindkey -- "${key[PageDown]}" end-of-buffer-or-history
-[[ -n "${key[Shift-Tab]}" ]] && bindkey -- "${key[Shift-Tab]}" reverse-menu-complete
+[[ -n "${key[ShiftTab]}" ]] && bindkey -- "${key[ShiftTab]}" reverse-menu-complete
 
 if (( ${+terminfo[smkx]} && ${+terminfo[rmkx]} )); then
 	autoload -Uz add-zle-hook-widget

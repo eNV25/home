@@ -8,13 +8,11 @@ packadd minpac
 function! Install()
 	call minpac#add('airblade/vim-gitgutter')
 	call minpac#add('arcticicestudio/nord-vim')
-	call minpac#add('cespare/vim-toml')
 	call minpac#add('direnv/direnv.vim')
 	call minpac#add('dense-analysis/ale')
 	call minpac#add('editorconfig/editorconfig-vim')
 	call minpac#add('farmergreg/vim-lastplace')
 	call minpac#add('fladson/vim-kitty')
-	call minpac#add('jaredgorski/fogbell.vim')
 	call minpac#add('nanotech/jellybeans.vim')
 	call minpac#add('mattn/vim-gomod')
 	call minpac#add('mcchrish/nnn.vim')
@@ -101,7 +99,7 @@ color nord
 
 augroup vimrc
 	autocmd!
-	autocmd BufEnter go.mod set ft=gomod
+	autocmd BufEnter go.mod setl ft=gomod
 	autocmd StdinReadPre * let s:std_in=1
 	autocmd BufWritePre *.go,*.rs undojoin | Neoformat
 	autocmd VimEnter *

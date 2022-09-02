@@ -1,0 +1,18 @@
+#!/bin/bash
+
+COMMAND="$1"
+KERNEL_VERSION="$2"
+ENTRY_DIR_ABS="$3"
+KERNEL_IMAGE="$4"
+
+MICROCODE=/boot/intel-ucode.img
+
+case "$COMMAND" in
+add)
+	[[ "$KERNEL_INSTALL_VERBOSE" -gt 0 ]] \
+		&& printf 'Adding microcode %s to %s\n' "$MICROCODE" "$ENTRY_DIR_ABS/initrd"
+	cat "$MICROCODE" "$ENTRY_DIR_ABS/initrd" > "$ENTRY_DIR_ABS/initrd-merged"
+	mv "$ENTRY_DIR_ABS/initrd-merged" "$ENTRY_DIR_ABS/initrd"
+	;;
+remove) ;;
+esac

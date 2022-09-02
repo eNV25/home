@@ -24,6 +24,7 @@ alias cat=bat
 alias open=xdg-open
 alias pager='$PAGER'
 alias r=ranger
+alias e='$EDITOR'
 alias o='$PAGER'
 alias h=head
 alias t=tail

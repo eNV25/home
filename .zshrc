@@ -87,14 +87,6 @@ zle -N history-beginning-search-forward-end history-search-end
 [[ -n "${key[PageDown]}" ]] && bindkey -- "${key[PageDown]}" end-of-buffer-or-history
 [[ -n "${key[ShiftTab]}" ]] && bindkey -- "${key[ShiftTab]}" reverse-menu-complete
 
-if (( ${+terminfo[smkx]} && ${+terminfo[rmkx]} )); then
-	autoload -Uz add-zle-hook-widget
-	function zle_application_mode_start { echoti smkx }
-	function zle_application_mode_stop { echoti rmkx }
-	add-zle-hook-widget -Uz zle-line-init zle_application_mode_start
-	add-zle-hook-widget -Uz zle-line-finish zle_application_mode_stop
-fi
-
 function proxy_on {
 	export no_proxy="127.0.0.1,::1,localhost,localhost.localdomain,.localhost,.localhost.localdomain"
 	local proxy="$1"

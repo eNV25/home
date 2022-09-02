@@ -1,0 +1,6 @@
+eval %sh{kak-lsp --kakoune -s $kak_session}
+lsp-enable
+lsp-auto-hover-enable
+hook global WinSetOption filetype=rust %{
+    hook window BufWritePre .* lsp-formatting-sync
+}

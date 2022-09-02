@@ -1,4 +1,20 @@
 #!/bin/sh
+usage="Usage: $(basename "$0") [TITLE]"
+while getopts 'h?' opt; do
+	case "$opt" in
+	?)
+		echo "$usage"
+		exit 2
+		;;
+	esac
+done
+title="$1"
+shift
+if [ -s "$title" ]; then title=Menu; fi
+if [ $# -gt 0 ]; then
+	echo "$usage"
+	exit 1
+fi
 tr '\n' '\0' |
 	xargs -0 -I@ printf '%s\0%s\0' @ @ |
-	xargs -0 kdialog --menu test
+	xargs -0 kdialog --menu "$title"

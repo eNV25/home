@@ -1,0 +1,12 @@
+theme = "nord"
+
+[keys.normal]
+"backspace" = ":bc"
+
+[editor.cursor-shape]
+insert = "bar"
+
+[editor.whitespace.render]
+tab = "all"
+space = "all"
+

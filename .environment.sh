@@ -10,7 +10,6 @@ export GIT_PS1_SHOWDIRTYSTATE=auto
 export GIT_PS1_SHOWSTASHSTATE=auto
 export GIT_PS1_SHOWUNTRACKEDFILES=auto
 export GIT_PS1_SHOWUPSTREAM=auto
-export GOFLAGS='-trimpath -ldflags=-linkmode=external'
 export GPG_TTY="$(tty)"
 export LESS='--mouse --wheel-lines=5'
 export LESSOPEN="|lesspipe.sh %s"
@@ -27,7 +26,8 @@ export BOOT="$(bootctl -x)"
 export ESP="$(bootctl -p)"
 export NNN_FIFO="$XDG_RUNTIME_DIR/nnn.fifo"
 export MPD_HOST="$XDG_RUNTIME_DIR/mpd/socket"
-export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR:-/run/user/$UID}/ssh-agent.socket"
+export SSH_AGENT_PID=""
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/gnupg/S.gpg-agent.ssh"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"

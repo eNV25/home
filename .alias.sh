@@ -1,8 +1,8 @@
 
 unalias ls 2>/dev/null 1>/dev/null
-alias l='ls --color=tty -lah --group-directories-first'
-alias ls='ls --color=tty --group-directories-first'
-alias ll='ls --color=tty -lh --group-directories-first'
+alias ls='ls --color=auto --hyperlink=auto --group-directories-first'
+alias l='ls -lah'
+alias ll='ls -lh'
 alias dir='dir --color=auto'
 alias diff='diff --color=auto'
 alias grep='grep --color=auto'
@@ -24,7 +24,6 @@ alias cat=bat
 alias open=xdg-open
 alias pager='$PAGER'
 alias r=ranger
-alias e='$EDITOR'
 alias o='$PAGER'
 alias h=head
 alias t=tail

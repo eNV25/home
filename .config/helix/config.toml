@@ -1,12 +1,19 @@
 theme = "nord"
 
-[keys.normal]
-"backspace" = ":bc"
+[editor]
+color-modes = true
 
 [editor.cursor-shape]
 insert = "bar"
 
+[editor.indent-guides]
+render = true
+character = "|"
+
 [editor.whitespace.render]
-tab = "all"
-space = "all"
+tab = "none"
+space = "none"
+
+[keys.normal]
+"backspace" = ":bc"
 

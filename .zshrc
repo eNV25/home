@@ -1,12 +1,15 @@
+# shellcheck shell=bash
 
 if [[ ! -f "$HOME/.local/share/zinit/zinit.git/zinit.zsh" ]]; then
 	print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
 	command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
+	# shellcheck disable=SC2015
 	command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" &&
 		print -P "%F{33} %F{34}Installation successful.%f%b" ||
 		print -P "%F{160} The clone has failed.%f%b"
 fi
 
+# shellcheck disable=SC1091
 source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
 
 # Load a few important annexes, without Turbo
@@ -28,13 +31,21 @@ fpath=(~/.zsh/functions/ "${fpath[@]}")
 
 eval "$(/usr/bin/dircolors)"
 eval "$(/usr/bin/direnv hook zsh)"
+eval "$(/usr/bin/luarocks path)"
 
-HISTFILE=~/.zhistory
-HISTSIZE=100
-SAVEHIST=100
-READNULLCMD="$PAGER"
-unsetopt beep nomatch
-setopt autocd extendedglob combiningchars magicequalsubst
+# shellcheck disable=SC2034
+{
+	HISTFILE=~/.zhistory
+	HISTSIZE=100
+	SAVEHIST=100
+	READNULLCMD="$PAGER"
+	unsetopt beep nomatch
+	setopt autocd extendedglob combiningchars magicequalsubst
+
+	function _rprompt { RPROMPT="$(__git_ps1 '[%s]') SH${SHLVL}${NNNLVL:+N${NNNLVL}}"; }
+	precmd_functions+=(_rprompt)
+	PROMPT="%B%F{green}%n@%m%f:%F{blue}%~/%f%#%b "
+}
 
 alias help=run-help
 alias zmv='zmv'
@@ -49,15 +60,9 @@ autoload -Uz zmv pick-web-browser run-help
 unalias run-help 2>/dev/null 1>/dev/null
 unalias 9 2>/dev/null 1>/dev/null
 
-function rprompt {
-	RPROMPT="$(__git_ps1 '[%s]')"
-	RPROMPT="${RPROMPT/ /} SH${SHLVL}${NNNLVL:+N${NNNLVL}}"
-}
-precmd_functions+=(rprompt)
-PROMPT="%B%F{green}%n@%m%f:%F{blue}%~/%f%#%b "
-
 typeset -g -A key
 
+# shellcheck disable=SC2154
 key[Home]="${terminfo[khome]}"
 key[End]="${terminfo[kend]}"
 key[Insert]="${terminfo[kich1]}"
@@ -80,7 +85,7 @@ zle -N history-beginning-search-forward-end history-search-end
 [[ -n "${key[Insert]}" ]] && bindkey -- "${key[Insert]}" overwrite-mode
 [[ -n "${key[Backspace]}" ]] && bindkey -- "${key[Backspace]}" backward-delete-char
 [[ -n "${key[Delete]}" ]] && bindkey -- "${key[Delete]}" delete-char
-[[ -n "${key[Up]}" ]] && bindkey -- "${key[Up]}" history-beginning-search-backward-end # up-line-or-history
+[[ -n "${key[Up]}" ]] && bindkey -- "${key[Up]}" history-beginning-search-backward-end    # up-line-or-history
 [[ -n "${key[Down]}" ]] && bindkey -- "${key[Down]}" history-beginning-search-forward-end # down-line-or-history
 [[ -n "${key[Left]}" ]] && bindkey -- "${key[Left]}" backward-char
 [[ -n "${key[Right]}" ]] && bindkey -- "${key[Right]}" forward-char
@@ -88,24 +93,26 @@ zle -N history-beginning-search-forward-end history-search-end
 [[ -n "${key[PageDown]}" ]] && bindkey -- "${key[PageDown]}" end-of-buffer-or-history
 [[ -n "${key[ShiftTab]}" ]] && bindkey -- "${key[ShiftTab]}" reverse-menu-complete
 
+# shellcheck disable=SC2120
 function proxy_on {
 	export no_proxy="127.0.0.1,::1,localhost,localhost.localdomain,.localhost,.localhost.localdomain"
 	local proxy="$1"
 	if [[ "$proxy" == "" ]]; then
 		echo -n "server: "
-		read server
+		read -r server
 		echo -n "port: "
-		read port
+		read -r port
 		echo -n "username: "
-		read username
+		read -r username
 		if [[ "$username" != "" ]]; then
 			echo -n "password: "
-			read -es password
+			read -res password
 			local pre="$username:$password@"
 		fi
 		proxy="$pre$server:$port"
 	fi
-	export all_proxy="$proxy" \
+	export \
+		all_proxy="$proxy" \
 		ALL_PROXY="$proxy" \
 		http_proxy="$proxy" \
 		HTTP_PROXY="$proxy" \

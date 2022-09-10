@@ -10,6 +10,9 @@ export GIT_PS1_SHOWDIRTYSTATE=auto
 export GIT_PS1_SHOWSTASHSTATE=auto
 export GIT_PS1_SHOWUNTRACKEDFILES=auto
 export GIT_PS1_SHOWUPSTREAM=auto
+export GIT_PS1_STATESEPARATOR=
+export GIT_PS1_DESCRIBE_STYLE=branch
+export GIT_PS1_SHOWCOLORHINTS=auto
 export GPG_TTY="$(tty)"
 export LESS='--mouse --wheel-lines=5'
 export LESSOPEN="|lesspipe.sh %s"
@@ -33,7 +36,7 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
 
-for p in "$HOME/go/bin" "$HOME/.local/bin" "$HOME/bin"; do
+for p in "$HOME/go/bin" "$HOME/.go/bin" "$HOME/.local/bin" "$HOME/bin"; do
 	PATH="${PATH//":$p:"/:}"                              # remove from middle
 	PATH="${PATH%%":$p"}"                                 # remove from end
 	case "$PATH" in "$p:"*) ;; *) PATH="$p:$PATH" ;; esac # prepend if

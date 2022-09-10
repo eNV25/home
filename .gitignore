@@ -17,7 +17,8 @@
 /.gnupg/
 /.ipython/
 /.kde4/
-/.mozilla/
+/.mozilla/extensions
+/.mozilla/firefox/*/
 /.npm/
 /.parallel/
 /.pki/

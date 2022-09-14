@@ -1,5 +1,9 @@
 # shellcheck shell=bash
 
+eval "$(/usr/bin/dircolors)"
+eval "$(/usr/bin/direnv hook zsh)"
+eval "$(/usr/bin/luarocks path)"
+
 if [[ ! -f "$HOME/.local/share/zinit/zinit.git/zinit.zsh" ]]; then
 	print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
 	command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
@@ -28,10 +32,6 @@ zinit snippet ~/.alias.sh
 zinit load jeffreytse/zsh-vi-mode
 
 fpath=(~/.zsh/functions/ "${fpath[@]}")
-
-eval "$(/usr/bin/dircolors)"
-eval "$(/usr/bin/direnv hook zsh)"
-eval "$(/usr/bin/luarocks path)"
 
 # shellcheck disable=SC2034
 {

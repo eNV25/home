@@ -1,6 +1,10 @@
 theme = "nord"
 
 [editor]
+auto-completion = true
+auto-format = true
+auto-info = true
+bufferline = "always"
 color-modes = true
 
 [editor.cursor-shape]
@@ -16,4 +20,6 @@ space = "none"
 
 [keys.normal]
 "backspace" = ":bc"
+"q" = ":q"
+"Q" = ":q"
 

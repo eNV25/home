@@ -1,3 +1,2 @@
 #!/bin/dash
-MPDCONF=${XDG_CONFIG_HOME:-$HOME/.config}/mpd/mpd.conf
-exec mpd --no-daemon $MPDCONF
+exec mpd --no-daemon

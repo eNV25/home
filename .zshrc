@@ -47,19 +47,6 @@ fpath=(~/.zsh/functions/ "${fpath[@]}")
 	PROMPT="%B%F{green}%n@%m%f:%F{blue}%~/%f%#%b "
 }
 
-alias help=run-help
-alias zmv='zmv'
-alias zcp='zmv -c'
-alias zln='zmv -l'
-alias -s html=pick-web-browser
-
-autoload -Uz compinit && compinit
-autoload -Uz bashcompinit && bashcompinit
-autoload -Uz command_not_found_handler
-autoload -Uz zmv pick-web-browser run-help
-unalias run-help 2>/dev/null 1>/dev/null
-unalias 9 2>/dev/null 1>/dev/null
-
 typeset -g -A key
 
 # shellcheck disable=SC2154
@@ -92,6 +79,24 @@ zle -N history-beginning-search-forward-end history-search-end
 [[ -n "${key[PageUp]}" ]] && bindkey -- "${key[PageUp]}" beginning-of-buffer-or-history
 [[ -n "${key[PageDown]}" ]] && bindkey -- "${key[PageDown]}" end-of-buffer-or-history
 [[ -n "${key[ShiftTab]}" ]] && bindkey -- "${key[ShiftTab]}" reverse-menu-complete
+
+alias -s html=pick-web-browser
+alias help=run-help
+alias zmv='zmv'
+alias zcp='zmv -c'
+alias zln='zmv -l'
+
+autoload -Uz compinit && compinit
+autoload -Uz bashcompinit && bashcompinit
+autoload -Uz command_not_found_handler
+autoload -Uz zmv pick-web-browser run-help
+unalias run-help 2>/dev/null 1>/dev/null
+unalias 9 2>/dev/null 1>/dev/null
+
+function rate-mirrors-arch {
+	rate-mirrors arch | awk '/^#/ { print $0 > "/dev/stderr"; next } { print $0 }'
+}
+alias updmirrors='sudo mv =(rate-mirrors-arch) /etc/pacman.d/mirrorlist'
 
 # shellcheck disable=SC2120
 function proxy_on {

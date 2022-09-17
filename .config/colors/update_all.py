@@ -62,7 +62,7 @@ if __name__ == "__main__":
     # print("OK --> " + "lxterminal/")
     # xrdb2pantheon_terminal.main("xrdb/", "pantheonterminal/")
     # print("OK --> " + "pantheonterminal/")
-    # xrdb2wezterm.main("xrdb/", "wezterm/")
+    xrdb2wezterm.main("xrdb/", "wezterm/")
     # print("OK --> " + "wezterm/")
     # xrdb2windowsterminal.main("xrdb/", "windowsterminal/")
     # print("OK --> " + "windowsterminal/")

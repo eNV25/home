@@ -1,0 +1,12 @@
+# Nord
+[colors]
+foreground = "#cfd6e4"
+background = "#232731"
+cursor_bg = "#cfd6e4"
+cursor_border = "#cfd6e4"
+cursor_fg = "#2d3241"
+selection_bg = "#3b4457"
+selection_fg = "#cfd6e4"
+
+ansi = ["#2d3241","#b04b57","#93b379","#e5c179","#6f8fb4","#a4799d","#77b3c5","#dfe3ec"]
+brights = ["#3b4457","#b04b57","#93b379","#e5c179","#6f8fb4","#a4799d","#7eafad","#e7ebf1"]

@@ -1,0 +1,12 @@
+# github-vscode-dark
+[colors]
+foreground = "#d1d5da"
+background = "#151515"
+cursor_bg = "#e5e5e5"
+cursor_border = "#e5e5e5"
+cursor_fg = "#1e2429"
+selection_bg = "#5b5f62"
+selection_fg = "#dde0e3"
+
+ansi = ["#000000","#d81029","#00c172","#e2e800","#1571ce","#c824c2","#00aad1","#e5e5e5"]
+brights = ["#666666","#fe3646","#00d684","#f2f800","#2e8df1","#e163dc","#00badf","#e5e5e5"]

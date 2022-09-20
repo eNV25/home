@@ -80,12 +80,6 @@ zle -N history-beginning-search-forward-end history-search-end
 [[ -n "${key[PageDown]}" ]] && bindkey -- "${key[PageDown]}" end-of-buffer-or-history
 [[ -n "${key[ShiftTab]}" ]] && bindkey -- "${key[ShiftTab]}" reverse-menu-complete
 
-alias -s html=pick-web-browser
-alias help=run-help
-alias zmv='zmv'
-alias zcp='zmv -c'
-alias zln='zmv -l'
-
 autoload -Uz compinit && compinit
 autoload -Uz bashcompinit && bashcompinit
 autoload -Uz command_not_found_handler
@@ -93,10 +87,22 @@ autoload -Uz zmv pick-web-browser run-help
 unalias run-help 2>/dev/null 1>/dev/null
 unalias 9 2>/dev/null 1>/dev/null
 
-function rate-mirrors-arch {
-	rate-mirrors arch | awk '/^#/ { print $0 > "/dev/stderr"; next } { print $0 }'
+alias -s html=pick-web-browser
+alias help=run-help
+alias zmv='zmv'
+alias zcp='zmv -c'
+alias zln='zmv -l'
+
+function commenterr {
+	"$@" | awk '/^#/ { print $0 > "/dev/stderr"; next } { print $0 }'
 }
-alias updmirrors='sudo mv =(rate-mirrors-arch) /etc/pacman.d/mirrorlist'
+
+function updmirrors {
+	commenterr rate-mirrors arch | sudo tee /etc/pacman.d/mirrorlist
+	for mirrorlist in /etc/pacman.d/*-mirrorlist; do
+		commenterr rankmirrors "$mirrorlist" | sudo tee "$mirrorlist"
+	done
+}
 
 # shellcheck disable=SC2120
 function proxy_on {

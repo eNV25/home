@@ -1,4 +1,4 @@
 user_interface = "alternative"
-mpd_music_dir = "/home/60011/Music"
-visualizer_data_source = "/run/user/60011/mpd/fifo"
+mpd_music_dir = "/home/media/Music"
+visualizer_data_source = "/run/user/1000/mpd/fifo"
 visualizer_output_name = "FIFO"

@@ -1,5 +1,5 @@
 # ~/.config/autostart/ssh-add.desktop
 [Desktop Entry]
-Exec=ssh-add .ssh/id_rsa .ssh/id_ed25519 .ssh/keys/arch_env .ssh/keys/github_env
+Exec=ssh-add .ssh/keys/aur
 Name=ssh-add
 Type=Application

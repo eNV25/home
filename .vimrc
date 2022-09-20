@@ -3,37 +3,6 @@ if &compatible
 	set nocompatible
 endif
 
-packadd minpac
-
-if exists('g:loaded_minpac')
-	call minpac#init({
-		\   'package_name': 'plugins',
-		\ })
-	call minpac#add('airblade/vim-gitgutter')
-	call minpac#add('arcticicestudio/nord-vim')
-	call minpac#add('direnv/direnv.vim')
-	call minpac#add('dense-analysis/ale')
-	call minpac#add('editorconfig/editorconfig-vim')
-	call minpac#add('farmergreg/vim-lastplace')
-	call minpac#add('lifepillar/vim-mucomplete')
-	call minpac#add('nanotech/jellybeans.vim')
-	call minpac#add('mattn/vim-gomod')
-	call minpac#add('mcchrish/nnn.vim')
-	call minpac#add('michaeljsmith/vim-indent-object')
-	call minpac#add('sbdchd/neoformat')
-	call minpac#add('rickhowe/diffchar.vim')
-	call minpac#add('tpope/vim-commentary')
-	call minpac#add('tpope/vim-eunuch')
-	call minpac#add('tpope/vim-fugitive')
-	call minpac#add('tpope/vim-repeat')
-	call minpac#add('tpope/vim-sleuth')
-	call minpac#add('tpope/vim-surround')
-	call minpac#add('vim-airline/vim-airline')
-	call minpac#add('vim-airline/vim-airline-themes')
-	call minpac#add('zigford/vim-powershell')
-	call minpac#add('k-takata/minpac', { 'type': 'opt' })
-endif
-
 set hidden
 set autowrite
 set nobackup nowritebackup
@@ -128,7 +97,6 @@ nmap <silent> q :quit<Return>
 nmap <silent> <Leader>m :make<Return>
 nmap <silent> <Leader>nnn :NnnPicker<Return>
 nmap <silent> <Leader>nnd :NnnPicker %:p:h<Return>
-nmap <silent> <Space>f :Neoformat<Return>
 
 nmap <silent> <Leader>s :split<Return>
 nmap <silent> <Leader>v :vsplit<Return>
@@ -137,6 +105,7 @@ nmap [d <Plug>(ale_prev_wrap)
 nmap ]d <Plug>(ale_next_wrap)
 nmap [D <Plug>(ale_first)
 nmap ]D <Plug>(ale_last)
+nmap <Space>f <Plug>(ale_fix)
 nmap <Space>k <Plug>(ale_hover)
 nmap <Space>r <Plug>(ale_rename)
 nmap <Space>a <Plug>(ale_code_action)

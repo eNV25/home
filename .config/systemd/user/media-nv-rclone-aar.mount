@@ -1,0 +1,6 @@
+[Mount]
+What=aar:
+Where=/media/nv/rclone/aar
+
+[Install]
+WantedBy=default.target

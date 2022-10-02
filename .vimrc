@@ -56,7 +56,7 @@ augroup END
 augroup vimrc
 	autocmd!
 	autocmd StdinReadPre * let s:stdin=1
-	autocmd BufWritePre *.go,*.rs undojoin | Neoformat
+	autocmd BufWritePre *.go,*.rs undojoin | ALEFix
 	autocmd VimEnter *
 		\ if exists('s:stdin') || !exists(':NnnExplorer') |
 		\ elseif isdirectory(@%) |

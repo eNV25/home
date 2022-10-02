@@ -6,6 +6,7 @@ auto-format = true
 auto-info = true
 bufferline = "always"
 color-modes = true
+completion-trigger-len = 0
 
 [editor.cursor-shape]
 insert = "bar"

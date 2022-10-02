@@ -2,4 +2,4 @@
 --wrap=never
 --theme=Nord
 --style=plain
---paging=always
+--paging=never

@@ -1,0 +1,18 @@
+
+base="${BASH_SOURCE[0]}"
+base="${base##*/}"
+base="${base%%.*}"
+
+ALL_config='/etc/mkinitcpio.conf'
+ALL_kver="/boot/vmlinuz-$base"
+ALL_microcode=(/boot/*-ucode.img)
+
+PRESETS=('fallback')
+
+default_image="/boot/initramfs-$base.img"
+default_efi_image="/efi/EFI/Linux/$(</etc/machine-id)-$base.efi"
+default_options=""
+
+fallback_image="/boot/initramfs-$base-fallback.img"
+fallback_efi_image="/efi/EFI/Linux/$(</etc/machine-id)-$base-fallback.efi"
+fallback_options="-S autodetect"

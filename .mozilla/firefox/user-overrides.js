@@ -9,6 +9,7 @@ user_pref("privacy.clearOnShutdown.history", false); // 2811
 user_pref("privacy.resistFingerprinting", false); // 4501
 user_pref("privacy.resistFingerprinting.letterboxing", false); // 4504 [pointless if not using RFP]
 user_pref("webgl.disabled", false); // 4520 [mostly pointless if not using RFP]
+//*/
 
 // optional
 user_pref("browser.download.folderList", 2); // 5016

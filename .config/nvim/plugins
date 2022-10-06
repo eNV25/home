@@ -1,0 +1,16 @@
+
+airblade/voom
+
+arcticicestudio/nord-vim
+
+gpanders/editorconfig.nvim
+mattn/vim-gomod
+NMAC427/guess-indent.nvim
+ojroques/nvim-hardline
+
+neovim/nvim-lspconfig
+simrat39/rust-tools.nvim
+jose-elias-alvarez/null-ls.nvim
+lifepillar/vim-mucomplete
+
+nvim-lua/plenary.nvim

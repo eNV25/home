@@ -24,7 +24,4 @@
 /.pki/
 /.ssh/
 /.subversion/
-/.vim/
 /.yarn/
-/.zsh/
-/.envrc

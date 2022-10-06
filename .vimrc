@@ -66,11 +66,6 @@ augroup vimrc
 		" \   call nnn#explorer('.', { 'layout': 'silent' }) |
 augroup END
 
-command! Install call Install()
-command! Update call minpac#update()
-command! Clean  call minpac#clean()
-command! Status call minpac#status()
-
 set termguicolors
 syntax on
 color nord

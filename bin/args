@@ -1,4 +1,4 @@
-#!//usr/bin/tcc -run
+#!/usr/bin/tcc -run
 #include <stdio.h> // vi: ft=c
 int main(int argc, char **argv) {
 	for (int i = 1; i < argc; i++) {

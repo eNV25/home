@@ -1,4 +1,4 @@
-theme = "nord"
+theme = "custom"
 
 [editor]
 auto-completion = true

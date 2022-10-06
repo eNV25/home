@@ -1,6 +1,6 @@
 #!/usr/bin/php
 <?php
-// Found on stackoverflow edited by me.
+// Found on stackoverflow, edited by eNV25.
 
 /**
  * This command line tool encodes all images contained in the specified HTML file.

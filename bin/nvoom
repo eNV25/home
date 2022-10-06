@@ -1,0 +1,2 @@
+#!/bin/sh
+VIM_DIR="$HOME/.config/nvim" VIM_PLUGINS_DIR="$HOME/.local/share/nvim/site/pack/plugins/start" exec "$HOME/.local/share/nvim/site/pack/plugins/start/voom/voom" "$@"

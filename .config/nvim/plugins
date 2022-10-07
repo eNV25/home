@@ -11,6 +11,11 @@ ojroques/nvim-hardline
 neovim/nvim-lspconfig
 simrat39/rust-tools.nvim
 jose-elias-alvarez/null-ls.nvim
-lifepillar/vim-mucomplete
+#lifepillar/vim-mucomplete
+
+hrsh7th/cmp-nvim-lsp
+hrsh7th/cmp-vsnip
+hrsh7th/nvim-cmp
+hrsh7th/vim-vsnip
 
 nvim-lua/plenary.nvim

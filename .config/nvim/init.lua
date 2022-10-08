@@ -8,7 +8,6 @@ local kmap = vim.keymap
 local opt = vim.opt
 local fn = vim.fn
 local g = vim.g
-local b = vim.b
 
 _G.pprint = vim.pretty_print
 local extend = require("config/utils/extend")
@@ -55,7 +54,7 @@ do
 end
 
 cmd("filetype plugin indent on")
-require("guess-indent").setup({})
+require('indent-o-matic').setup({})
 require("hardline").setup({ bufferline = true, theme = g.colors_name })
 
 do
@@ -101,7 +100,7 @@ do
 		completion = { autocomplete = false },
 		snippet = {
 			expand = function(args)
-				vim.fn["vsnip#anonymous"](args.body)
+				fn["vsnip#anonymous"](args.body)
 			end,
 		},
 		sources = {
@@ -127,11 +126,11 @@ do
 				end
 			end, { "i", "s" }),
 			["<Tab>"] = cmp.mapping(function(fallback)
-				local col = vim.fn.col(".") - 1
+				local col = fn.col(".") - 1
 
 				if cmp.visible() then
 					cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
-				elseif col == 0 or vim.fn.getline("."):sub(col, col):match("%s") then
+				elseif col == 0 or fn.getline("."):sub(col, col):match("%s") then
 					fallback()
 				else
 					cmp.complete()

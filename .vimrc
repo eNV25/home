@@ -26,9 +26,6 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_idx_mode = 1
 let g:ale_go_golangci_lint_package = 1
 let g:ale_go_golangci_lint_options = ''
-let g:ale_java_eclipselsp_config_path = '/home/nv/.config/jdtls'
-let g:ale_java_eclipselsp_workspace_path = '/home/nv/src'
-let g:ale_java_javalsp_executable = '/usr/local/bin/java-language-server'
 let g:ale_linters = {
 	\   'c': ['clangd', 'clang'],
 	\   'go': ['gopls', 'gobuild', 'govet', 'golangci-lint'],

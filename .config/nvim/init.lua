@@ -2,97 +2,98 @@
 
 local vim = assert(vim, "module vim does not exist")
 
-local api = vim.api
-local cmd = vim.cmd
-local kmap = vim.keymap
-local opt = vim.opt
-local fn = vim.fn
-local g = vim.g
-
 _G.pprint = vim.pretty_print
-local extend = require("config/utils/extend")
+local contains = vim.tbl_contains
+local deep_extend = function(...)
+	return vim.tbl_deep_extend("force", ...)
+end
 
-opt.autowrite = true
-opt.splitbelow = true
-opt.splitright = true
+vim.opt.autowrite = true
+vim.opt.splitbelow = true
+vim.opt.splitright = true
 
-opt.wrap = false
-opt.number = true
-opt.list = true
-opt.listchars:append({ trail = "·", tab = "→ ", extends = ">", precedes = "<", nbsp = "␣" })
-opt.completeopt = { "menu", "menuone", "noselect", "preview" }
-opt.shortmess:append({ a = true, c = true })
-opt.guifont = "JetBrains Mono:h11"
+vim.opt.wrap = false
+vim.opt.number = true
+vim.opt.list = true
+vim.opt.completeopt = { "menu", "menuone", "noselect", "preview" }
+vim.opt.shortmess:append({ a = true, c = true })
+vim.opt.guifont = "JetBrains Mono:h11"
 
 do
-	local augroup_init = api.nvim_create_augroup("init", {})
-	api.nvim_create_autocmd("CompleteDone", {
+	local augroup_init = vim.api.nvim_create_augroup("Init", {})
+	vim.api.nvim_create_autocmd("CompleteDone", {
 		group = augroup_init,
 		command = "pclose",
 	})
-	api.nvim_create_autocmd("BufWritePre", {
-		pattern = { "*.go", "*.rs" },
-		group = augroup_init,
-		callback = function()
-			vim.lsp.buf.format({ async = true })
-		end,
-	})
-end
-
-do
-	local augroup_nord_override = api.nvim_create_augroup("nord_override", {})
-	api.nvim_create_autocmd("ColorScheme", {
+	vim.api.nvim_create_autocmd("ColorScheme", {
 		pattern = "nord",
-		group = augroup_nord_override,
+		group = augroup_init,
 		command = [[
-		highlight Normal ctermbg=NONE guibg=NONE
-		highlight NonText ctermbg=NONE guibg=NONE
-	]],
+			highlight Normal ctermbg=NONE guibg=NONE
+			highlight NonText ctermbg=NONE guibg=NONE
+		]],
 	})
-	opt.termguicolors = true
-	cmd("colorscheme nord")
 end
 
-cmd("filetype plugin indent on")
-require('indent-o-matic').setup({})
-require("hardline").setup({ bufferline = true, theme = g.colors_name })
+local augroup_lsp_buffer_format = vim.api.nvim_create_augroup("LspBufferFormat", {})
+local lsp_autocmds = function(client, bufnr)
+	local buf = vim.lsp.buf
+	if
+		client.supports_method("textDocument/formatting")
+		and contains({ "go", "rust" }, vim.bo[bufnr].filetype)
+	then
+		vim.api.nvim_clear_autocmds({ group = augroup_lsp_buffer_format, buffer = bufnr })
+		vim.api.nvim_create_autocmd("BufWritePre", {
+			group = augroup_lsp_buffer_format,
+			buffer = bufnr,
+			callback = function()
+				buf.format({ bufnr = bufnr })
+			end,
+		})
+	end
+end
 
 do
 	local kmopts = { noremap = true, silent = true }
-	kmap.set("n", "q", "<Cmd>quit<Return>", kmopts)
-	kmap.set("n", "ge", "G", kmopts)
-	kmap.set("n", "[b", "<Cmd>bprev<Return>", kmopts)
-	kmap.set("n", "]b", "<Cmd>bnext<Return>", kmopts)
-	kmap.set("n", "<BS>", "<Cmd>bdelete<Return>", kmopts)
-	kmap.set("n", "<C-G>", "11<C-G>", kmopts)
-	kmap.set("n", "<Return>", "<Cmd>nohlsearch|normal!<C-L><Return><Return>", kmopts)
-	kmap.set("n", "[d", vim.diagnostic.goto_prev, kmopts)
-	kmap.set("n", "]d", vim.diagnostic.goto_next, kmopts)
-	kmap.set("n", "<Space>e", vim.diagnostic.open_float, kmopts)
-	kmap.set("n", "<Space>q", vim.diagnostic.setloclist, kmopts)
+	vim.keymap.set("n", "q", "<Cmd>quit<Return>", kmopts)
+	vim.keymap.set("n", "ge", "G", kmopts)
+	vim.keymap.set("n", "[b", "<Cmd>bprev<Return>", kmopts)
+	vim.keymap.set("n", "]b", "<Cmd>bnext<Return>", kmopts)
+	vim.keymap.set("n", "<BS>", "<Cmd>bdelete<Return>", kmopts)
+	vim.keymap.set("n", "<C-G>", "11<C-G>", kmopts)
+	vim.keymap.set("n", "<Return>", "<Cmd>nohlsearch|normal!<C-L><Return><Return>", kmopts)
+	vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, kmopts)
+	vim.keymap.set("n", "]d", vim.diagnostic.goto_next, kmopts)
+	vim.keymap.set("n", "<Space>j", vim.diagnostic.open_float, kmopts)
+	vim.keymap.set("n", "<Space>q", vim.diagnostic.setloclist, kmopts)
 end
 
-local lsp_kmap = function(buffn)
+local lsp_kmap = function(_, bufnr)
 	local buf = vim.lsp.buf
-	local kmbufopts = { noremap = true, silent = true, buffer = buffn }
-	kmap.set("n", "gD", buf.declaration, kmbufopts)
-	kmap.set("n", "gd", buf.definition, kmbufopts)
-	kmap.set("n", "gy", buf.type_definition, kmbufopts)
-	kmap.set("n", "gi", buf.implementation, kmbufopts)
-	kmap.set("n", "gr", buf.references, kmbufopts)
-	kmap.set("n", "<C-k>", buf.signature_help, kmbufopts)
-	kmap.set("n", "<Space>wa", buf.add_workspace_folder, kmbufopts)
-	kmap.set("n", "<Space>wr", buf.remove_workspace_folder, kmbufopts)
-	kmap.set("n", "<Space>wl", function()
+	local kmbufopts = { noremap = true, silent = true, buffer = bufnr }
+	vim.keymap.set("n", "gD", buf.declaration, kmbufopts)
+	vim.keymap.set("n", "gd", buf.definition, kmbufopts)
+	vim.keymap.set("n", "gy", buf.type_definition, kmbufopts)
+	vim.keymap.set("n", "gi", buf.implementation, kmbufopts)
+	vim.keymap.set("n", "gr", buf.references, kmbufopts)
+	vim.keymap.set("n", "<C-k>", buf.signature_help, kmbufopts)
+	vim.keymap.set("n", "<Space>wa", buf.add_workspace_folder, kmbufopts)
+	vim.keymap.set("n", "<Space>wr", buf.remove_workspace_folder, kmbufopts)
+	vim.keymap.set("n", "<Space>wl", function()
 		pprint(buf.list_workspace_folders())
 	end, kmbufopts)
-	kmap.set("n", "<space>f", function()
-		buf.format({ async = true })
+	vim.keymap.set("n", "<space>f", function()
+		buf.format({ async = true, bufnr = bufnr })
 	end, kmbufopts)
-	kmap.set("n", "<Space>k", buf.hover, kmbufopts)
-	kmap.set("n", "<Space>r", buf.rename, kmbufopts)
-	kmap.set("n", "<Space>a", buf.code_action, kmbufopts)
+	vim.keymap.set("n", "<Space>k", buf.hover, kmbufopts)
+	vim.keymap.set("n", "<Space>r", buf.rename, kmbufopts)
+	vim.keymap.set("n", "<Space>a", buf.code_action, kmbufopts)
 end
+
+vim.opt.termguicolors = true
+vim.cmd("colorscheme nord")
+require("indent-o-matic").setup({})
+require("hardline").setup({ bufferline = true, theme = vim.g.colors_name })
 
 do
 	local cmp = require("cmp")
@@ -100,7 +101,7 @@ do
 		completion = { autocomplete = false },
 		snippet = {
 			expand = function(args)
-				fn["vsnip#anonymous"](args.body)
+				vim.fn["vsnip#anonymous"](args.body)
 			end,
 		},
 		sources = {
@@ -112,25 +113,24 @@ do
 			["<C-f>"] = cmp.mapping.scroll_docs(4),
 			["<CR>"] = cmp.mapping.confirm({ select = true }),
 			["<C-d>"] = cmp.mapping(function(fallback)
-				if fn["vsnip#jumpable"](1) then
-					cmd("normal <Plug>(vsnip-jump-next)")
+				if vim.fn["vsnip#jumpable"](1) then
+					vim.cmd("normal <Plug>(vsnip-jump-next)")
 				else
 					fallback()
 				end
 			end, { "i", "s" }),
 			["<C-b>"] = cmp.mapping(function(fallback)
-				if fn["vsnip#jumpable"](-1) then
-					cmd("normal <Plug>(vsnip-jump-prev)")
+				if vim.fn["vsnip#jumpable"](-1) then
+					vim.cmd("normal <Plug>(vsnip-jump-prev)")
 				else
 					fallback()
 				end
 			end, { "i", "s" }),
 			["<Tab>"] = cmp.mapping(function(fallback)
-				local col = fn.col(".") - 1
-
+				local col = vim.fn.col(".") - 1
 				if cmp.visible() then
 					cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
-				elseif col == 0 or fn.getline("."):sub(col, col):match("%s") then
+				elseif col == 0 or vim.fn.getline("."):sub(col, col):match("%s") then
 					fallback()
 				else
 					cmp.complete()
@@ -148,14 +148,13 @@ do
 end
 
 do
-	local cmp_nvim_lsp = require("cmp_nvim_lsp")
 	local lsp_config = require("lspconfig")
 	local lsp_servers = { "gopls", "sumneko_lua", "bashls", "clangd", "pylsp" }
 	local lsp_opts = {
-		capabilities = cmp_nvim_lsp.update_capabilities(vim.lsp.protocol.make_client_capabilities()),
-		on_attach = function(client, buffn)
-			_ = client
-			lsp_kmap(buffn)
+		capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+		on_attach = function(client, bufnr)
+			lsp_kmap(client, bufnr)
+			lsp_autocmds(client, bufnr)
 		end,
 	}
 
@@ -166,13 +165,13 @@ do
 	end
 
 	for server, opts in pairs(lsp_servers) do
-		lsp_config[server].setup(extend(lsp_opts, opts))
+		lsp_config[server].setup(deep_extend(lsp_opts, opts))
 	end
 
 	require("rust-tools").setup({ server = lsp_opts })
 
 	local null_ls = require("null-ls")
-	null_ls.setup(extend(lsp_opts, {
+	null_ls.setup(deep_extend(lsp_opts, {
 		sources = {
 			null_ls.builtins.formatting.black,
 			null_ls.builtins.formatting.jq,

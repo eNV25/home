@@ -12,9 +12,14 @@ neovim/nvim-lspconfig
 simrat39/rust-tools.nvim
 jose-elias-alvarez/null-ls.nvim
 
-hrsh7th/cmp-nvim-lsp
-hrsh7th/cmp-vsnip
 hrsh7th/nvim-cmp
-hrsh7th/vim-vsnip
+hrsh7th/cmp-emoji
+hrsh7th/cmp-nvim-lsp
+hrsh7th/cmp-nvim-lsp-signature-help
+hrsh7th/cmp-nvim-lua
+dcampos/nvim-snippy
+dcampos/cmp-snippy
+
+golang/vscode-go
 
 nvim-lua/plenary.nvim

@@ -9,6 +9,7 @@ alias grep='grep --color=auto'
 alias ip='ip --color=auto'
 alias nvlc='nvlc --no-color'
 alias tree='tree -C'
+alias agrep='agrep --color'
 
 alias pac=paru
 alias podman='sudo podman'

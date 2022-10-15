@@ -113,14 +113,14 @@ do
 			{ name = "emoji" },
 		},
 		mapping = cmp.config.mapping.preset.insert({
-			["<C-u>"] = cmp.mapping.scroll_docs(-4),
-			["<C-f>"] = cmp.mapping.scroll_docs(4),
+			["<C-J>"] = cmp.mapping.scroll_docs(-4),
+			["<C-K>"] = cmp.mapping.scroll_docs(4),
 			["<CR>"] = cmp.mapping.confirm({ select = true }),
 			["<Tab>"] = cmp.mapping(function(fallback)
 				if cmp.visible() then
 					cmp.select_next_item()
 				elseif snippy.can_expand_or_advance() then
-					snippy.expand_or_next()
+					snippy.expand_or_advance()
 				elseif at_word() then
 					cmp.complete()
 				else

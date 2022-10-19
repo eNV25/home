@@ -17,9 +17,7 @@ hrsh7th/cmp-emoji
 hrsh7th/cmp-nvim-lsp
 hrsh7th/cmp-nvim-lsp-signature-help
 hrsh7th/cmp-nvim-lua
-dcampos/nvim-snippy
 dcampos/cmp-snippy
-
-golang/vscode-go
+dcampos/nvim-snippy
 
 nvim-lua/plenary.nvim

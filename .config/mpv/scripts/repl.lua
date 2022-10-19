@@ -1,3 +1,5 @@
+local mp = assert(mp)
+
 -- repl.lua -- A graphical REPL for mpv input commands
 --
 -- © 2016, James Ross-Gowan
@@ -30,7 +32,7 @@ local opts = {
 	["font-size"] = 16,
 }
 
-function detect_platform()
+local function detect_platform()
 	local o = {}
 	-- Kind of a dumb way of detecting the platform but whatever
 	if mp.get_property_native("options/vo-mmcss-profile", o) ~= o then
@@ -147,7 +149,7 @@ local history_pos = 1
 local log_ring = {}
 
 -- Add a line to the log buffer (which is limited to 100 lines)
-function log_add(style, text)
+local function log_add(style, text)
 	log_ring[#log_ring + 1] = { style = style, text = text }
 	if #log_ring > 100 then
 		table.remove(log_ring, 1)
@@ -155,7 +157,7 @@ function log_add(style, text)
 end
 
 -- Escape a string for verbatim display on the OSD
-function ass_escape(str)
+local function ass_escape(str)
 	-- There is no escape for '\' in ASS (I think?) but '\' is used verbatim if
 	-- it isn't followed by a recognised character, so add a zero-width
 	-- non-breaking space
@@ -169,7 +171,7 @@ function ass_escape(str)
 end
 
 -- Render the REPL and console as an ASS OSD
-function update()
+local function update()
 	local screenx, screeny, aspect = mp.get_osd_size()
 	screenx = screenx / opts.scale
 	screeny = screeny / opts.scale
@@ -240,7 +242,7 @@ function update()
 end
 
 -- Set the REPL visibility (`, Esc)
-function set_active(active)
+local function set_active(active)
 	if active == repl_active then
 		return
 	end
@@ -257,7 +259,7 @@ end
 
 -- Show the repl if hidden and replace its contents with 'text'
 -- (script-message-to repl type)
-function show_and_type(text)
+local function show_and_type(text)
 	text = text or ""
 
 	-- Save the line currently being edited, just in case
@@ -278,7 +280,7 @@ end
 
 -- Naive helper function to find the next UTF-8 character in 'str' after 'pos'
 -- by skipping continuation bytes. Assumes 'str' contains valid UTF-8.
-function next_utf8(str, pos)
+local function next_utf8(str, pos)
 	if pos > str:len() then
 		return pos
 	end
@@ -289,7 +291,7 @@ function next_utf8(str, pos)
 end
 
 -- As above, but finds the previous UTF-8 charcter in 'str' before 'pos'
-function prev_utf8(str, pos)
+local function prev_utf8(str, pos)
 	if pos <= 1 then
 		return pos
 	end
@@ -300,7 +302,7 @@ function prev_utf8(str, pos)
 end
 
 -- Insert a character at the current cursor position (' '-'~', Shift+Enter)
-function handle_char_input(c)
+local function handle_char_input(c)
 	if insert_mode then
 		line = line:sub(1, cursor - 1) .. c .. line:sub(next_utf8(line, cursor))
 	else
@@ -311,7 +313,7 @@ function handle_char_input(c)
 end
 
 -- Remove the character behind the cursor (Backspace)
-function handle_backspace()
+local function handle_backspace()
 	if cursor <= 1 then
 		return
 	end
@@ -322,7 +324,7 @@ function handle_backspace()
 end
 
 -- Remove the character in front of the cursor (Del)
-function handle_del()
+local function handle_del()
 	if cursor > line:len() then
 		return
 	end
@@ -331,24 +333,24 @@ function handle_del()
 end
 
 -- Toggle insert mode (Ins)
-function handle_ins()
+local function handle_ins()
 	insert_mode = not insert_mode
 end
 
 -- Move the cursor to the next character (Right)
-function next_char(amount)
+local function next_char(amount)
 	cursor = next_utf8(line, cursor)
 	update()
 end
 
 -- Move the cursor to the previous character (Left)
-function prev_char(amount)
+local function prev_char(amount)
 	cursor = prev_utf8(line, cursor)
 	update()
 end
 
 -- Clear the current line (Ctrl+C)
-function clear()
+local function clear()
 	line = ""
 	cursor = 1
 	insert_mode = false
@@ -357,14 +359,14 @@ function clear()
 end
 
 -- Close the REPL if the current line is empty, otherwise do nothing (Ctrl+D)
-function maybe_exit()
+local function maybe_exit()
 	if line == "" then
 		set_active(false)
 	end
 end
 
 -- Run the current command and clear the line (Enter)
-function handle_enter()
+local function handle_enter()
 	if line == "" then
 		return
 	end
@@ -377,7 +379,7 @@ function handle_enter()
 end
 
 -- Go to the specified position in the command history
-function go_history(new_pos)
+local function go_history(new_pos)
 	local old_pos = history_pos
 	history_pos = new_pos
 
@@ -412,23 +414,23 @@ function go_history(new_pos)
 end
 
 -- Go to the specified relative position in the command history (Up, Down)
-function move_history(amount)
+local function move_history(amount)
 	go_history(history_pos + amount)
 end
 
 -- Go to the first command in the command history (PgUp)
-function handle_pgup()
+local function handle_pgup()
 	go_history(1)
 end
 
 -- Stop browsing history and start editing a blank line (PgDown)
-function handle_pgdown()
+local function handle_pgdown()
 	go_history(#history + 1)
 end
 
 -- Move to the start of the current word, or if already at the start, the start
 -- of the previous word. (Ctrl+Left)
-function prev_word()
+local function prev_word()
 	-- This is basically the same as next_word() but backwards, so reverse the
 	-- string in order to do a "backwards" find. This wouldn't be as annoying
 	-- to do if Lua didn't insist on 1-based indexing.
@@ -438,7 +440,7 @@ end
 
 -- Move to the end of the current word, or if already at the end, the end of
 -- the next word. (Ctrl+Right)
-function next_word()
+local function next_word()
 	cursor = select(2, line:find("%s*[^%s]*", cursor)) + 1
 	update()
 end
@@ -467,7 +469,7 @@ local completers = {
 -- Use 'list' to find possible tab-completions for 'part.' Returns the longest
 -- common prefix of all the matching list items and a flag that indicates
 -- whether the match was unique or not.
-function complete_match(part, list)
+local function complete_match(part, list)
 	local completion = nil
 	local full_match = false
 
@@ -491,7 +493,7 @@ function complete_match(part, list)
 end
 
 -- Complete the option or property at the cursor (TAB)
-function complete()
+local function complete()
 	local before_cur = line:sub(1, cursor - 1)
 	local after_cur = line:sub(cursor)
 
@@ -532,19 +534,19 @@ function complete()
 end
 
 -- Move the cursor to the beginning of the line (HOME)
-function go_home()
+local function go_home()
 	cursor = 1
 	update()
 end
 
 -- Move the cursor to the end of the line (END)
-function go_end()
+local function go_end()
 	cursor = line:len() + 1
 	update()
 end
 
 -- Delete from the cursor to the end of the word (Ctrl+W)
-function del_word()
+local function del_word()
 	local before_cur = line:sub(1, cursor - 1)
 	local after_cur = line:sub(cursor)
 
@@ -555,26 +557,26 @@ function del_word()
 end
 
 -- Delete from the cursor to the end of the line (Ctrl+K)
-function del_to_eol()
+local function del_to_eol()
 	line = line:sub(1, cursor - 1)
 	update()
 end
 
 -- Delete from the cursor back to the start of the line (Ctrl+U)
-function del_to_start()
+local function del_to_start()
 	line = line:sub(cursor)
 	cursor = 1
 	update()
 end
 
 -- Empty the log buffer of all messages (Ctrl+L)
-function clear_log_buffer()
+local function clear_log_buffer()
 	log_ring = {}
 	update()
 end
 
 -- Returns a string of UTF-8 text from the clipboard (or the primary selection)
-function get_clipboard(clip)
+local function get_clipboard(clip)
 	if platform == "linux" then
 		local res = utils.subprocess({
 			args = {
@@ -629,7 +631,7 @@ end
 
 -- Paste text from the window-system's clipboard. 'clip' determines whether the
 -- clipboard or the primary selection buffer is used (on X11 only.)
-function paste(clip)
+local function paste(clip)
 	local text = get_clipboard(clip)
 	local before_cur = line:sub(1, cursor - 1)
 	local after_cur = line:sub(cursor)
@@ -643,7 +645,7 @@ end
 -- their own input section, but they must also raise events on key-repeat.
 -- Hence, this function manually creates an input section and puts a list of
 -- bindings in it.
-function add_repl_bindings(bindings)
+local function add_repl_bindings(bindings)
 	local cfg = ""
 	for i, binding in ipairs(bindings) do
 		local key = binding[1]

@@ -32,6 +32,17 @@ do
 			})
 		end,
 	})
+	vim.api.nvim_create_autocmd("BufRead", {
+		group = augroup,
+		callback = function(args)
+			local bufnr = args.buf
+			vim.api.nvim_create_autocmd("FileType", {
+				buffer = bufnr,
+				once = true,
+				command = [[ if &ft !~# 'commit\|rebase' && line("'\"") > 1 && line("'\"") <= line("$") | exe 'normal! g`"' | endif ]],
+			})
+		end,
+	})
 	vim.api.nvim_create_autocmd("VimEnter", {
 		group = augroup,
 		callback = function()
@@ -47,8 +58,9 @@ do
 			vim.keymap.set("n", "]d", vim.diagnostic.goto_next, kmopts)
 			vim.keymap.set("n", "<Space>j", vim.diagnostic.open_float, kmopts)
 			vim.keymap.set("n", "<Space>q", vim.diagnostic.setloclist, kmopts)
-			vim.cmd([[aunmenu PopUp.-1-]])
-			vim.cmd([[aunmenu PopUp.How-to\ disable\ mouse]])
+			vim.cmd([[ aunmenu PopUp.-1- ]])
+			vim.cmd([[ aunmenu PopUp.How-to\ disable\ mouse ]])
+			vim.cmd([[ command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis | wincmd p | diffthis ]])
 		end,
 	})
 	vim.api.nvim_create_autocmd("LspAttach", {
@@ -78,10 +90,7 @@ do
 	vim.api.nvim_create_autocmd("ColorScheme", {
 		pattern = "nord",
 		group = augroup,
-		command = [[
-			highlight Normal ctermbg=NONE guibg=NONE
-			highlight NonText ctermbg=NONE guibg=NONE
-		]],
+		command = [[ highlight Normal ctermbg=NONE guibg=NONE | highlight NonText ctermbg=NONE guibg=NONE ]],
 	})
 end
 

@@ -1,24 +1,42 @@
 #!hint/zsh
-local purple="\e[1;35m" bright="\e[0;1m" green="\e[1;32m" reset="$(tput sgr0)"
+
+local bold="$(tput bold)"
+local purple="$(tput setaf 5)"
+local white="$(tput setaf 15)"
+local green="$(tput setaf 2)"
+local reset="$(tput sgr0)"
+local civis="$(tput civis)"
+local cnorm="$(tput cnorm)"
+
+printf "${civis}"
+
+function TRAPINT {
+	tput cnorm
+}
+
 printf 'zsh: command not found: %s\n' "$1"
+printf "${bold}$1${reset} may be found in the following packages:"
+
 local entries=(
-	${(f)"$(/usr/bin/pacman -Fx --machinereadable -- "bin/$1$")"}
+	${(0)"$(/usr/bin/pkgfile -0 -b "$1")"}
 )
+
 if ((${#entries[@]}))
 then
-	printf "${bright}bin/$1${reset} may be found in the following packages:\n"
-	local pkg
+	printf "\n"
+
 	for entry in "${entries[@]}"
 	do
-		# (repo package version file)
+		# (repo package)
 		local fields=(
-			${(0)entry}
+			${(ps:/:)entry}
 		)
-		if [[ "$pkg" != "${fields[2]}" ]]
-		then
-			printf "${purple}%s/${bright}%s ${green}%s${reset}\n" "${fields[1]}" "${fields[2]}" "${fields[3]}"
-		fi
-		printf '	/%s\n' "${fields[4]}"
-		pkg="${fields[2]}"
+
+		printf "${bold}${purple}%s/${white}%s${reset}\n" "${fields[1]}" "${fields[2]}"
 	done
+
+	printf "${cnorm}"
+	return
 fi
+
+printf "\r${cnorm}"

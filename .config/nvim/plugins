@@ -7,6 +7,7 @@ Darazaki/indent-o-matic
 gpanders/editorconfig.nvim
 mattn/vim-gomod
 ojroques/nvim-hardline
+sindrets/diffview.nvim
 
 neovim/nvim-lspconfig
 simrat39/rust-tools.nvim

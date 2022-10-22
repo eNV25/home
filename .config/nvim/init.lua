@@ -99,6 +99,7 @@ vim.opt.termguicolors = true
 vim.cmd("colorscheme nord")
 
 require("indent-o-matic").setup({})
+
 require("hardline").setup({ bufferline = true, theme = vim.g.colors_name })
 
 do
@@ -193,7 +194,6 @@ do
 
 			null_ls.builtins.formatting.black,
 			null_ls.builtins.formatting.jq,
-			null_ls.builtins.formatting.goimports_reviser,
 			null_ls.builtins.formatting.stylua,
 			null_ls.builtins.formatting.shfmt.with({ filetypes = shell_filetypes }),
 

@@ -9,6 +9,7 @@ vim.opt.splitright = true
 
 vim.opt.wrap = false
 vim.opt.number = true
+vim.opt.relativenumber = true
 vim.opt.list = true
 vim.opt.completeopt = { "menu", "menuone", "noselect", "preview" }
 vim.opt.shortmess:append({ a = true, c = true })
@@ -151,25 +152,53 @@ end
 
 do
 	local lsp_config = require("lspconfig")
-	lsp_config.util.default_config = vim.tbl_extend("force", lsp_config.util.default_config, {
-		capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+	lsp_config.util.default_config = vim.tbl_deep_extend("force", lsp_config.util.default_config, {
+		capabilities = require("cmp_nvim_lsp").default_capabilities(),
 	})
 
-	for server, opts in pairs({ gopls = {}, sumneko_lua = {}, bashls = {}, clangd = {}, pylsp = {} }) do
+	for server, opts in pairs({
+		bashls = {},
+		clangd = {},
+		pylsp = {},
+		sumneko_lua = {},
+		gopls = {
+			root_dir = lsp_config.util.root_pattern("go.work", "go.mod", ".git"),
+			settings = {
+				gopls = {
+					analyses = {
+						fieldalignment = true,
+						nilness = true,
+						unusedparams = true,
+						unusedvariable = true,
+						unusedwrite = true,
+						useany = true,
+					},
+				},
+			},
+		},
+	}) do
 		lsp_config[server].setup(opts)
 	end
 
 	require("rust-tools").setup({})
 
+	local shell_filetypes = { "sh", "bash", "ksh", "zsh", "PKGBUILD" }
+
 	local null_ls = require("null-ls")
 	null_ls.setup({
 		sources = {
+			null_ls.builtins.diagnostics.golangci_lint,
+			null_ls.builtins.diagnostics.revive,
+			null_ls.builtins.diagnostics.staticcheck,
+
 			null_ls.builtins.formatting.black,
 			null_ls.builtins.formatting.jq,
-			null_ls.builtins.formatting.shfmt,
+			null_ls.builtins.formatting.goimports_reviser,
 			null_ls.builtins.formatting.stylua,
-			null_ls.builtins.code_actions.shellcheck,
-			null_ls.builtins.diagnostics.golangci_lint,
+			null_ls.builtins.formatting.shfmt.with({ filetypes = shell_filetypes }),
+
+			null_ls.builtins.code_actions.shellcheck.with({ filetypes = shell_filetypes }),
+
 			null_ls.builtins.hover.dictionary,
 			null_ls.builtins.hover.printenv,
 		},

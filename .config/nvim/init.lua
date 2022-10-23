@@ -124,9 +124,10 @@ do
 			{ name = "emoji" },
 		},
 		mapping = cmp.config.mapping.preset.insert({
+			["<CR>"] = cmp.mapping.confirm({ select = true }),
 			["<C-J>"] = cmp.mapping.scroll_docs(-4),
 			["<C-K>"] = cmp.mapping.scroll_docs(4),
-			["<CR>"] = cmp.mapping.confirm({ select = true }),
+			["<C-Space>"] = cmp.mapping.complete(),
 			["<Tab>"] = cmp.mapping(function(fallback)
 				if cmp.visible() then
 					cmp.select_next_item()

@@ -8,35 +8,29 @@ local reset="$(tput sgr0)"
 local civis="$(tput civis)"
 local cnorm="$(tput cnorm)"
 
-printf "${civis}"
+printf "$civis"
 
 function TRAPINT {
-	tput cnorm
+	printf "$cnorm"
 }
 
 printf 'zsh: command not found: %s\n' "$1"
-printf "${bold}$1${reset} may be found in the following packages:"
+printf "$bold$1$reset may be found in the following packages:"
 
-local entries=(
-	${(0)"$(/usr/bin/pkgfile -0 -b "$1")"}
-)
+local oldname pkgname pkgver cmdpath
+while read -r -d $'\0' pkgname pkgver cmdpath
+do
+	[[ -z "$oldname" ]] &&
+		printf "\n"
+	[[ "$oldname" != "$pkgname" ]] &&
+		printf "$bold$purple%s/$white%s $green%s$reset\n" "${(s:/:)pkgname}" "$pkgver"
+	printf "    %s\n" "$cmdpath"
+	oldname="$pkgname"
+done <<(/usr/bin/pkgfile -0 -v -q -w -- "$1" 2>/dev/null)
 
-if ((${#entries[@]}))
+if [[ -z "$oldname" ]]
 then
-	printf "\n"
-
-	for entry in "${entries[@]}"
-	do
-		# (repo package)
-		local fields=(
-			${(ps:/:)entry}
-		)
-
-		printf "${bold}${purple}%s/${white}%s${reset}\n" "${fields[1]}" "${fields[2]}"
-	done
-
-	printf "${cnorm}"
-	return
+	printf '\r'
 fi
 
-printf "\r${cnorm}"
+printf "$cnorm"

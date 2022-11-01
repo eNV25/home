@@ -1,9 +1,6 @@
 #!/bin/sh
 tput civis
-trap '
-	tput cvvis
-	tput cr el
-' 0
+trap 'tput cvvis cr el' 0
 /usr/bin/aria2c \
 	--split=5 \
 	--max-connection-per-server=5 \

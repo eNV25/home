@@ -1,0 +1,2 @@
+#!/bin/sh
+VIM_PLUGINS_DIR="$HOME/.vim/pack/plugins/start" exec "$HOME/.vim/pack/plugins/start/voom/voom" "$@"

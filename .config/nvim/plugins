@@ -3,9 +3,11 @@ airblade/voom
 
 arcticicestudio/nord-vim
 
+NoahTheDuke/vim-just
+mattn/vim-gomod
+
 Darazaki/indent-o-matic
 gpanders/editorconfig.nvim
-mattn/vim-gomod
 ojroques/nvim-hardline
 sindrets/diffview.nvim
 

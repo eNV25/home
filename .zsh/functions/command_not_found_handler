@@ -26,7 +26,7 @@ do
 		printf "$bold$purple%s/$white%s $green%s$reset\n" "${(s:/:)pkgname}" "$pkgver"
 	printf "    %s\n" "$cmdpath"
 	oldname="$pkgname"
-done <<(/usr/bin/pkgfile -0 -v -q -w -- "$1" 2>/dev/null)
+done <<<"$(/usr/bin/pkgfile -0 -v -q -w -- "$1" 2>/dev/null)"
 
 if [[ -z "$oldname" ]]
 then

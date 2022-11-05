@@ -1,7 +1,10 @@
 [Service]
-Type=forking
-ExecStartPre=sh -c 'set -- %I; umount $$2; mkdir -p $$2'
-ExecStart=sh -c 'mount -t rclone -o args2env,vfs-cache-mode=writes,drive-server-side-across-configs=true %I'
+Type=notify
 Restart=on-failure
+Environment=args=%I
+Environment=RCLONE_VFS_CACHE_MODE=writes
+Environment=RCLONE_DRIVE_SERVER_SIDE_ACROSS_CONFIGS=true
+ExecStartPre=sh -c 'umount $$1; mkdir -p $$1' $args
+ExecStart=rclone mount $args
 [Install]
 WantedBy=default.target

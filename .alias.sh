@@ -24,6 +24,7 @@ alias nvimpager='nvimpager -p'
 alias cat=bat
 alias open=xdg-open
 alias pager='$PAGER'
+alias j=just
 alias r=ranger
 alias o='$PAGER'
 alias h=head

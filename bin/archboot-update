@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+set -euxo pipefail
+
+[[ "$EUID" != 0 ]] && exec sudo "$0" "$@"
+
+pushd /boot/archboot || exit
+trap popd 0
+
+url="https://pkgbuild.com/~tpowa/archboot/iso/x86_64/latest/boot"
+
+for file in {amd-ucode.img,intel-ucode.img,initramfs_x86_64.img,vmlinuz_archboot_x86_64}; do
+	dl.sh "$url/$file" "$file"
+done
+
+sed '
+/^BUILD_ID/          s|=.*|=archboot|
+/^HOME_URL/          s|=.*|="https://bit.ly/archboot"|
+/^DOCUMENTATION_URL/ s|=.*|="https://bit.ly/archboot"|
+/^BUG_REPORT_URL/    s|=.*|="https://gitlab.archlinux.org/tpowa/archboot/-/issues"|
+/^SUPPORT_URL/       s|=.*|="https://gitlab.archlinux.org/tpowa/archboot/-/issues"|
+' /etc/os-release >os-release
+
+getopts i opt || :
+
+case "$opt" in
+i)
+	XBOOT="$(bootctl -x)"
+	sudo sbctl bundle \
+		-c /dev/null \
+		-o /boot/archboot/os-release \
+		-a /boot/archboot/amd-ucode.img \
+		-i /boot/archboot/intel-ucode.img \
+		-f /boot/archboot/initramfs_x86_64.img \
+		-k /boot/archboot/vmlinuz_archboot_x86_64 \
+		-s "$XBOOT"/EFI/Linux/archboot.efi
+	sudo sbctl sign -s "$XBOOT"/EFI/Linux/archboot.efi
+	;;
+*)
+	sudo sbctl sign-all -g
+	;;
+esac

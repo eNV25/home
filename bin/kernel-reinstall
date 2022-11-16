@@ -1,16 +1,12 @@
-#!/bin/bash
+#!/bin/sh -eu
 
-if [[ "$EUID" != 0 ]]; then
-	exec sudo "$0" "$@"
-	exit "$?"
-fi
+[ "$(id -u)" != 0 ] && exec sudo "$0" "$@"
 
 for path in /usr/lib/modules/*; do
 	kver="${path##*/}"
-	read -r pkgname <"${path}/pkgbase" || continue
 	vmlinuz="${path}/vmlinuz"
 
-	echo ":: Reinstalling $pkgname $kver"
+	echo >&2 "+ kernel-install $kver $vmlinuz"
 
 	kernel-install add "$@" "$kver" "$vmlinuz"
 done

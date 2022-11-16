@@ -1,42 +1,42 @@
-#!/usr/bin/env bash
+#!/bin/sh -eu
 
-set -euxo pipefail
+[ "$(id -u)" != 0 ] && exec sudo "$0" "$@"
 
-[[ "$EUID" != 0 ]] && exec sudo "$0" "$@"
+dir="$(mktemp -d)"
 
-pushd /boot/archboot || exit
-trap popd 0
+cd "$dir" || exit
+trap on_exit 0
+on_exit() {
+	cd
+	rm -rf "$dir"
+}
 
 url="https://pkgbuild.com/~tpowa/archboot/iso/x86_64/latest/boot"
 
-for file in {amd-ucode.img,intel-ucode.img,initramfs_x86_64.img,vmlinuz_archboot_x86_64}; do
+for file in amd-ucode.img intel-ucode.img initramfs_x86_64.img vmlinuz_archboot_x86_64; do
+	echo >&2 Downloading "$url/$file"
 	dl.sh "$url/$file" "$file"
 done
 
 sed '
-/^BUILD_ID/          s|=.*|=archboot|
-/^HOME_URL/          s|=.*|="https://bit.ly/archboot"|
-/^DOCUMENTATION_URL/ s|=.*|="https://bit.ly/archboot"|
-/^BUG_REPORT_URL/    s|=.*|="https://gitlab.archlinux.org/tpowa/archboot/-/issues"|
-/^SUPPORT_URL/       s|=.*|="https://gitlab.archlinux.org/tpowa/archboot/-/issues"|
+/^BUILD_ID=/          s|=.*|=archboot|
+/^HOME_URL=/          s|=.*|="https://bit.ly/archboot"|
+/^DOCUMENTATION_URL=/ s|=.*|="https://bit.ly/archboot"|
+/^BUG_REPORT_URL=/    s|=.*|="https://gitlab.archlinux.org/tpowa/archboot/-/issues"|
+/^SUPPORT_URL=/       s|=.*|="https://gitlab.archlinux.org/tpowa/archboot/-/issues"|
 ' /etc/os-release >os-release
 
-getopts i opt || :
+image="$(bootctl -x)"/EFI/Linux/archboot.efi
 
-case "$opt" in
-i)
-	XBOOT="$(bootctl -x)"
-	sudo sbctl bundle \
-		-c /dev/null \
-		-o /boot/archboot/os-release \
-		-a /boot/archboot/amd-ucode.img \
-		-i /boot/archboot/intel-ucode.img \
-		-f /boot/archboot/initramfs_x86_64.img \
-		-k /boot/archboot/vmlinuz_archboot_x86_64 \
-		-s "$XBOOT"/EFI/Linux/archboot.efi
-	sudo sbctl sign -s "$XBOOT"/EFI/Linux/archboot.efi
-	;;
-*)
-	sudo sbctl sign-all -g
-	;;
-esac
+echo >&2 Writing "$image"
+sbctl bundle \
+	-c /dev/null \
+	-o os-release \
+	-a amd-ucode.img \
+	-i intel-ucode.img \
+	-f initramfs_x86_64.img \
+	-k vmlinuz_archboot_x86_64 \
+	"$image"
+
+echo >&2 Signing "$image"
+sbctl sign -s "$image"

@@ -1,5 +1,4 @@
 --tabs=8
 --wrap=never
---theme=Nord
 --style=plain
---paging=never
+--theme=ansi

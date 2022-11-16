@@ -21,12 +21,13 @@ alias doas='doas '
 alias tsocks='tsocks '
 alias echoa='echo '
 alias nvimpager='nvimpager -p'
-alias cat=bat
+alias cat='bat --paging=never'
+alias less='bat --paging=always'
 alias open=xdg-open
-alias pager='$PAGER'
+alias pager=less
 alias j=just
 alias r=ranger
-alias o='$PAGER'
+alias o=less
 alias h=head
 alias t=tail
 

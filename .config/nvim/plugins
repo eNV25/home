@@ -1,13 +1,19 @@
 
 airblade/voom
 
-arcticicestudio/nord-vim
+nvim-lua/plenary.nvim
 
-NoahTheDuke/vim-just
-mattn/vim-gomod
+arcticicestudio/nord-vim
 
 Darazaki/indent-o-matic
 gpanders/editorconfig.nvim
+
+nvim-treesitter/nvim-treesitter
+nvim-orgmode/orgmode
+NoahTheDuke/vim-just
+mattn/vim-gomod
+
+hood/popui.nvim
 ojroques/nvim-hardline
 sindrets/diffview.nvim
 
@@ -23,4 +29,3 @@ hrsh7th/cmp-nvim-lua
 dcampos/cmp-snippy
 dcampos/nvim-snippy
 
-nvim-lua/plenary.nvim

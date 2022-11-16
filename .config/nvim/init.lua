@@ -50,8 +50,8 @@ do
 			local kmopts = { noremap = true, silent = true }
 			vim.keymap.set("n", "q", "<Cmd>quit<Return>", kmopts)
 			vim.keymap.set("n", "ge", "G", kmopts)
-			vim.keymap.set("n", "[b", "<Cmd>bprev<Return>", kmopts)
-			vim.keymap.set("n", "]b", "<Cmd>bnext<Return>", kmopts)
+			vim.keymap.set("n", "\\b", "<Cmd>bprev<Return>", kmopts)
+			vim.keymap.set("n", "\\B", "<Cmd>bnext<Return>", kmopts)
 			vim.keymap.set("n", "<BS>", "<Cmd>bdelete<Return>", kmopts)
 			vim.keymap.set("n", "<C-G>", "11<C-G>", kmopts)
 			vim.keymap.set("n", "<Return>", "<Cmd>nohlsearch|normal!<C-L><Return><Return>", kmopts)
@@ -101,6 +101,18 @@ vim.cmd("colorscheme nord")
 require("indent-o-matic").setup({})
 
 require("hardline").setup({ bufferline = true, theme = vim.g.colors_name })
+
+require("nvim-treesitter.configs").setup({
+	ensure_installed = "all",
+	auto_install = true,
+	highlight = { enable = true },
+	indent = { enable = true },
+})
+
+do
+	vim.ui.select = require("popui.ui-overrider")
+	vim.ui.input = require("popui.input-overrider")
+end
 
 do
 	local cmp = require("cmp")

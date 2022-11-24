@@ -50,8 +50,8 @@ do
 			local kmopts = { noremap = true, silent = true }
 			vim.keymap.set("n", "q", "<Cmd>quit<Return>", kmopts)
 			vim.keymap.set("n", "ge", "G", kmopts)
-			vim.keymap.set("n", "\\b", "<Cmd>bprev<Return>", kmopts)
-			vim.keymap.set("n", "\\B", "<Cmd>bnext<Return>", kmopts)
+			vim.keymap.set("n", "[b", "<Cmd>bprev<Return>", kmopts)
+			vim.keymap.set("n", "]b", "<Cmd>bnext<Return>", kmopts)
 			vim.keymap.set("n", "<BS>", "<Cmd>bdelete<Return>", kmopts)
 			vim.keymap.set("n", "<C-G>", "11<C-G>", kmopts)
 			vim.keymap.set("n", "<Return>", "<Cmd>nohlsearch|normal!<C-L><Return><Return>", kmopts)
@@ -172,7 +172,7 @@ do
 
 	for server, opts in pairs({
 		bashls = {},
-		clangd = {},
+		ccls = {},
 		pylsp = {},
 		sumneko_lua = {},
 		gopls = {

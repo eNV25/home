@@ -1,26 +1,33 @@
 
 airblade/voom
 
+# libs
 nvim-lua/plenary.nvim
 
+# color
 arcticicestudio/nord-vim
 
+# behaviour
 Darazaki/indent-o-matic
 gpanders/editorconfig.nvim
 
+# filetype
 nvim-treesitter/nvim-treesitter
 nvim-orgmode/orgmode
 NoahTheDuke/vim-just
 mattn/vim-gomod
 
-hood/popui.nvim
-ojroques/nvim-hardline
-sindrets/diffview.nvim
+# ui
+lewis6991/gitsigns.nvim
+stevearc/dressing.nvim
+nvim-lualine/lualine.nvim
 
+# language server
 neovim/nvim-lspconfig
 simrat39/rust-tools.nvim
 jose-elias-alvarez/null-ls.nvim
 
+# completion
 hrsh7th/nvim-cmp
 hrsh7th/cmp-emoji
 hrsh7th/cmp-nvim-lsp

@@ -15,7 +15,7 @@ export GIT_PS1_SHOWCOLORHINTS=auto
 export LESS='-R --mouse --wheel-lines=5'
 export NNN_OPTS=Br
 export NNN_ARCHIVE='\.(tar|zip|jar|rar|lha|7z|alz|ace|a|ar|arj|arc|rpm|deb|cab|cpio|iso|mtree|xar|warc|t?(gz|grz|bz|bz2|Z|lzma|lzo|lz|lz4|lrz|xz|rz|uu|zst))'
-export NNN_PLUG='l:nuke;o:fzplug'
+export NNN_PLUG='l:nuke;p:preview-tui'
 export NNN_SSHFS='mount -t sshfs'
 export NNN_RCLONE='mount -t rclone -o args2env,vfs-cache-mode=writes'
 export NNN_FCOLORS=030304020000060001030501

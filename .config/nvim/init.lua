@@ -98,21 +98,28 @@ end
 vim.opt.termguicolors = true
 vim.cmd("colorscheme nord")
 
+require("gitsigns").setup()
+
 require("indent-o-matic").setup({})
 
-require("hardline").setup({ bufferline = true, theme = vim.g.colors_name })
+vim.opt.showmode = false
+require("lualine").setup({
+	options = {
+		icons_enabled = false,
+		component_separators = { left = "", right = "" },
+		section_separators = { left = "", right = "" },
+	},
+	tabline = {
+		lualine_c = { { "buffers", symbols = { alternate_file = "" } } },
+	},
+})
 
 require("nvim-treesitter.configs").setup({
 	ensure_installed = "all",
 	auto_install = true,
-	highlight = { enable = true },
+	highlight = { enable = true, disable = { "toml" } },
 	indent = { enable = true },
 })
-
-do
-	vim.ui.select = require("popui.ui-overrider")
-	vim.ui.input = require("popui.input-overrider")
-end
 
 do
 	local cmp = require("cmp")
@@ -174,7 +181,16 @@ do
 		bashls = {},
 		ccls = {},
 		pylsp = {},
-		sumneko_lua = {},
+		sumneko_lua = {
+			settings = {
+				Lua = {
+					runtime = { version = "LuaJIT" },
+					diagnostics = { globals = { "vim" } },
+					workspace = { library = vim.api.nvim_get_runtime_file("", true) },
+					telemetry = { enable = false },
+				},
+			},
+		},
 		gopls = {
 			root_dir = lsp_config.util.root_pattern("go.work", "go.mod", ".git"),
 			settings = {
@@ -202,8 +218,6 @@ do
 	null_ls.setup({
 		sources = {
 			null_ls.builtins.diagnostics.golangci_lint,
-			null_ls.builtins.diagnostics.revive,
-			null_ls.builtins.diagnostics.staticcheck,
 
 			null_ls.builtins.formatting.black,
 			null_ls.builtins.formatting.jq,

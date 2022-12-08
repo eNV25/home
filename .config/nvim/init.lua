@@ -69,12 +69,12 @@ do
 		callback = function(args)
 			local bufnr = args.buf
 			local kmopts = { noremap = true, silent = true, buffer = bufnr }
-			vim.keymap.set("n", "gD", vim.lsp.buf.declaration, kmopts)
-			vim.keymap.set("n", "gd", vim.lsp.buf.definition, kmopts)
-			vim.keymap.set("n", "gy", vim.lsp.buf.type_definition, kmopts)
-			vim.keymap.set("n", "gi", vim.lsp.buf.implementation, kmopts)
-			vim.keymap.set("n", "gr", vim.lsp.buf.references, kmopts)
-			vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, kmopts)
+			vim.keymap.set("n", "<Space>D", vim.lsp.buf.declaration, kmopts)
+			vim.keymap.set("n", "<Space>d", vim.lsp.buf.definition, kmopts)
+			vim.keymap.set("n", "<Space>y", vim.lsp.buf.type_definition, kmopts)
+			vim.keymap.set("n", "<Space>i", vim.lsp.buf.implementation, kmopts)
+			vim.keymap.set("n", "<Space>R", vim.lsp.buf.references, kmopts)
+			vim.keymap.set("n", "<Space>K", vim.lsp.buf.signature_help, kmopts)
 			vim.keymap.set("n", "<Space>wa", vim.lsp.buf.add_workspace_folder, kmopts)
 			vim.keymap.set("n", "<Space>wr", vim.lsp.buf.remove_workspace_folder, kmopts)
 			vim.keymap.set("n", "<Space>wl", function()
@@ -98,9 +98,22 @@ end
 vim.opt.termguicolors = true
 vim.cmd("colorscheme nord")
 
+require("indent-o-matic").setup({})
+
+require("nvim-treesitter.configs").setup({
+	ensure_installed = "all",
+	auto_install = true,
+	highlight = { enable = true, disable = { "toml" } },
+	indent = { enable = true },
+})
+
+require("go").setup()
+
+require("nlspsettings").setup()
+
 require("gitsigns").setup()
 
-require("indent-o-matic").setup({})
+require("dapui").setup()
 
 vim.opt.showmode = false
 require("lualine").setup({
@@ -112,13 +125,6 @@ require("lualine").setup({
 	tabline = {
 		lualine_c = { { "buffers", symbols = { alternate_file = "" } } },
 	},
-})
-
-require("nvim-treesitter.configs").setup({
-	ensure_installed = "all",
-	auto_install = true,
-	highlight = { enable = true, disable = { "toml" } },
-	indent = { enable = true },
 })
 
 do
@@ -186,7 +192,6 @@ do
 				Lua = {
 					runtime = { version = "LuaJIT" },
 					diagnostics = { globals = { "vim" } },
-					workspace = { library = vim.api.nvim_get_runtime_file("", true) },
 					telemetry = { enable = false },
 				},
 			},
@@ -195,6 +200,7 @@ do
 			root_dir = lsp_config.util.root_pattern("go.work", "go.mod", ".git"),
 			settings = {
 				gopls = {
+					usePlaceholders = true,
 					analyses = {
 						fieldalignment = true,
 						nilness = true,

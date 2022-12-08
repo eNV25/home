@@ -3,6 +3,7 @@ airblade/voom
 
 # libs
 nvim-lua/plenary.nvim
+ray-x/guihua.lua
 
 # color
 arcticicestudio/nord-vim
@@ -15,7 +16,7 @@ gpanders/editorconfig.nvim
 nvim-treesitter/nvim-treesitter
 nvim-orgmode/orgmode
 NoahTheDuke/vim-just
-mattn/vim-gomod
+ray-x/go.nvim
 
 # ui
 lewis6991/gitsigns.nvim
@@ -23,9 +24,14 @@ stevearc/dressing.nvim
 nvim-lualine/lualine.nvim
 
 # language server
+jose-elias-alvarez/null-ls.nvim
 neovim/nvim-lspconfig
 simrat39/rust-tools.nvim
-jose-elias-alvarez/null-ls.nvim
+tamago324/nlsp-settings.nvim
+
+# dap
+mfussenegger/nvim-dap
+rcarriga/nvim-dap-ui
 
 # completion
 hrsh7th/nvim-cmp

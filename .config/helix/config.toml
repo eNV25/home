@@ -1,26 +1,27 @@
 theme = "custom"
 
 [editor]
-auto-completion = true
-auto-format = true
-auto-info = true
+auto-save = true
 bufferline = "always"
 color-modes = true
 completion-trigger-len = 1
+line-number = "relative"
+
+[editor.statusline]
+mode.normal = "NORMAL"
+mode.insert = "INSERT"
+mode.select = "SELECT"
 
 [editor.cursor-shape]
+normal = "block"
 insert = "bar"
+select = "hidden"
 
 [editor.indent-guides]
 render = true
 character = "|"
 
-[editor.whitespace.render]
-tab = "none"
-space = "none"
-
 [keys.normal]
-"backspace" = ":bc"
-"q" = ":q"
-"Q" = ":q"
-
+"backspace" = ":buffer-close"
+"q" = ":quit"
+"Q" = ":quit"

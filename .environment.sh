@@ -4,6 +4,7 @@
 
 export EDITOR=nvim
 export VISUAL=nvim
+export PAGER=pager
 
 export GIT_PS1_SHOWDIRTYSTATE=auto
 export GIT_PS1_SHOWSTASHSTATE=auto
@@ -26,3 +27,8 @@ for p in "$HOME/go/bin" "$HOME/.local/bin" "$HOME/bin"; do
 	case "$PATH" in "$p:"*) ;; *) PATH="$p:$PATH" ;; esac # prepend if
 done
 export PATH
+
+if [[ "$XDG_CURRENT_DESKTOP" == *KDE* ]]; then
+	export SSH_ASKPASS=/usr/bin/ksshaskpass
+	export SSH_ASKPASS_REQUIRE=prefer
+fi

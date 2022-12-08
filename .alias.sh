@@ -22,12 +22,11 @@ alias tsocks='tsocks '
 alias echoa='echo '
 alias nvimpager='nvimpager -p'
 alias cat='bat --paging=never'
-alias less='bat --paging=always'
+alias less=pager
 alias open=xdg-open
-alias pager=less
 alias j=just
 alias r=ranger
-alias o=less
+alias p=pager
 alias h=head
 alias t=tail
 

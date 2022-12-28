@@ -21,18 +21,6 @@ do
 		group = augroup,
 		command = "pclose",
 	})
-	vim.api.nvim_create_autocmd("BufWritePre", {
-		group = augroup,
-		callback = function(args)
-			local bufnr = args.buf
-			vim.lsp.buf.format({
-				bufnr = bufnr,
-				filter = function()
-					return vim.tbl_contains({ "go", "rust" }, vim.bo[bufnr].filetype)
-				end,
-			})
-		end,
-	})
 	vim.api.nvim_create_autocmd("BufRead", {
 		group = augroup,
 		callback = function(args)
@@ -68,6 +56,7 @@ do
 		group = augroup,
 		callback = function(args)
 			local bufnr = args.buf
+			local capabilities = vim.lsp.get_client_by_id(args.data.client_id).server_capabilities
 			local kmopts = { noremap = true, silent = true, buffer = bufnr }
 			vim.keymap.set("n", "<Space>D", vim.lsp.buf.declaration, kmopts)
 			vim.keymap.set("n", "<Space>d", vim.lsp.buf.definition, kmopts)
@@ -86,6 +75,24 @@ do
 			vim.keymap.set("n", "<Space>k", vim.lsp.buf.hover, kmopts)
 			vim.keymap.set("n", "<Space>r", vim.lsp.buf.rename, kmopts)
 			vim.keymap.set("n", "<Space>a", vim.lsp.buf.code_action, kmopts)
+			vim.api.nvim_create_autocmd("BufWritePre", {
+				group = augroup,
+				buffer = bufnr,
+				callback = function()
+					if
+						capabilities.documentFormattingProvider
+						and vim.tbl_contains({ "go", "rust" }, vim.bo[bufnr].filetype)
+					then
+						vim.lsp.buf.format({ async = false, bufnr = bufnr })
+					end
+					if capabilities.codeActionProvider and "go" == vim.bo[bufnr].filetype then
+						vim.lsp.buf.code_action({
+							context = { only = { "source.organizeImports" } },
+							apply = true,
+						})
+					end
+				end,
+			})
 		end,
 	})
 	vim.api.nvim_create_autocmd("ColorScheme", {
@@ -107,6 +114,10 @@ require("nvim-treesitter.configs").setup({
 	indent = { enable = true },
 })
 
+require("colorizer").setup()
+
+require("nvim-surround").setup()
+
 require("go").setup()
 
 require("nlspsettings").setup()
@@ -124,6 +135,19 @@ require("lualine").setup({
 	},
 	tabline = {
 		lualine_c = { { "buffers", symbols = { alternate_file = "" } } },
+	},
+})
+
+require("noice").setup({
+	lsp = {
+		override = {
+			["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+			["vim.lsp.util.stylize_markdown"] = true,
+			["cmp.entry.get_documentation"] = true,
+		},
+	},
+	cmdline = {
+		view = "cmdline",
 	},
 })
 
@@ -193,6 +217,7 @@ do
 					runtime = { version = "LuaJIT" },
 					diagnostics = { globals = { "vim" } },
 					telemetry = { enable = false },
+					format = { enable = false },
 				},
 			},
 		},

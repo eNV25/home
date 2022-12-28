@@ -47,38 +47,42 @@ fpath=(~/.zsh/functions/ "${fpath[@]}")
 	PROMPT="%B%F{green}%n@%m%f:%F{blue}%~/%f%#%b "
 }
 
-typeset -g -A key
+{
+	local -A key
 
-# shellcheck disable=SC2154
-key[Home]="${terminfo[khome]}"
-key[End]="${terminfo[kend]}"
-key[Insert]="${terminfo[kich1]}"
-key[Backspace]="${terminfo[kbs]}"
-key[Delete]="${terminfo[kdch1]}"
-key[Up]="${terminfo[kcuu1]}"
-key[Down]="${terminfo[kcud1]}"
-key[Left]="${terminfo[kcub1]}"
-key[Right]="${terminfo[kcuf1]}"
-key[PageUp]="${terminfo[kpp]}"
-key[PageDown]="${terminfo[knp]}"
-key[ShiftTab]="${terminfo[kcbt]}"
+	# shellcheck disable=SC2154
+	key[Home]="${terminfo[khome]}"
+	key[End]="${terminfo[kend]}"
+	key[Insert]="${terminfo[kich1]}"
+	key[Backspace]="${terminfo[kbs]}"
+	key[Delete]="${terminfo[kdch1]}"
+	key[Up]="${terminfo[kcuu1]}"
+	key[Down]="${terminfo[kcud1]}"
+	key[Left]="${terminfo[kcub1]}"
+	key[Right]="${terminfo[kcuf1]}"
+	key[PageUp]="${terminfo[kpp]}"
+	key[PageDown]="${terminfo[knp]}"
+	key[ShiftTab]="${terminfo[kcbt]}"
 
-autoload -Uz history-search-end
-zle -N history-beginning-search-backward-end history-search-end
-zle -N history-beginning-search-forward-end history-search-end
+	autoload -Uz history-search-end
+	zle -N history-beginning-search-backward-end history-search-end
+	zle -N history-beginning-search-forward-end history-search-end
 
-[[ -n "${key[Home]}" ]] && bindkey -- "${key[Home]}" beginning-of-line
-[[ -n "${key[End]}" ]] && bindkey -- "${key[End]}" end-of-line
-[[ -n "${key[Insert]}" ]] && bindkey -- "${key[Insert]}" overwrite-mode
-[[ -n "${key[Backspace]}" ]] && bindkey -- "${key[Backspace]}" backward-delete-char
-[[ -n "${key[Delete]}" ]] && bindkey -- "${key[Delete]}" delete-char
-[[ -n "${key[Up]}" ]] && bindkey -- "${key[Up]}" history-beginning-search-backward-end    # up-line-or-history
-[[ -n "${key[Down]}" ]] && bindkey -- "${key[Down]}" history-beginning-search-forward-end # down-line-or-history
-[[ -n "${key[Left]}" ]] && bindkey -- "${key[Left]}" backward-char
-[[ -n "${key[Right]}" ]] && bindkey -- "${key[Right]}" forward-char
-[[ -n "${key[PageUp]}" ]] && bindkey -- "${key[PageUp]}" beginning-of-buffer-or-history
-[[ -n "${key[PageDown]}" ]] && bindkey -- "${key[PageDown]}" end-of-buffer-or-history
-[[ -n "${key[ShiftTab]}" ]] && bindkey -- "${key[ShiftTab]}" reverse-menu-complete
+	[[ -n "${key[Home]}" ]] && bindkey -- "${key[Home]}" beginning-of-line
+	[[ -n "${key[End]}" ]] && bindkey -- "${key[End]}" end-of-line
+	[[ -n "${key[Insert]}" ]] && bindkey -- "${key[Insert]}" overwrite-mode
+	[[ -n "${key[Backspace]}" ]] && bindkey -- "${key[Backspace]}" backward-delete-char
+	[[ -n "${key[Delete]}" ]] && bindkey -- "${key[Delete]}" delete-char
+	[[ -n "${key[Up]}" ]] && bindkey -- "${key[Up]}" history-beginning-search-backward-end    # up-line-or-history
+	[[ -n "${key[Down]}" ]] && bindkey -- "${key[Down]}" history-beginning-search-forward-end # down-line-or-history
+	[[ -n "${key[Left]}" ]] && bindkey -- "${key[Left]}" backward-char
+	[[ -n "${key[Right]}" ]] && bindkey -- "${key[Right]}" forward-char
+	[[ -n "${key[PageUp]}" ]] && bindkey -- "${key[PageUp]}" beginning-of-buffer-or-history
+	[[ -n "${key[PageDown]}" ]] && bindkey -- "${key[PageDown]}" end-of-buffer-or-history
+	[[ -n "${key[ShiftTab]}" ]] && bindkey -- "${key[ShiftTab]}" reverse-menu-complete
+
+	unset key
+}
 
 autoload -Uz compinit && compinit
 autoload -Uz bashcompinit && bashcompinit
@@ -151,4 +155,3 @@ function without_proxy { (
 	proxy_off
 	"$@"
 ); }
-

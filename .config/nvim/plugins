@@ -3,25 +3,30 @@ airblade/voom
 
 # libs
 nvim-lua/plenary.nvim
-ray-x/guihua.lua
+nvim-tree/nvim-web-devicons
+muniftanjim/nui.nvim
 
 # color
 arcticicestudio/nord-vim
 
 # behaviour
-Darazaki/indent-o-matic
+darazaki/indent-o-matic
 gpanders/editorconfig.nvim
 
 # filetype
 nvim-treesitter/nvim-treesitter
 nvim-orgmode/orgmode
-NoahTheDuke/vim-just
+noahtheduke/vim-just
 ray-x/go.nvim
 
 # ui
+folke/noice.nvim
+kylechui/nvim-surround
 lewis6991/gitsigns.nvim
-stevearc/dressing.nvim
+norcalli/nvim-colorizer.lua
 nvim-lualine/lualine.nvim
+sindrets/diffview.nvim
+https://git.sr.ht/~whynothugo/lsp_lines.nvim
 
 # language server
 jose-elias-alvarez/null-ls.nvim

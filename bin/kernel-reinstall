@@ -8,5 +8,5 @@ for path in /usr/lib/modules/*; do
 
 	echo >&2 "+ kernel-install $kver $vmlinuz"
 
-	kernel-install add "$@" "$kver" "$vmlinuz"
+	kernel-install add "$kver" "$vmlinuz" "$@" 
 done

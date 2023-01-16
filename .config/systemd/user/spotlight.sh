@@ -25,11 +25,18 @@ while getopts "hd:" opt; do
 	esac
 done
 
+backgrounds_path="$(realpath "$backgrounds_path")"
+
 function decode_url {
 	printf "%b\n" "$(sed 's/+/ /g; s/%\([0-9A-F][0-9A-F]\)/\\x\1/g')"
 }
 
-{ exec {sleep}<> <(:); while ! : >/dev/tcp/arc.msn.com/80; do read -r -t 1 -u $sleep; done; } 2>/dev/null || true
+(
+	exec {sleep}<> <(:)
+	while ! : >/dev/tcp/arc.msn.com/80; do
+		read -r -t 1 -u $sleep
+	done
+) 2>/dev/null || true
 
 response="$(curl -sL -A "WindowsShellClient/0" "https://arc.msn.com/v3/Delivery/Placement?pid=209567&fmt=json&cdm=1&lc=en,en-US&ctry=US")"
 status="$?"
@@ -47,17 +54,18 @@ title="$(jq -r ".ad.title_text.tx" <<<"$item")"
 search_terms="$(jq -r ".ad.title_destination_url.u" <<<"$item" | sed "s/.*q=\([^&]*\).*/\1/" | decode_url)"
 
 mkdir -p "$backgrounds_path"
-image_path="$backgrounds_path/$(date +%y-%m-%d-%H-%M-%S)-$title ($search_terms).jpg"
+image_path="$backgrounds_path/$title ($search_terms) [$sha256].jpg"
 
 curl -sL "$landscape_url" -o "$image_path"
 sha256calculated="$(sha256sum "$image_path" | cut -d " " -f 1)"
 
 if [[ "$sha256" != "$sha256calculated" ]]; then
 	echo "Checksum incorrect"
+	mv "$image_path" "$image_path.bad"
 	exit 1
 fi
 
-ksetwallpaper "$image_path"
+~/bin/ksetwallpaper "$image_path"
 
 notify-send "Background changed" "$title ($search_terms)" --app-name=spotlight --icon=preferences-desktop-wallpaper --urgency=low
 echo "Background changed to $title ($search_terms)"

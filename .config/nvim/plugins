@@ -29,10 +29,10 @@ sindrets/diffview.nvim
 https://git.sr.ht/~whynothugo/lsp_lines.nvim
 
 # language server
+folke/neoconf.nvim
 jose-elias-alvarez/null-ls.nvim
 neovim/nvim-lspconfig
 simrat39/rust-tools.nvim
-tamago324/nlsp-settings.nvim
 
 # dap
 mfussenegger/nvim-dap

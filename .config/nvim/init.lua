@@ -75,6 +75,7 @@ do
 			vim.keymap.set("n", "<Space>k", vim.lsp.buf.hover, kmopts)
 			vim.keymap.set("n", "<Space>r", vim.lsp.buf.rename, kmopts)
 			vim.keymap.set("n", "<Space>a", vim.lsp.buf.code_action, kmopts)
+			vim.keymap.set("n", "<Space>l", vim.lsp.codelens.run, kmopts)
 			vim.api.nvim_create_autocmd("BufWritePre", {
 				group = augroup,
 				buffer = bufnr,
@@ -120,7 +121,7 @@ require("nvim-surround").setup()
 
 require("go").setup()
 
-require("nlspsettings").setup()
+require("neoconf").setup()
 
 require("gitsigns").setup()
 

@@ -1,2 +1,2 @@
 GOAMD64=v3
-GOFLAGS=-trimpath -ldflags=-linkmode=external
+GOFLAGS=-buildmode=pie -trimpath -ldflags=-linkmode=external

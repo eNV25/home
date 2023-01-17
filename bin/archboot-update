@@ -3,13 +3,7 @@
 [ "$(id -u)" != 0 ] && exec sudo "$0" "$@"
 
 dir="$(mktemp -d)"
-
-cd "$dir" || exit
-trap on_exit 0
-on_exit() {
-	cd
-	rm -rf "$dir"
-}
+cd "$dir"
 
 url="https://pkgbuild.com/~tpowa/archboot/iso/x86_64/latest/boot"
 
@@ -17,6 +11,8 @@ for file in amd-ucode.img intel-ucode.img initramfs_x86_64.img vmlinuz_archboot_
 	echo >&2 Downloading "$url/$file"
 	dl.sh "$url/$file" "$file"
 done
+
+echo rootfstype=ramfs >cmdline
 
 sed '
 /^BUILD_ID=/          s|=.*|=archboot|
@@ -26,17 +22,21 @@ sed '
 /^SUPPORT_URL=/       s|=.*|="https://gitlab.archlinux.org/tpowa/archboot/-/issues"|
 ' /etc/os-release >os-release
 
-image="$(bootctl -x)"/EFI/Linux/archboot.efi
+bootdir="$(bootctl -x)"
+image="$bootdir"/EFI/Linux/archboot.efi
 
 echo >&2 Writing "$image"
 sbctl bundle \
-	-c /dev/null \
+	-c cmdline \
 	-o os-release \
 	-a amd-ucode.img \
 	-i intel-ucode.img \
 	-f initramfs_x86_64.img \
 	-k vmlinuz_archboot_x86_64 \
 	"$image"
+
+cd - >/dev/null
+rm -rf "$dir"
 
 echo >&2 Signing "$image"
 sbctl sign -s "$image"

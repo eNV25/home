@@ -18,5 +18,4 @@ trap 'tput cvvis cr el' 0
 	--summary-interval=0 \
 	--console-log-level=warn \
 	--log-level=warn \
-	-UWget \
 	"$1" -o "$2"

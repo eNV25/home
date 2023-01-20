@@ -5,6 +5,9 @@
 for path in /usr/lib/modules/*; do
 	kver="${path##*/}"
 	vmlinuz="${path}/vmlinuz"
+	if ! pacman -Qqo "$vmlinuz" 1>/dev/null 2>/dev/null; then
+		continue
+	fi
 
 	echo >&2 "+ kernel-install $kver $vmlinuz"
 

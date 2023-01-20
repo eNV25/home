@@ -1,42 +1,11 @@
 #!/bin/sh -eu
 
-[ "$(id -u)" != 0 ] && exec sudo "$0" "$@"
-
-dir="$(mktemp -d)"
-cd "$dir"
-
-url="https://pkgbuild.com/~tpowa/archboot/iso/x86_64/latest/boot"
-
-for file in amd-ucode.img intel-ucode.img initramfs_x86_64.img vmlinuz_archboot_x86_64; do
-	echo >&2 Downloading "$url/$file"
-	dl.sh "$url/$file" "$file"
-done
-
-echo rootfstype=ramfs >cmdline
-
-sed '
-/^BUILD_ID=/          s|=.*|=archboot|
-/^HOME_URL=/          s|=.*|="https://bit.ly/archboot"|
-/^DOCUMENTATION_URL=/ s|=.*|="https://bit.ly/archboot"|
-/^BUG_REPORT_URL=/    s|=.*|="https://gitlab.archlinux.org/tpowa/archboot/-/issues"|
-/^SUPPORT_URL=/       s|=.*|="https://gitlab.archlinux.org/tpowa/archboot/-/issues"|
-' /etc/os-release >os-release
-
 bootdir="$(bootctl -x)"
 image="$bootdir"/EFI/Linux/archboot.efi
+url="https://pkgbuild.com/~tpowa/archboot/iso/x86_64/latest/boot/archboot-x86_64.efi"
 
-echo >&2 Writing "$image"
-sbctl bundle \
-	-c cmdline \
-	-o os-release \
-	-a amd-ucode.img \
-	-i intel-ucode.img \
-	-f initramfs_x86_64.img \
-	-k vmlinuz_archboot_x86_64 \
-	"$image"
-
-cd - >/dev/null
-rm -rf "$dir"
+echo >&2 Installing "$url"
+curl -sSL "$url" | sudo install -v /dev/stdin "$image"
 
 echo >&2 Signing "$image"
-sbctl sign -s "$image"
+sudo sbctl sign "$image"

@@ -21,17 +21,6 @@ do
 		group = augroup,
 		command = "pclose",
 	})
-	vim.api.nvim_create_autocmd("BufRead", {
-		group = augroup,
-		callback = function(args)
-			local bufnr = args.buf
-			vim.api.nvim_create_autocmd("FileType", {
-				buffer = bufnr,
-				once = true,
-				command = [[ if &ft !~# 'commit\|rebase' && line("'\"") > 1 && line("'\"") <= line("$") | exe 'normal! g`"' | endif ]],
-			})
-		end,
-	})
 	vim.api.nvim_create_autocmd("VimEnter", {
 		group = augroup,
 		callback = function()

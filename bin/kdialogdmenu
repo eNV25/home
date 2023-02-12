@@ -1,4 +1,5 @@
 #!/bin/sh
+set -eu
 usage="Usage: $(basename "$0") [TITLE]"
 while getopts 'h?' opt; do
 	case "$opt" in
@@ -8,13 +9,10 @@ while getopts 'h?' opt; do
 		;;
 	esac
 done
-title="$1"
-shift
-if [ -s "$title" ]; then title=Menu; fi
-if [ $# -gt 0 ]; then
+if [ $# -gt 1 ]; then
 	echo "$usage"
 	exit 1
 fi
 tr '\n' '\0' |
 	xargs -0 -I@ printf '%s\0%s\0' @ @ |
-	xargs -0 kdialog --menu "$title"
+	xargs -0 kdialog --menu "${1:-Menu}"

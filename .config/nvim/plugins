@@ -30,6 +30,7 @@ https://git.sr.ht/~whynothugo/lsp_lines.nvim
 
 # language server
 folke/neoconf.nvim
+folke/neodev.nvim
 jose-elias-alvarez/null-ls.nvim
 neovim/nvim-lspconfig
 simrat39/rust-tools.nvim

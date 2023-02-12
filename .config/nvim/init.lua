@@ -1,7 +1,6 @@
 -- init.lua
 
 local vim = assert(vim, "module vim does not exist")
-local unpack = vim.F.unpack_len
 
 vim.opt.autowrite = true
 vim.opt.splitbelow = true
@@ -96,27 +95,22 @@ vim.opt.termguicolors = true
 vim.cmd("colorscheme nord")
 
 require("indent-o-matic").setup({})
+require("nvim-surround").setup()
+require("gitsigns").setup()
 
+require("colorizer").setup()
 require("nvim-treesitter.configs").setup({
 	ensure_installed = "all",
 	auto_install = true,
-	highlight = { enable = true, disable = { "toml" } },
+	highlight = { enable = true },
 	indent = { enable = true },
+	incremental_selection = { enable = true },
 })
 
-require("colorizer").setup()
-
-require("nvim-surround").setup()
-
-require("go").setup()
-
-require("neoconf").setup()
-
-require("gitsigns").setup()
-
 require("dapui").setup()
+require("lsp_lines").setup()
+vim.diagnostic.config({ virtual_text = false })
 
-vim.opt.showmode = false
 require("lualine").setup({
 	options = {
 		icons_enabled = false,
@@ -127,6 +121,7 @@ require("lualine").setup({
 		lualine_c = { { "buffers", symbols = { alternate_file = "" } } },
 	},
 })
+vim.opt.showmode = false
 
 require("noice").setup({
 	lsp = {
@@ -191,44 +186,30 @@ do
 	})
 end
 
+require("go").setup()
+require("neodev").setup()
+require("neoconf").setup()
+
 do
 	local lsp_config = require("lspconfig")
 	lsp_config.util.default_config = vim.tbl_deep_extend("force", lsp_config.util.default_config, {
 		capabilities = require("cmp_nvim_lsp").default_capabilities(),
+		settings = {
+			gopls = {
+				analyses = {
+					fieldalignment = true,
+					nilness = true,
+					unusedparams = true,
+					unusedvariable = true,
+					unusedwrite = true,
+					useany = true,
+				},
+			},
+		},
 	})
 
-	for server, opts in pairs({
-		bashls = {},
-		ccls = {},
-		pylsp = {},
-		sumneko_lua = {
-			settings = {
-				Lua = {
-					runtime = { version = "LuaJIT" },
-					diagnostics = { globals = { "vim" } },
-					telemetry = { enable = false },
-					format = { enable = false },
-				},
-			},
-		},
-		gopls = {
-			root_dir = lsp_config.util.root_pattern("go.work", "go.mod", ".git"),
-			settings = {
-				gopls = {
-					usePlaceholders = true,
-					analyses = {
-						fieldalignment = true,
-						nilness = true,
-						unusedparams = true,
-						unusedvariable = true,
-						unusedwrite = true,
-						useany = true,
-					},
-				},
-			},
-		},
-	}) do
-		lsp_config[server].setup(opts)
+	for _, server in ipairs({ "bashls", "ccls", "pylsp", "sumneko_lua", "gopls" }) do
+		lsp_config[server].setup({})
 	end
 
 	require("rust-tools").setup({})

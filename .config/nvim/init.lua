@@ -82,6 +82,13 @@ do
 					end
 				end,
 			})
+			vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
+				group = augroup,
+				buffer = bufnr,
+				callback = function()
+					vim.lsp.codelens.refresh()
+				end,
+			})
 		end,
 	})
 	vim.api.nvim_create_autocmd("ColorScheme", {
@@ -91,145 +98,196 @@ do
 	})
 end
 
-vim.opt.termguicolors = true
-vim.cmd("colorscheme nord")
-
-require("indent-o-matic").setup({})
-require("nvim-surround").setup()
-require("gitsigns").setup()
-
-require("colorizer").setup()
-require("nvim-treesitter.configs").setup({
-	ensure_installed = "all",
-	auto_install = true,
-	highlight = { enable = true },
-	indent = { enable = true },
-	incremental_selection = { enable = true },
-})
-
-require("dapui").setup()
-require("lsp_lines").setup()
-vim.diagnostic.config({ virtual_text = false })
-
-require("lualine").setup({
-	options = {
-		icons_enabled = false,
-		component_separators = { left = "", right = "" },
-		section_separators = { left = "", right = "" },
-	},
-	tabline = {
-		lualine_c = { { "buffers", symbols = { alternate_file = "" } } },
-	},
-})
-vim.opt.showmode = false
-
-require("noice").setup({
-	lsp = {
-		override = {
-			["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-			["vim.lsp.util.stylize_markdown"] = true,
-			["cmp.entry.get_documentation"] = true,
-		},
-	},
-	cmdline = {
-		view = "cmdline",
-	},
-})
-
-do
-	local cmp = require("cmp")
-	local snippy = require("snippy")
-	local at_word = function()
-		local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-		local char = col == 0 and " " or vim.api.nvim_buf_get_text(0, row - 1, col - 1, row - 1, col, {})[1]
-		return not char:match("%s")
-	end
-	cmp.setup({
-		completion = { autocomplete = false },
-		snippet = {
-			expand = function(args)
-				snippy.expand_snippet(args.body)
-			end,
-		},
-		sources = {
-			{ name = "nvim_lsp_signature_help" },
-			{ name = "nvim_lsp" },
-			{ name = "snippy" },
-			{ name = "emoji" },
-		},
-		mapping = cmp.config.mapping.preset.insert({
-			["<CR>"] = cmp.mapping.confirm({ select = true }),
-			["<C-J>"] = cmp.mapping.scroll_docs(-4),
-			["<C-K>"] = cmp.mapping.scroll_docs(4),
-			["<C-Space>"] = cmp.mapping.complete(),
-			["<Tab>"] = cmp.mapping(function(fallback)
-				if cmp.visible() then
-					cmp.select_next_item()
-				elseif snippy.can_expand_or_advance() then
-					snippy.expand_or_advance()
-				elseif at_word() then
-					cmp.complete()
-				else
-					fallback()
-				end
-			end, { "i", "s" }),
-			["<S-Tab>"] = cmp.mapping(function(fallback)
-				if cmp.visible() then
-					cmp.select_prev_item()
-				elseif snippy.can_jump(-1) then
-					snippy.previous()
-				else
-					fallback()
-				end
-			end, { "i", "s" }),
-		}),
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+	vim.fn.system({
+		"git",
+		"clone",
+		"--filter=blob:none",
+		"https://github.com/folke/lazy.nvim.git",
+		"--branch=stable",
+		lazypath,
 	})
 end
+vim.opt.rtp:prepend(lazypath)
 
-require("go").setup()
-require("neodev").setup()
-require("neoconf").setup()
-
-do
-	local lsp_config = require("lspconfig")
-	lsp_config.util.default_config = vim.tbl_deep_extend("force", lsp_config.util.default_config, {
-		capabilities = require("cmp_nvim_lsp").default_capabilities(),
-		settings = {
-			gopls = {
-				analyses = {
-					fieldalignment = true,
-					nilness = true,
-					unusedparams = true,
-					unusedvariable = true,
-					unusedwrite = true,
-					useany = true,
-				},
+require("lazy").setup({
+	{ "folke/lazy.nvim", version = "*" },
+	{
+		"arcticicestudio/nord-vim",
+		version = "*",
+		priority = math.huge,
+		init = function()
+			vim.opt.termguicolors = true
+			vim.cmd("colorscheme nord")
+		end,
+	},
+	{ "gpanders/editorconfig.nvim", version = "*" },
+	{ "darazaki/indent-o-matic", config = true },
+	{ "kylechui/nvim-surround", config = true },
+	{ "nvchad/nvim-colorizer.lua", name = "colorizer", config = true },
+	{
+		"nvim-treesitter/nvim-treesitter",
+		opts = {
+			ensure_installed = "all",
+			auto_install = true,
+			highlight = { enable = true },
+			indent = { enable = true },
+			incremental_selection = { enable = true },
+		},
+		config = function(_, opts)
+			require("nvim-treesitter.configs").setup(opts)
+		end,
+	},
+	{
+		"sindrets/diffview.nvim",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+	},
+	{
+		"nvim-lualine/lualine.nvim",
+		opts = {
+			options = {
+				icons_enabled = false,
+				component_separators = { left = "", right = "" },
+				section_separators = { left = "", right = "" },
+			},
+			tabline = {
+				lualine_c = { { "buffers", symbols = { alternate_file = "" } } },
 			},
 		},
-	})
-
-	for _, server in ipairs({ "bashls", "ccls", "pylsp", "sumneko_lua", "gopls" }) do
-		lsp_config[server].setup({})
-	end
-
-	require("rust-tools").setup({})
-
-	local shell_filetypes = { "sh", "bash", "ksh", "zsh", "PKGBUILD" }
-
-	local null_ls = require("null-ls")
-	null_ls.setup({
-		sources = {
-			null_ls.builtins.diagnostics.golangci_lint,
-
-			null_ls.builtins.formatting.black,
-			null_ls.builtins.formatting.jq,
-			null_ls.builtins.formatting.stylua,
-			null_ls.builtins.formatting.shfmt.with({ filetypes = shell_filetypes }),
-
-			null_ls.builtins.code_actions.shellcheck.with({ filetypes = shell_filetypes }),
-
-			null_ls.builtins.hover.dictionary,
-			null_ls.builtins.hover.printenv,
+		config = function(_, opts)
+			require("lualine").setup(opts)
+			vim.opt.showmode = false
+		end,
+	},
+	{
+		"folke/noice.nvim",
+		version = "*",
+		dependencies = { "muniftanjim/nui.nvim" },
+		opts = {
+			lsp = {
+				override = {
+					["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+					["vim.lsp.util.stylize_markdown"] = true,
+					["cmp.entry.get_documentation"] = true,
+				},
+			},
+			cmdline = {
+				view = "cmdline",
+			},
 		},
-	})
-end
+	},
+	{
+		"hrsh7th/nvim-cmp",
+		dependencies = {
+			"hrsh7th/cmp-emoji",
+			"hrsh7th/cmp-nvim-lsp",
+			"hrsh7th/cmp-nvim-lsp-signature-help",
+			"dcampos/cmp-snippy",
+			"dcampos/nvim-snippy",
+		},
+		config = function()
+			local cmp = require("cmp")
+			local snippy = require("snippy")
+			cmp.setup({
+				completion = { autocomplete = false },
+				snippet = {
+					expand = function(args)
+						snippy.expand_snippet(args.body)
+					end,
+				},
+				sources = {
+					{ name = "nvim_lsp_signature_help" },
+					{ name = "nvim_lsp" },
+					{ name = "snippy" },
+					{ name = "emoji" },
+				},
+				mapping = cmp.config.mapping.preset.insert({
+					["<CR>"] = cmp.mapping.confirm({ select = true }),
+					["<C-J>"] = cmp.mapping.scroll_docs(-4),
+					["<C-K>"] = cmp.mapping.scroll_docs(4),
+					["<C-Space>"] = cmp.mapping.complete({}),
+					["<Tab>"] = cmp.mapping(function(fallback)
+						if cmp.visible() then
+							cmp.select_next_item()
+						elseif snippy.can_expand_or_advance() then
+							snippy.expand_or_advance()
+						elseif
+							(function()
+								local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+								local char = col == 0 and " "
+									or vim.api.nvim_buf_get_text(0, row - 1, col - 1, row - 1, col, {})[1]
+								return not char:match("%s")
+							end)()
+						then
+							cmp.complete()
+						else
+							fallback()
+						end
+					end, { "i", "s" }),
+					["<S-Tab>"] = cmp.mapping(function(fallback)
+						if cmp.visible() then
+							cmp.select_prev_item()
+						elseif snippy.can_jump(-1) then
+							snippy.previous()
+						else
+							fallback()
+						end
+					end, { "i", "s" }),
+				}),
+			})
+			require("lspconfig").util.default_config =
+				vim.tbl_deep_extend("force", require("lspconfig").util.default_config, {
+					capabilities = require("cmp_nvim_lsp").default_capabilities(),
+				})
+		end,
+	},
+	{ "nvim-orgmode/orgmode", setup = true, dependencies = { "nvim-treesitter/nvim-treesitter" } },
+	{
+		"neovim/nvim-lspconfig",
+		dependencies = {
+			"hrsh7th/nvim-cmp",
+			{ "folke/neodev.nvim", version = "*", config = true },
+			{ "folke/neoconf.nvim", config = true },
+			{
+				name = "lsp_lines",
+				url = "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+				config = function(plugin, opts)
+					require(plugin.name).setup(opts)
+					vim.diagnostic.config({ virtual_text = false })
+				end,
+			},
+			{
+				"simrat39/rust-tools.nvim",
+				dependencies = { "hrsh7th/nvim-cmp" },
+				config = true,
+			},
+			{
+				"jose-elias-alvarez/null-ls.nvim",
+				dependencies = { "nvim-lua/plenary.nvim", "hrsh7th/nvim-cmp" },
+				config = function()
+					local null_ls = require("null-ls")
+					local shell_filetypes = { "sh", "bash", "ksh", "zsh", "PKGBUILD" }
+					null_ls.setup({
+						sources = {
+							null_ls.builtins.diagnostics.golangci_lint,
+							null_ls.builtins.formatting.black,
+							null_ls.builtins.formatting.jq,
+							null_ls.builtins.formatting.stylua,
+							null_ls.builtins.formatting.shfmt.with({ filetypes = shell_filetypes }),
+							null_ls.builtins.code_actions.shellcheck.with({ filetypes = shell_filetypes }),
+							null_ls.builtins.hover.dictionary,
+							null_ls.builtins.hover.printenv,
+						},
+					})
+				end,
+			},
+		},
+		config = function()
+			local lspconfig = require("lspconfig")
+			vim.tbl_map(function(server)
+				lspconfig[server].setup({})
+			end, { "jsonls", "bashls", "ccls", "pylsp", "lua_ls", "gopls" })
+		end,
+	},
+})

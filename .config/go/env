@@ -1,2 +1,1 @@
 GOAMD64=v3
-GOFLAGS=-trimpath

@@ -64,6 +64,15 @@ do
 			vim.keymap.set("n", "<Space>r", vim.lsp.buf.rename, kmopts)
 			vim.keymap.set("n", "<Space>a", vim.lsp.buf.code_action, kmopts)
 			vim.keymap.set("n", "<Space>l", vim.lsp.codelens.run, kmopts)
+			vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI", "InsertLeave" }, {
+				group = augroup,
+				buffer = bufnr,
+				callback = function()
+					if capabilities.codeLensProvider then
+						vim.lsp.codelens.refresh()
+					end
+				end,
+			})
 			vim.api.nvim_create_autocmd("BufWritePre", {
 				group = augroup,
 				buffer = bufnr,
@@ -75,18 +84,8 @@ do
 						vim.lsp.buf.format({ async = false, bufnr = bufnr })
 					end
 					if capabilities.codeActionProvider and "go" == vim.bo[bufnr].filetype then
-						vim.lsp.buf.code_action({
-							context = { only = { "source.organizeImports" } },
-							apply = true,
-						})
+						vim.lsp.buf.code_action({ context = { only = { "source.organizeImports" } }, apply = true })
 					end
-				end,
-			})
-			vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
-				group = augroup,
-				buffer = bufnr,
-				callback = function()
-					vim.lsp.codelens.refresh()
 				end,
 			})
 		end,
@@ -125,6 +124,7 @@ require("lazy").setup({
 	{ "gpanders/editorconfig.nvim", version = "*" },
 	{ "darazaki/indent-o-matic", config = true },
 	{ "kylechui/nvim-surround", config = true },
+	{ "m4xshen/autoclose.nvim", config = true },
 	{ "nvchad/nvim-colorizer.lua", name = "colorizer", config = true },
 	{
 		"nvim-treesitter/nvim-treesitter",
@@ -150,6 +150,9 @@ require("lazy").setup({
 				icons_enabled = false,
 				component_separators = { left = "", right = "" },
 				section_separators = { left = "", right = "" },
+			},
+			sections = {
+				lualine_c = { "%F" },
 			},
 			tabline = {
 				lualine_c = { { "buffers", symbols = { alternate_file = "" } } },

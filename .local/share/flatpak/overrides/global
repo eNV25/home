@@ -1,6 +1,6 @@
 [Context]
 devices=dri;
-filesystems=xdg-config/gtk-3.0:ro;
+filesystems=xdg-config/gtkrc:ro;xdg-config/gtkrc-2.0:ro;xdg-config/gtk-2.0:ro;xdg-config/gtk-3.0:ro;xdg-config/gtk-4.0:ro;
 
 [Session Bus Policy]
 com.canonical.AppMenu.Registrar=talk

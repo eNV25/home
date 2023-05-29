@@ -1,7 +1,12 @@
 #!/usr/bin/alacritty --config-file
 
-#import:
-#  - ~/.config/colors/alacritty/github-vscode-dark.yml
+import:
+  - ~/.config/colors/alacritty/github-vscode-dark.yml
+
+shell: /usr/bin/dvtm
+
+env:
+  TERM: alacritty+common
 
 font:
   normal:

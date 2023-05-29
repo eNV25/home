@@ -97,15 +97,10 @@ alias zmv='zmv'
 alias zcp='zmv -c'
 alias zln='zmv -l'
 
-function commenterr {
-	"$@" | awk '/^#/ { print $0 > "/dev/stderr"; next } { print $0 }'
-}
-
 function updmirrors {
-	commenterr rate-mirrors arch | sudo tee /etc/pacman.d/mirrorlist
-	for mirrorlist in /etc/pacman.d/*-mirrorlist; do
-		commenterr rankmirrors "$mirrorlist" | sudo tee "$mirrorlist"
-	done
+	local file="$(mktemp)"
+	rate-mirrors --protocol https --save "$file" --disable-comments-in-file arch; sudo mv -v "$file" /etc/pacman.d/mirrorlist
+	rate-mirrors --protocol https --save "$file" --disable-comments-in-file chaotic-aur; sudo mv -v "$file" /etc/pacman.d/chaotic-mirrorlist
 }
 
 # shellcheck disable=SC2120

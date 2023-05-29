@@ -1,9 +1,6 @@
 #!/usr/bin/alacritty --config-file
 
-import:
-  - ~/.config/colors/alacritty/github-vscode-dark.yml
-
-shell: /usr/bin/dvtm
+shell: /usr/bin/zellij
 
 env:
   TERM: alacritty+common

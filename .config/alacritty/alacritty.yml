@@ -2,9 +2,6 @@
 
 shell: /usr/bin/zellij
 
-env:
-  TERM: alacritty+common
-
 font:
   normal:
     family: JetBrains Mono NL

@@ -25,7 +25,6 @@ zinit light-mode for \
 	zdharma-continuum/zinit-annex-rust
 
 zinit snippet /usr/share/git/completion/git-prompt.sh
-zinit snippet ~/.config/nnn/quitcd.sh
 zinit snippet ~/.environment.sh
 zinit snippet ~/.alias.sh
 
@@ -86,6 +85,8 @@ fpath=(~/.zsh/functions/ "${fpath[@]}")
 
 autoload -Uz compinit && compinit
 autoload -Uz bashcompinit && bashcompinit
+autoload -Uz bracketed-paste-magic && zle -N bracketed-paste bracketed-paste-magic
+autoload -Uz url-quote-magic && zle -N self-insert url-quote-magic
 autoload -Uz command_not_found_handler
 autoload -Uz zmv pick-web-browser run-help
 unalias run-help 2>/dev/null 1>/dev/null

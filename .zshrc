@@ -98,12 +98,6 @@ alias zmv='zmv'
 alias zcp='zmv -c'
 alias zln='zmv -l'
 
-function updmirrors {
-	local file="$(mktemp)"
-	rate-mirrors --protocol https --save "$file" --disable-comments-in-file arch; sudo mv -v "$file" /etc/pacman.d/mirrorlist
-	rate-mirrors --protocol https --save "$file" --disable-comments-in-file chaotic-aur; sudo mv -v "$file" /etc/pacman.d/chaotic-mirrorlist
-}
-
 # shellcheck disable=SC2120
 function proxy_on {
 	export no_proxy="127.0.0.1,::1,localhost,localhost.localdomain,.localhost,.localhost.localdomain"

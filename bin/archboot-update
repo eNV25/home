@@ -5,7 +5,7 @@ image="$bootdir"/EFI/Linux/archboot.efi
 url="https://archboot.com/iso/x86_64/latest/boot/archboot-x86_64.efi"
 
 echo >&2 Installing "$url"
-curl -sSL "$url" | sudo install -v /dev/stdin "$image"
+curl -L --progress-bar "$url" | sudo install -v /dev/stdin "$image"
 
 echo >&2 Signing "$image"
 sudo sbctl sign "$image"

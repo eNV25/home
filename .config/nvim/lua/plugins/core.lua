@@ -29,23 +29,6 @@ return {
     opts = { ignored_filetypes = { "nofile", "quickfix", "qf", "prompt" }, ignored_buftypes = { "nofile" } },
   },
   {
-    "echasnovski/mini.ai",
-    event = { "User AstroFile", "InsertEnter" },
-    dependencies = "nvim-treesitter/nvim-treesitter-textobjects",
-    opts = function()
-      local treesitter = require("mini.ai").gen_spec.treesitter
-      return {
-        n_lines = 500,
-        custom_textobjects = {
-          c = treesitter { a = "@class.outer", i = "@class.inner" },
-          f = treesitter { a = "@function.outer", i = "@function.inner" },
-          k = treesitter { a = "@block.outer", i = "@block.inner" },
-          o = treesitter { a = { "@conditional.outer", "@loop.outer" }, i = { "@conditional.inner", "@loop.inner" } },
-        },
-      }
-    end,
-  },
-  {
     "windwp/nvim-autopairs",
     event = "InsertEnter",
     opts = {
@@ -121,6 +104,16 @@ return {
     "akinsho/toggleterm.nvim",
     cmd = { "ToggleTerm", "TermExec" },
     opts = {
+      highlights = {
+        Normal = { link = "Normal" },
+        NormalNC = { link = "NormalNC" },
+        NormalFloat = { link = "NormalFloat" },
+        FloatBorder = { link = "FloatBorder" },
+        StatusLine = { link = "StatusLine" },
+        StatusLineNC = { link = "StatusLineNC" },
+        WinBar = { link = "WinBar" },
+        WinBarNC = { link = "WinBarNC" },
+      },
       size = 10,
       on_create = function()
         vim.opt.foldcolumn = "0"
@@ -129,10 +122,7 @@ return {
       open_mapping = [[<F7>]],
       shading_factor = 2,
       direction = "float",
-      float_opts = {
-        border = "curved",
-        highlights = { border = "Normal", background = "Normal" },
-      },
+      float_opts = { border = "rounded" },
     },
   },
 }

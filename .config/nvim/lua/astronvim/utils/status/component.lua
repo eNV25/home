@@ -113,7 +113,8 @@ function M.cmd_info(opts)
       update = {
         "RecordingEnter",
         "RecordingLeave",
-        callback = vim.schedule_wrap(function() vim.cmd.redrawstatus() end),
+        -- TODO: remove when dropping support for Neovim v0.8
+        callback = vim.fn.has "nvim-0.9" == 0 and vim.schedule_wrap(function() vim.cmd.redrawstatus() end) or nil,
       },
     },
     search_count = {
@@ -196,7 +197,8 @@ function M.git_branch(opts)
         end
       end,
     },
-    update = { "User", pattern = { "GitSignsUpdate", "AstroGitFile" } },
+    update = { "User", pattern = "GitSignsUpdate" },
+    init = init.update_events { "BufEnter" },
   }, opts)
   return M.builder(status_utils.setup_providers(opts, { "git_branch" }))
 end
@@ -221,6 +223,7 @@ function M.git_diff(opts)
     },
     surround = { separator = "left", color = "git_diff_bg", condition = condition.git_changed },
     update = { "User", pattern = "GitSignsUpdate" },
+    init = init.update_events { "BufEnter" },
   }, opts)
   return M.builder(status_utils.setup_providers(opts, { "added", "changed", "removed" }, function(p_opts, p)
     local out = status_utils.build_provider(p_opts, p)

@@ -1,13 +1,17 @@
 --[[
 
-script to make mpv play torrents/magnets directly using btfs
+script to make mpv play torrents/magnets directly using btfs https://github.com/johang/btfs
 
 original script: https://gist.github.com/huglovefan/4c68bc40661b6701ca5fc6ce1157f192
 
 requires:
-- linux
 - btfs
-- xterm (optional)
+- file --brief --mime-type
+- mountpoint -q
+- umount
+- rmdir
+- mkdir -p
+- sleep
 
 usage:
 - open a magnet link or torrent url using mpv and it should Just Work
@@ -24,49 +28,124 @@ local btfs_args = {
 
 	-- these are in kB/s
 	--'--max-download-rate=4900',
-	'--max-upload-rate=500',
+	"--max-upload-rate=500",
 }
 
-local mountdir = '/tmp/mpvbtfs'
-
--- list files from the mountpoint that should added to the playlist
-local list_files = function (mountpoint)
-	local p = assert(io.popen([[
-	mountpoint=]]..shellquote(mountpoint)..'\n'..[[
-	# -V = version sort. should sort anime episodes correctly
-	find "$mountpoint" -type f | sort -V
-	]]))
-	local files = {}
-	for line in p:lines() do
-		table.insert(files, line)
-		files[line] = #files -- save the position for the sort below
-	end
-	p:close()
-	-- put files before directories but keep the sort order
-	local count_slashes = function (path) return #path-#path:gsub('/', '') end
-	table.sort(files, function (p1, p2)
-		local c1 = count_slashes(p1)
-		local c2 = count_slashes(p2)
-		if c1 ~= c2 then
-			return c1 < c2
-		else
-			return files[p1] < files[p2]
-		end
-	end)
-	return files
-end
+local mountdir = "/tmp/mpvbtfs"
 
 --------------------------------------------------------------------------------
 
-shellquote = function (s)
-	return '\'' .. s:gsub('\'', '\'\\\'\'') .. '\''
+local mp = require("mp")
+local utils = require("mp.utils")
+local msg = require("mp.msg")
+
+-- predeclare with some common file types, for faster loading
+local MPV_MEDIA_TYPES = {
+	[".flac"] = true,
+	[".mp3"] = true,
+	[".ogg"] = true,
+	[".m3u"] = true,
+	[".m3u8"] = true,
+	[".mkv"] = true,
+	[".mp4"] = true,
+	[".webm"] = true,
+};
+
+-- init MPV_MEDIA_TYPES with supported mime types from mpv.desktop,
+-- for use with file --brief --mime-type
+(function()
+	-- get XDG_DATA_DIRS and add a final colon to make it easier to parse
+	local XDG_DATA_DIRS = os.getenv("XDG_DATA_DIRS") or "/usr/share"
+	if not XDG_DATA_DIRS:match(":$") then
+		XDG_DATA_DIRS = XDG_DATA_DIRS .. ":"
+	end
+	for path in XDG_DATA_DIRS:gmatch("(.-):") do
+		-- build path and make sure it is absolute
+		path = utils.join_path(path, "applications/mpv.desktop")
+		if not path:match("^/") then
+			goto continue
+		end
+
+		-- find the first mpv.desktop in XDG_DATA_DIRS
+		local f = io.open(path)
+		if not f then
+			goto continue
+		end
+
+		-- parse the first MimeType= line
+		for line in f:lines() do
+			local mime_types = line:match("^MimeType=(.*)$")
+			if mime_types then
+				f:close()
+				if not mime_types:match(";$") then
+					mime_types = mime_types .. ";"
+				end
+				for mime_type in mime_types:gmatch("(.-);") do
+					MPV_MEDIA_TYPES[mime_type] = true
+				end
+				return
+			end
+		end
+
+		f:close()
+
+		::continue::
+	end
+end)()
+
+-- return shortest file extension
+local file_ext = function(file)
+	return file:match("^.+(%.[^.][^.]-)$")
 end
 
-local exec_ok = os.execute
-if _VERSION == 'Lua 5.1' then
-	exec_ok = function (...)
-		return 0 == os.execute(...)
+-- list files from the mountpoint that should added to the playlist
+-- TODO: implement natural order sorting
+local list_files = function(mountpoint)
+	local files = {}
+	local dirs = { mountpoint }
+
+	while #dirs > 0 do
+		-- pop first directory
+		local current = dirs[1]
+		table.remove(dirs, 1)
+
+		-- append media files, while caching file extensions for future use
+		local subfiles = utils.readdir(current, "files")
+		table.sort(subfiles)
+		for _, filename in ipairs(subfiles) do
+			local ext = file_ext(filename)
+			local file = utils.join_path(current, filename)
+
+			msg.verbose("checking " .. file)
+
+			if ext and MPV_MEDIA_TYPES[ext] then
+				table.insert(files, file)
+			else
+				local mime_type = mp.command_native({
+							name = "subprocess",
+							args = { "file", "--brief", "--mime-type", file },
+							capture_stdout = true,
+						}).stdout
+						:match("[%S]*") -- strip whitespace
+
+				if mime_type and MPV_MEDIA_TYPES[mime_type] then
+					msg.verbose("using " .. file)
+
+					MPV_MEDIA_TYPES[ext] = true
+					table.insert(files, file)
+				end
+			end
+		end
+
+		-- append subdirectories to queue
+		local subdirs = utils.readdir(current, "dirs")
+		table.sort(subdirs)
+		for _, dirname in ipairs(subdirs) do
+			table.insert(dirs, utils.join_path(current, dirname))
+		end
 	end
+
+	return files
 end
 
 --------------------------------------------------------------------------------
@@ -74,103 +153,92 @@ end
 -- mountpoints mounted by us (will be unmounted on shutdown)
 local mounted_points = {}
 
-local do_unmount = function (mountpoint)
-	os.execute([[
-	mountpoint=]]..shellquote(mountpoint)..'\n'..[[
-	fusermount -u "$mountpoint"
-	rmdir "$mountpoint"
-	]])
-	mounted_points[mountpoint] = nil
+local is_mounted = function(mountpoint)
+	return mp.command_native({ name = "subprocess", args = { "mountpoint", "-q", mountpoint } }).status == 0
+	--return mp.command_native({ name = "subprocess", args = { "mount" }, capture_stdout = true }).stdout:match(" " .. mountpoint:gsub("([%W])", "%%%1") .. " ")
 end
 
-local do_mount = function (url, mountpoint)
-	if type(btfs_args) == 'table' then
-		for i = 1, #btfs_args do
-			btfs_args[i] = shellquote(btfs_args[i])
+local do_unmount = function(url, mountpoint)
+	mounted_points[url] = nil
+	mp.command_native({ name = "subprocess", args = { "umount", mountpoint }, playback_only = false })
+	mp.command_native({ name = "subprocess", args = { "rmdir", mountpoint }, playback_only = false })
+end
+
+local do_mount = function(url, mountpoint)
+	mp.command_native({ name = "subprocess", args = { "mkdir", "-p", mountpoint } })
+
+	local args = { "btfs" }
+	for _, v in ipairs(btfs_args) do
+		table.insert(args, v)
+	end
+	table.insert(args, url)
+	table.insert(args, mountpoint)
+
+	mp.command_native({ name = "subprocess", args = args })
+	mounted_points[url] = mountpoint
+
+	msg.verbose("waiting for files")
+
+	-- wait until btfs is finished mounting, else fail
+	while is_mounted(mountpoint) do
+		if #utils.readdir(mountpoint) > 0 then
+			msg.verbose("files found")
+			return true
 		end
-		btfs_args = table.concat(btfs_args, ' ')
+		mp.command_native({ name = "subprocess", args = { "sleep", "0.25" } })
 	end
-	local title = ('btfs - '..mountpoint:match('[^/]+$'))
-	if not exec_ok([[
-	mountpoint=]]..shellquote(mountpoint)..'\n'..[[
-	url=]]..shellquote(url)..'\n'..[[
-	mkdir -p "$mountpoint" || exit 1
-	{
-	# if command -v xterm >/dev/null; then
-	# 	exec xterm -title ]]..shellquote(title)..[[ -e btfs -f ]]..btfs_args..[[ "$url" "$mountpoint"
-	# else
-		exec btfs -f ]]..btfs_args..[[ "$url" "$mountpoint" >/dev/null 2>&1
-	#fi
-	} &
-	pid=$!
-	while true; do
-		if [ ! -e /proc/$pid ]; then
-			exit 1
-		fi
-		if mountpoint -q "$mountpoint"; then
-			set -- "$mountpoint"/*
-			if [ $# -gt 1 ] || [ -e "$1" ]; then
-				exit 0
-			fi
-		fi
-		command sleep 0.25 || exit 1
-	done
-	]]) then
-		return false
-	end
-	mounted_points[mountpoint] = true
-	return true
-end
-
-local is_mounted = function (mountpoint)
-	return exec_ok('mountpoint -q '..shellquote(mountpoint))
+	return false
 end
 
 --------------------------------------------------------------------------------
 
 -- gets the info hash or torrent filename for use as the mount directory name
-local parse_url = function (url)
-	return url:match('^magnet:.*[?&]xt=urn:bt[im]h:([a-zA-Z0-9]*)&?')
-	    or url:gsub('[?#].*', '', 1):match('/([^/]+%.torrent)$')
+local parse_url = function(url)
+	return url:match("^magnet:.*[?&]xt=urn:bt[im]h:(%w*)&?") or (url:match("^.*%.torrent$") and url:gsub("/", "⧸"))
 end
 
-mp.add_hook('on_load', 11, function ()
-	local url = mp.get_property('stream-open-filename')
+local file_url = function(file)
+	return "file://" .. file:gsub("%%", "%%25"):gsub("\r", "%%0D"):gsub("\n", "%%0A")
+end
+
+mp.add_hook("on_load", 11, function()
+	local url = mp.get_property("stream-open-filename")
 	if not url then
 		return
 	end
+
+	msg.verbose("using url " .. url)
 
 	local dirname = parse_url(url)
 	if not dirname then
 		return
 	end
 
-	local mountpoint = (mountdir..'/'..dirname)
+	local mountpoint = (mountdir .. "/" .. dirname)
+
+	msg.verbose("using mountpoint " .. mountpoint)
+
 	if not is_mounted(mountpoint) then
 		if not do_mount(url, mountpoint) then
-			print('mount failed!')
+			msg.error("mount failed!")
 			return
 		end
 	end
 
 	local files = list_files(mountpoint)
 	if #files == 0 then
-		print('nothing to play!')
-	elseif #files == 1 then
-		mp.set_property("file-local-options/force-media-title", files[1]:match('[^/]+$'))
-		mp.set_property('stream-open-filename', 'file://'..files[1])
+		msg.error("nothing to play!")
 	else
-		local playlist = {'#EXTM3U'}
-		for _, line in ipairs(files) do
-			table.insert(playlist, '#EXTINF:0,'..line:match('[^/]+$'))
-			table.insert(playlist, 'file://'..line)
+		local playlist = { "#EXTM3U" }
+		for _, file in ipairs(files) do
+			table.insert(playlist, file_url(file))
 		end
-		mp.set_property('stream-open-filename', 'memory://'..table.concat(playlist, '\n'))
+		mp.set_property("stream-open-filename", "memory://" .. table.concat(playlist, "\n"))
 	end
 end)
 
-mp.register_event('shutdown', function ()
-	for mountpoint in pairs(mounted_points) do
-		do_unmount(mountpoint)
+mp.register_event("shutdown", function()
+	for url, mountpoint in pairs(mounted_points) do
+		do_unmount(url, mountpoint)
 	end
 end)

@@ -1,7 +1,7 @@
 return {
 	format_on_save = {
 		enabled = true,
-		allow_filetypes = { "go", "rust" },
+		allow_filetypes = { "go" },
 	},
 	filter = function(client)
 		if "gopls" == client.name then

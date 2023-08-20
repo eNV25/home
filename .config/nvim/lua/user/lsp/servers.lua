@@ -7,7 +7,7 @@ end
 return {
 	server("bash-language-server", "bashls"),
 	server("rust-analyzer", "rust_analyzer"),
-	server("ccls"),
+	server("clangd"),
 	server("gopls"),
 	server("jdtls"),
 	server("lua-language-server", "lua_ls"),

@@ -1,3 +1,11 @@
 [[language]]
 name = "bash"
-formatter = { command = 'shfmt' }
+formatter = { command = "shfmt" }
+
+[[language]]
+name = "go"
+auto-format = true
+
+[[language]]
+name = "rust"
+auto-format = true

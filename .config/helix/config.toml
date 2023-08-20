@@ -1,27 +1,35 @@
-theme = "rasmus"
+theme = "custom"
 
 [editor]
+auto-format = false
 auto-save = true
 bufferline = "always"
 color-modes = true
+completion-replace = true
 completion-trigger-len = 1
 line-number = "relative"
 
-[editor.statusline]
-mode.normal = "NORMAL"
-mode.insert = "INSERT"
-mode.select = "SELECT"
+[editor.indent-guides]
+character = "|"
+render = true
 
 [editor.cursor-shape]
-normal = "block"
 insert = "bar"
-select = "hidden"
-
-[editor.indent-guides]
-render = true
-character = "|"
+normal = "block"
+select = "block"
 
 [keys.normal]
 "backspace" = ":buffer-close"
 "q" = ":quit"
 "Q" = ":quit"
+"=" = ":format"
+
+[editor.statusline]
+right = ["file-type", "diagnostics", "selections", "position", "file-encoding"] #= ["file-type"] + default
+mode.insert = "INSERT"
+mode.normal = "NORMAL"
+mode.select = "SELECT"
+
+[editor.lsp]
+display-messages = true
+display-inlay-hints = true

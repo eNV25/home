@@ -22,7 +22,7 @@ export NNN_SSHFS='mount -t sshfs'
 export NNN_RCLONE='mount -t rclone -o args2env,vfs-cache-mode=writes'
 export NNN_FCOLORS=030304020000060001030501
 
-for p in "$HOME/.cargo/bin" "$HOME/go/bin" "$HOME/.local/bin" "$HOME/bin"; do
+for p in "$HOME/.bun/bin" "$HOME/.cargo/bin" "$HOME/go/bin" "$HOME/.local/bin" "$HOME/bin"; do
 	PATH="${PATH//":$p:"/:}"                              # remove from middle
 	PATH="${PATH%%":$p"}"                                 # remove from end
 	case "$PATH" in "$p:"*) ;; *) PATH="$p:$PATH" ;; esac # prepend if

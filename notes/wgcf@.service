@@ -1,0 +1,14 @@
+[Unit]
+Before=wg-quick@%i.service
+BindsTo=wg-quick@%i.service
+ConditionPathExists=/etc/wireguard/%I.conf
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/etc/wireguard/
+ExecStart=-nmcli connection delete %I
+ExecStart=bash -c '{ until : >/dev/udp/engage.cloudflareclient.com/2408; do sleep 1; done; } &>/dev/null'
+ExecStart=wgcf update
+ExecStart=wgcf generate -p %I.conf
+Restart=on-failure

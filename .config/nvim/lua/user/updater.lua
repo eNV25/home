@@ -1,7 +1,7 @@
 require("astronvim.utils.updater").update = function()
 	local repo = "https://github.com/AstroNvim/AstroNvim.git"
 	local tag = string.match(
-		vim.fn.system({ "git", "-c", "versionsort.suffix=-", "ls-remote", "--tags", "--sort=version:refname", repo }),
+		vim.fn.system({ "git", "ls-remote", "--tags", "--sort=version:refname", repo }),
 		"refs/tags/(v%d+.%d+.%d+)\r?\n$"
 	)
 	print(vim.fn.system({

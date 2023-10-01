@@ -1,0 +1,3 @@
+#!/bin/sh -eu
+sleep 0.1
+exec busctl --user call org.kde.kglobalaccel /component/org_kde_powerdevil org.kde.kglobalaccel.Component invokeShortcut s "Turn Off Screen"

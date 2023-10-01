@@ -1,0 +1,2 @@
+#!/bin/sh
+PAGER=less exec bat --paging=always "$@"

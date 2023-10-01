@@ -46,10 +46,24 @@ highlight DiffText ctermbg=NONE guibg=NONE
 			{
 				"creativenull/efmls-configs-nvim",
 				version = "*",
+				opts = {
+					settings = {
+						rootMarkers = { ".git/" },
+					},
+					init_options = {
+						documentFormatting = true,
+						documentRangeFormatting = true,
+					},
+				},
 				config = function(opts)
-					local efmls = require("efmls-configs")
-					efmls.init({ default_config = true })
-					efmls.setup()
+					local languages = require("efmls-configs.defaults").languages()
+					local efmls_config = {
+						filetypes = vim.tbl_keys(languages),
+						settings = {
+							languages = languages,
+						},
+					}
+					require("lspconfig").efm.setup(vim.tbl_extend("force", efmls_config, opts))
 				end,
 			},
 		},

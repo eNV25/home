@@ -1,4 +1,3 @@
 return {
-  color_scheme = "custom",
-  font_size = 10.0,
+  color_scheme = "modus-vivendi",
 }

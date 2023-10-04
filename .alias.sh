@@ -39,8 +39,6 @@ alacritty*)
 	alias vagrant='TERM=xterm-256color vagrant'
 	;;
 *)
-	alias ssh=ssh
-	alias vagrant=vagrant
 	;;
 esac
 

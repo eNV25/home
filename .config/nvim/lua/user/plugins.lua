@@ -21,6 +21,8 @@ highlight DiffAdd ctermbg=NONE guibg=NONE
 highlight DiffChange ctermbg=NONE guibg=NONE
 highlight DiffDelete ctermbg=NONE guibg=NONE
 highlight DiffText ctermbg=NONE guibg=NONE
+highlight CursorLine ctermbg=NONE guibg=NONE
+highlight LspInlayHint ctermbg=NONE guibg=NONE
         ]],
 			})
 		end,
@@ -44,28 +46,41 @@ highlight DiffText ctermbg=NONE guibg=NONE
 		"neovim/nvim-lspconfig",
 		dependencies = {
 			{
+				"folke/neoconf.nvim",
+				setup = true,
+			},
+			{
 				"creativenull/efmls-configs-nvim",
 				version = "*",
-				opts = {
-					settings = {
-						rootMarkers = { ".git/" },
-					},
-					init_options = {
-						documentFormatting = true,
-						documentRangeFormatting = true,
-					},
-				},
-				config = function(opts)
-					local languages = require("efmls-configs.defaults").languages()
-					local efmls_config = {
+				opts = function(_, opts)
+					local shell = {
+						require("efmls-configs.linters.shellcheck"),
+						require("efmls-configs.formatters.shfmt"),
+					}
+					local languages = vim.tbl_extend("force", require("efmls-configs.defaults").languages(), {
+						sh = shell,
+						bash = shell,
+						ksh = shell,
+					})
+					local defaults = {
 						filetypes = vim.tbl_keys(languages),
 						settings = {
 							languages = languages,
+							rootMarkers = { ".git/" },
+						},
+						init_options = {
+							documentFormatting = true,
+							documentRangeFormatting = true,
 						},
 					}
-					require("lspconfig").efm.setup(vim.tbl_extend("force", efmls_config, opts))
+					return vim.tbl_extend("force", defaults, opts)
+				end,
+				config = function(_, opts)
+					require("lspconfig").efm.setup(opts)
 				end,
 			},
 		},
 	},
+	"AstroNvim/astrocommunity",
+	{ import = "astrocommunity.lsp.lsp-inlayhints-nvim" },
 }

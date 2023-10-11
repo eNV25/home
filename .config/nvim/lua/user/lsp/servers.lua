@@ -6,13 +6,19 @@ end
 
 return {
 	server("bash-language-server", "bashls"),
-	server("rust-analyzer", "rust_analyzer"),
 	server("clangd"),
 	server("gopls"),
-	server("jdtls"),
+	server("julia", "julials"),
 	server("lua-language-server", "lua_ls"),
 	server("pylsp"),
-	server("vim-language-server", "vimls"),
+	server("rust-analyzer", "rust_analyzer"),
+	server("taplo"),
+	server("texlab"),
+	server("jdtls"),
+	server("typescript-language-server", "tsserver"),
+	server("vscode-css-languageserver", "jsonls"),
 	server("vscode-json-languageserver", "jsonls"),
+	server("yaml-languageserver", "yamlls"),
 	server("zls"),
+	server("vim-language-server", "vimls"),
 }

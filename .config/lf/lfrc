@@ -1,0 +1,25 @@
+set ratios 1:2:3
+set shell sh
+set shellopts '-eu'
+set ifs "\n"
+
+map x $$f
+map X !$f
+map o &xdg-open $f
+map O $xdg-open $f
+
+cmd trash %trash-put -v $fx
+cmd extract %bsdtar -xpvf $f
+cmd open &{{
+	case $(file --mime-type -Lb $f) in
+	text/*) lf -remote "send $id \$$EDITOR \$fx" ;;
+	*)
+		for f in $fx; do
+			$OPENER $f >/dev/null 2>/dev/null &
+		done
+		;;
+	esac
+}}
+
+set previewer ~/.config/lf/preview
+set cleaner ~/.config/lf/cleaner

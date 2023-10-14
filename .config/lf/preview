@@ -1,23 +1,43 @@
-#!/bin/sh
+#!/bin/sh -e
+
 file=$1
 w=$2
 h=$3
 x=$4
-y=$(($5 + 1))
+y=$(($5 + 1)) # hack to avoid overwrite
 
-filetype="$(file -Lb --mime-type "$file")"
+filetype="$(file --dereference --brief --mime-type "$file")"
 
-case "$filetype" in
-image*)
-	kitten icat --silent --stdin no --transfer-mode file --place "${w}x${h}@${x}x${y}" "$file" </dev/null >/dev/tty
+icat() {
+	kitten icat --silent --stdin no --transfer-mode file --place "${w}x${h}@${x}x${y}" "$1" </dev/null >/dev/tty
+}
+
+case "$filetype/$file" in
+image/*)
+	icat "$file"
 	exit 1
 	;;
-video*)
-	# vidthumb is from here:
-	# https://raw.githubusercontent.com/duganchen/kitty-pistol-previewer/main/vidthumb
-	kitten icat --silent --stdin no --transfer-mode file --place "${w}x${h}@${x}x${y}" "$(vidthumb "$file")" </dev/null >/dev/tty
+video/*)
+	thumbnail="$(mktemp)"
+	ffmpegthumbnailer -i "$file" -o "$thumbnail" -s 0 2>/dev/null
+	icat "$thumbnail"
+	rm -rf "$thumbnail"
 	exit 1
+	;;
+application/pdf/* | application/x-pdf/*)
+	thumbnail="$(mktemp)"
+	pdftoppm -singlefile -jpeg "$file" >"$thumbnail"
+	icat "$thumbnail"
+	rm -rf "$thumbnail"
+	exit 1
+	;;
+text/* | application/json/*)
+	bat --paging=never --color=always "$file"
+	;;
+*/*/*.tar.* | *.zip | *.rar | *.7z | *.cab | *.iso | *.tgz | *.tgrz | *.tbz | *.tbz2 | *.tZ | *.tlzma | *.tlzo | *.tlz | *.tlz4 | *.tlrz | *.txz | *.trz | *.tuu | *.tzst)
+	bsdtar tvf "$file"
+	;;
+*)
+	file --dereference --brief "$file"
 	;;
 esac
-
-pistol "$file"

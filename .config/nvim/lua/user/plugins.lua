@@ -54,7 +54,6 @@ highlight LspInlayHint ctermbg=NONE guibg=NONE
 				version = "*",
 				opts = function(_, opts)
 					local shell = {
-						require("efmls-configs.linters.shellcheck"),
 						require("efmls-configs.formatters.shfmt"),
 					}
 					local languages = vim.tbl_extend("force", require("efmls-configs.defaults").languages(), {

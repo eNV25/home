@@ -6,5 +6,6 @@ return {
   font = font_with_fallback({ "JetBrains Mono", "Symbols Nerd Font", "Noto Color Emoji" }),
   colors = astrodark.colors(),
   window_frame = astrodark.window_frame(),
+  window_background_opacity = 0.9,
   alternate_buffer_wheel_scroll_speed = 1,
 }

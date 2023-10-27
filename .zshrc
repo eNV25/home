@@ -8,6 +8,7 @@ ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 source "${ZINIT_HOME}/zinit.zsh"
 
+zinit snippet https://github.com/wez/wezterm/raw/main/assets/shell-integration/wezterm.sh
 zinit snippet /usr/share/git/completion/git-prompt.sh
 zinit snippet ~/.environment.sh
 zinit snippet ~/.alias.sh
@@ -67,8 +68,7 @@ fpath=(~/.zsh/functions/ "${fpath[@]}")
 	unset key
 }
 
-autoload -Uz compinit && compinit
-autoload -Uz bashcompinit && bashcompinit
+autoload -Uz compinit bashcompinit && { compinit; bashcompinit; }
 autoload -Uz bracketed-paste-magic && zle -N bracketed-paste bracketed-paste-magic
 autoload -Uz url-quote-magic && zle -N self-insert url-quote-magic
 autoload -Uz command_not_found_handler

@@ -35,7 +35,7 @@ text/* | application/json/*)
 	bat --paging=never --color=always "$file"
 	;;
 */*/*.tar.* | *.zip | *.rar | *.7z | *.cab | *.iso | *.tgz | *.tgrz | *.tbz | *.tbz2 | *.tZ | *.tlzma | *.tlzo | *.tlz | *.tlz4 | *.tlrz | *.txz | *.trz | *.tuu | *.tzst)
-	bsdtar tvf "$file"
+	bsdtar -tf "$file"
 	;;
 *)
 	file --dereference --brief "$file"

@@ -8,7 +8,6 @@ ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 source "${ZINIT_HOME}/zinit.zsh"
 
-zinit snippet https://github.com/wez/wezterm/raw/main/assets/shell-integration/wezterm.sh
 zinit snippet /usr/share/git/completion/git-prompt.sh
 zinit snippet ~/.environment.sh
 zinit snippet ~/.alias.sh

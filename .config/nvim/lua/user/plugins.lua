@@ -1,4 +1,5 @@
 return {
+	{ "projekt0n/github-nvim-theme", version = "*" },
 	{
 		"nordtheme/vim",
 		name = "nord",

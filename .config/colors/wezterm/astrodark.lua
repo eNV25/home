@@ -1,0 +1,1 @@
+/home/x/.local/share/nvim/lazy/astrotheme/extras/wezterm/wezterm_astrodark.lua

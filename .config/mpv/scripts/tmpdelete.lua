@@ -6,7 +6,12 @@ local webtorrent = { path = "./", port = 0 }
 options.read_options(webtorrent, "webtorrent")
 webtorrent.path = mp.command_native({ "expand-path", webtorrent.path })
 
-local args = { "sh", "-c", [[ sleep 1; cd "$0"; rm -rf "$@"; ]], utils.getcwd() }
+local args = { "sh", "-c", [[
+sleep 1
+rm -rf "$@"
+find "$0" -type d -empty -delete
+rmdir "$0"
+]], webtorrent.path }
 
 mp.add_hook("on_load", 10, function()
 	local function unescape(url)

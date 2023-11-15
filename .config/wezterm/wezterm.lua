@@ -5,6 +5,7 @@ local function config_home()
 end
 
 return {
+  default_prog = { os.getenv("SHELL") },
   font = wezterm.font_with_fallback({
     {
       family = "Monaspace Krypton",

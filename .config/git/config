@@ -6,5 +6,5 @@
 	cmd = difft "$LOCAL" "$REMOTE"
 [pager]
 	difftool = true
-[diff]
-	external = difft
+[alias]
+	difft = difftool

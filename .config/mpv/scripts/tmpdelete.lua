@@ -31,5 +31,8 @@ mp.register_event("shutdown", function()
 		args = args,
 		detach = true,
 		playback_only = false,
+		capture_size = 0,
+		capture_stdout = true,
+		capture_stderr = true,
 	})
 end)

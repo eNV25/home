@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 
 import dbus
-from argparse import ArgumentParser
-from urllib.parse import quote as urlquote
+import json
+from pathlib import Path
 
 
-def ksetwallpaper(filepath, plugin="org.kde.image"):
+def ksetwallpaper(file, plugin="org.kde.image"):
     jscript = rf"""
     desktops().forEach((d) => {{
-        d.wallpaperPlugin = { repr(plugin) };
-        d.currentConfigGroup = Array("Wallpaper", { repr(plugin) }, "General");
-        d.writeConfig("Image", { repr("file://" + urlquote(filepath)) });
+        d.wallpaperPlugin = { json.dumps(plugin) };
+        d.currentConfigGroup = Array("Wallpaper", { json.dumps(plugin) }, "General");
+        d.writeConfig("Image", { json.dumps(Path(file).resolve().as_uri()) });
     }});
     """
     print(jscript)
@@ -23,6 +23,8 @@ def ksetwallpaper(filepath, plugin="org.kde.image"):
 
 
 if __name__ == "__main__":
+    from argparse import ArgumentParser
+
     parser = ArgumentParser(description="KDE Wallpaper setter")
     parser.add_argument("file", help="Wallpaper file name")
     parser.add_argument(

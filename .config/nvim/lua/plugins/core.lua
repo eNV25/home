@@ -118,11 +118,11 @@ return {
         WinBarNC = { link = "WinBarNC" },
       },
       size = 10,
+      ---@param t Terminal
       on_create = function()
-        vim.opt.foldcolumn = "0"
-        vim.opt.signcolumn = "no"
+        vim.opt_local.foldcolumn = "0"
+        vim.opt_local.signcolumn = "no"
       end,
-      open_mapping = [[<F7>]],
       shading_factor = 2,
       direction = "float",
       float_opts = { border = "rounded" },

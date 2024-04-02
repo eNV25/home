@@ -8,7 +8,7 @@ webtorrent.path = mp.command_native({ "expand-path", webtorrent.path })
 
 local args = { "sh", "-c", [[
 sleep 1
-rm -rf "$@"
+rm -f "$@"
 find "$0" -type d -empty -delete
 rmdir "$0"
 ]], webtorrent.path }

@@ -1,3 +1,2 @@
 #!/bin/bash
-# shellcheck disable=2097,2098
-XDG_CONFIG_HOME="$HOME/.vim" exec -a vim nvim +"call setenv('XDG_CONFIG_HOME', '${XDG_CONFIG_HOME/"'"/"''"}')" "$@"
+XDG_CONFIG_HOME="$HOME/.vim" exec -a vim nvim "$@"

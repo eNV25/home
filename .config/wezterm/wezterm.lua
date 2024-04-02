@@ -28,7 +28,6 @@ setmetatable(color_schemes, {
 color_schemes[color_scheme] = color_schemes[color_scheme]
 
 return {
-  default_prog = { os.getenv("SHELL") },
   font = font,
   color_scheme = color_scheme,
   color_schemes = color_schemes,

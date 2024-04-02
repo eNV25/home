@@ -1,8 +1,0 @@
-[Service]
-Type=dbus
-BusName=org.mpris.MediaPlayer2.playerctld
-ExecStart=/usr/bin/playerctld
-
-[Install]
-WantedBy=default.target
-Alias=dbus-org.mpris.MediaPlayer2.playerctld.service

@@ -1,19 +1,4 @@
 
-# change annoyting colors
-Set-PSReadLineOption -colors @{
-    # None      = 'white';
-    # Comment   = 'white';
-    Keyword   = 'white';
-    # String    = 'white';
-    Operator  = 'white';
-    # Variable  ='white';
-    Command   = 'white';
-    Parameter = 'white';
-    # Type      = 'white';
-    # Number    = 'white';
-    # Member    = 'white';
-}
-
 # »
 function Global:Prompt {
     $regex = [regex]::Escape($home) + "(/.*)*$"

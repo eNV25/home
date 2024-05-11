@@ -1,6 +1,4 @@
-return function()
-	vim.cmd([[
+vim.cmd([[
 aunmenu PopUp.-1-
 aunmenu PopUp.How-to\ disable\ mouse
-	]])
-end
+]])

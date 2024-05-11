@@ -5,4 +5,4 @@ sh <<'EOF' &
 inotifywait -e close_write "$WEBTORRENT_OUT"
 rm -rf "$WEBTORRENT_OUT"
 EOF
-exec wezterm start --new-tab -- bunx webtorrent-hybrid --out "$WEBTORRENT_OUT" --mpv "$@"
+exec wezterm start --new-tab -- bunx webtorrent-hybrid --out "$WEBTORRENT_OUT" --mpv --playlist "$@"

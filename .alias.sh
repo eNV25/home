@@ -31,7 +31,6 @@ alias h=head
 alias t=tail
 
 alias config='git --git-dir="$HOME/.dotgit/" --work-tree="$HOME"'
-alias stream='streamlink -p mpv'
 
 case "$TERM" in
 alacritty*)

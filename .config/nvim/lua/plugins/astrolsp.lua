@@ -32,7 +32,7 @@ return {
             server("julia", "julials"),
             server("lua-language-server", "lua_ls"),
             server("pylsp"),
-            --server("rust-analyzer", "rust_analyzer"),
+            server("rust-analyzer", "rust_analyzer"),
             server("taplo"),
             server("texlab"),
             server("typst-lsp", "typst_lsp"),
@@ -47,7 +47,6 @@ return {
     },
     dependencies = {
         "https://git.sr.ht/~p00f/clangd_extensions.nvim",
-        { "mrcjkb/rustaceanvim", version = "^4", lazy = false },
         {
             "creativenull/efmls-configs-nvim",
             version = "*",
@@ -76,6 +75,7 @@ return {
             config = function(_, opts)
                 require("lspconfig").efm.setup(opts)
             end,
+            dependencies = "folke/neoconf.nvim",
         },
     },
 }

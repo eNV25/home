@@ -1,2 +1,2 @@
 #!/bin/sh
-spectacle -b -n -o /dev/stdout | magick convert png:- bmp:- | zbarimg -
+spectacle -b -n -o /dev/stdout | magick png:- bmp:- | zbarimg -

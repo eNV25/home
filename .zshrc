@@ -67,7 +67,7 @@ fpath=(~/.zsh/functions/ "${fpath[@]}")
 	unset key
 }
 
-autoload -Uz compinit bashcompinit && { compinit; bashcompinit; }
+autoload -Uz compinit && compinit
 autoload -Uz bracketed-paste-magic && zle -N bracketed-paste bracketed-paste-magic
 autoload -Uz url-quote-magic && zle -N self-insert url-quote-magic
 autoload -Uz command_not_found_handler

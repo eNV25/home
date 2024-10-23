@@ -5,6 +5,7 @@
 export EDITOR=nvim
 export VISUAL=nvim
 export PAGER=pager
+export MANPAGER=less
 export BROWSER=firefox
 
 export GIT_PS1_SHOWDIRTYSTATE=auto

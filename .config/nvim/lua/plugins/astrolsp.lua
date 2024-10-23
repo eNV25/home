@@ -37,7 +37,7 @@ return {
             server("texlab"),
             server("typst-lsp", "typst_lsp"),
             server("jdtls"),
-            server("typescript-language-server", "tsserver"),
+            server("typescript-language-server", "ts_ls"),
             server("vscode-css-languageserver", "jsonls"),
             server("vscode-json-languageserver", "jsonls"),
             server("yaml-languageserver", "yamlls"),

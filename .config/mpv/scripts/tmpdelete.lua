@@ -7,6 +7,7 @@ options.read_options(webtorrent, "webtorrent")
 webtorrent.path = mp.command_native({ "expand-path", webtorrent.path })
 
 local args = { "sh", "-c", [[
+exec 1>/dev/null 2>/dev/null
 sleep 1
 rm -f "$@"
 find "$0" -type d -empty -delete
@@ -31,8 +32,5 @@ mp.register_event("shutdown", function()
 		args = args,
 		detach = true,
 		playback_only = false,
-		capture_size = 0,
-		capture_stdout = true,
-		capture_stderr = true,
 	})
 end)

@@ -19,7 +19,10 @@ return {
             },
             filter = function(client)
                 if "gopls" == client.name then
-                    vim.lsp.buf.code_action({ context = { only = { "source.organizeImports" } }, apply = true })
+                    vim.lsp.buf.code_action({
+                        context = { diagnostics = {}, only = { "source.organizeImports" } },
+                        apply = true,
+                    })
                 end
                 return true
             end,
@@ -47,6 +50,19 @@ return {
     },
     dependencies = {
         "https://git.sr.ht/~p00f/clangd_extensions.nvim",
+        {
+            "ray-x/lsp_signature.nvim",
+            event = "VeryLazy",
+            opts = {},
+            config = function(_, opts)
+                require("lsp_signature").setup(opts)
+            end,
+        },
+        --{
+        --    "chrisgrieser/nvim-lsp-endhints",
+        --    event = "LspAttach",
+        --    opts = {},
+        --},
         {
             "creativenull/efmls-configs-nvim",
             version = "*",

@@ -1,0 +1,2 @@
+#!/bin/sh -eu
+exec mpv --profile=live "https://eu.luminous.dev/${2:-live}/${1}?supported_codecs=h265,h264&allow_source=true&allow_audio_only=true&fast_bread=true"

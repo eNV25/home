@@ -4,7 +4,7 @@
 
 export EDITOR=nvim
 export VISUAL=nvim
-export PAGER=pager
+export PAGER=less
 export MANPAGER=less
 export BROWSER=firefox
 
@@ -15,7 +15,6 @@ export GIT_PS1_SHOWUPSTREAM=auto
 export GIT_PS1_STATESEPARATOR=
 export GIT_PS1_DESCRIBE_STYLE=branch
 export GIT_PS1_SHOWCOLORHINTS=auto
-export LESS='-R --mouse --wheel-lines=5'
 export NNN_OPTS=Br
 export NNN_ARCHIVE='\.(tar|zip|jar|rar|lha|7z|alz|ace|a|ar|arj|arc|rpm|deb|cab|cpio|iso|mtree|xar|warc|t?(gz|grz|bz|bz2|Z|lzma|lzo|lz|lz4|lrz|xz|rz|uu|zst))'
 export NNN_PLUG='l:nuke;p:preview-tui'

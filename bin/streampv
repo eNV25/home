@@ -1,0 +1,5 @@
+#!/bin/sh
+exec streamlink \
+	--player=mpv --player-args='--no-config --hwdec=auto-safe --profile=low-latency' \
+	--twitch-low-latency \
+	"$@"

@@ -2,10 +2,9 @@
 
 bootdir="$(bootctl -x)"
 image="$bootdir"/EFI/Linux/archboot.efi
-url="https://release.archboot.de/x86_64/latest/uki/archboot-x86_64.efi"
 
-echo >&2 Installing "$url"
-curl -L --progress-bar "$url" | sudo install -v /dev/stdin "$image"
+echo >&2 Installing "$1"
+curl -L --progress-bar "$1" | sudo install -v /dev/stdin "$image"
 
 echo >&2 Signing "$image"
 sudo sbctl sign "$image"

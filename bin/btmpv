@@ -1,8 +1,8 @@
-#!/bin/sh
+#!/bin/sh -e
 WEBTORRENT_OUT="$(mktemp -d webtorrent-XXXX)"
-export WEBTORRENT_OUT
-sh <<'EOF' &
-inotifywait -e close_write "$WEBTORRENT_OUT"
-rm -rf "$WEBTORRENT_OUT"
-EOF
-exec wezterm start --new-tab -- bunx webtorrent-cli --out "$WEBTORRENT_OUT" --mpv --playlist "$@"
+# shellcheck disable=SC2016
+exec systemd-run --user --service-type=oneshot --same-dir \
+	-u "$(basename "$WEBTORRENT_OUT")" \
+	-E WEBTORRENT_OUT="$WEBTORRENT_OUT" \
+	-p ExecStartPost='rm -rf $WEBTORRENT_OUT' \
+	-- npx webtorrent-cli --out "$WEBTORRENT_OUT" --mpv --playlist "$@"

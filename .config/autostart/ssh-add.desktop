@@ -1,6 +1,0 @@
-# ~/.config/autostart/ssh-add.desktop
-[Desktop Entry]
-Exec=ssh-add .ssh/keys/aur
-Name=ssh-add
-Type=Application
-Terminal=false

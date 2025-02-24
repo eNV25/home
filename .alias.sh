@@ -21,7 +21,6 @@ alias run0='run0 '
 alias tsocks='tsocks '
 alias echoa='echo '
 alias nvimpager='nvimpager -p'
-alias cat='bat --paging=never'
 alias open=xdg-open
 
 alias config='git --git-dir="$HOME/.dotgit/" --work-tree="$HOME"'

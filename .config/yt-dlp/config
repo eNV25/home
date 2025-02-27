@@ -1,5 +1,9 @@
 --format-sort=res:1080,codec:vp9.2
 --format=bv+ba/b
---write-subs=true
---write-auto-subs=true
---subs-lang=en.*
+--write-auto-subs
+--convert-subs=srt
+--embed-chapters
+--embed-metadata
+--embed-subs
+--embed-thumbnail
+--sub-langs=en-orig,en.*

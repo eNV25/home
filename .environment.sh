@@ -6,7 +6,6 @@ export EDITOR=nvim
 export VISUAL=nvim
 export PAGER=less
 export MANPAGER=less
-export BROWSER=firefox
 
 export GIT_PS1_SHOWDIRTYSTATE=auto
 export GIT_PS1_SHOWSTASHSTATE=auto

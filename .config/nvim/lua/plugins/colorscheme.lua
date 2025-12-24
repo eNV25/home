@@ -15,7 +15,7 @@ return {
     "LazyVim/LazyVim",
     opts = {
       colorscheme = function()
-        require("tokyonight").load({ style = "night" })
+        require("tokyonight").load({ style = "night", transparent = true })
         local lsp_inlay_hint = vim.api.nvim_get_hl(0, { name = "LspInlayHint", link = false })
         vim.api.nvim_set_hl(0, "LspInlayHint", vim.tbl_extend("force", lsp_inlay_hint, { italic = true }))
       end,

@@ -9,7 +9,6 @@ function show_help {
 	echo ""
 	echo "Options:"
 	echo "	-h shows this help message"
-	echo "	-k keeps the previous image"
 	echo "	-d stores the image into the given destination. Defaults to \"$HOME/.local/share/backgrounds\"."
 }
 
@@ -38,7 +37,7 @@ function decode_url {
 	done
 ) 2>/dev/null || true
 
-response="$(curl -sL -A "WindowsShellClient/0" "https://arc.msn.com/v3/Delivery/Placement?pid=209567&fmt=json&cdm=1&lc=en,en-US&ctry=US")"
+response="$(curl -sL -A "WindowsShellClient/0" "https://fd.api.iris.microsoft.com/v4/api/selection?placement=88000820&fmt=json&locale=en-IE&country=ES")"
 status="$?"
 
 if [[ $status -ne 0 ]]; then
@@ -46,26 +45,20 @@ if [[ $status -ne 0 ]]; then
 	exit $status
 fi
 
-item="$(jq -r ".batchrsp.items[0].item" <<<"$response")"
+echo "$response"
 
-landscape_url="$(jq -r ".ad.image_fullscreen_001_landscape.u" <<<"$item")"
-sha256="$(jq -r ".ad.image_fullscreen_001_landscape.sha256" <<<"$item" | base64 -d | hexdump -ve "1/1 \"%.2x\"")"
-title="$(jq -r ".ad.title_text.tx" <<<"$item")"
-search_terms="$(jq -r ".ad.title_destination_url.u" <<<"$item" | sed "s/.*q=\([^&]*\).*/\1/" | decode_url)"
+landscape_url="$(jq -r ".ad.landscapeImage.asset" <<<"$response")"
+title="$(jq -r ".ad.title" <<<"$response")"
+description="$(jq -r ".ad.description" <<<"$response")"
 
 mkdir -p "$backgrounds_path"
-image_path="$backgrounds_path/$title ($search_terms) [$sha256].jpg"
+image_path="$backgrounds_path/$(basename "$landscape_url")"
 
+"$image_path.json" <<<"$response"
 curl -sL "$landscape_url" -o "$image_path"
-sha256calculated="$(sha256sum "$image_path" | cut -d " " -f 1)"
 
-if [[ "$sha256" != "$sha256calculated" ]]; then
-	echo "Checksum incorrect"
-	mv "$image_path" "$image_path.bad"
-	exit 1
-fi
+#~/bin/ksetwallpaper "$image_path"
+dms ipc wallpaper set "$image_path"
 
-~/bin/ksetwallpaper "$image_path"
-
-notify-send "Background changed" "$title ($search_terms)" --app-name=spotlight --icon=preferences-desktop-wallpaper --urgency=low
-echo "Background changed to $title ($search_terms)"
+notify-send "$title" "$description" --app-name=spotlight --icon=preferences-desktop-wallpaper --urgency=low
+echo "Background changed to $title"

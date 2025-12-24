@@ -11,7 +11,6 @@ alias tree='tree -C'
 alias agrep='agrep --color'
 
 alias pac=paru
-alias podman='sudo podman'
 alias pwsh='pwsh -NoLogo'
 alias curl='curl -s'
 alias usv='SVDIR=~/service sv'

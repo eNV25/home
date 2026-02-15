@@ -45,7 +45,7 @@ if [[ $status -ne 0 ]]; then
 	exit $status
 fi
 
-echo "$response"
+#echo "$response"
 
 landscape_url="$(jq -r ".ad.landscapeImage.asset" <<<"$response")"
 title="$(jq -r ".ad.title" <<<"$response")"
@@ -58,7 +58,9 @@ image_path="$backgrounds_path/$(basename "$landscape_url")"
 curl -sL "$landscape_url" -o "$image_path"
 
 #~/bin/ksetwallpaper "$image_path"
-dms ipc wallpaper set "$image_path"
+#dms ipc wallpaper set "$image_path"
+gsettings set org.gnome.desktop.background picture-uri "file://$image_path"
+gsettings set org.gnome.desktop.background picture-uri-dark "file://$image_path"
 
 notify-send "$title" "$description" --app-name=spotlight --icon=preferences-desktop-wallpaper --urgency=low
 echo "Background changed to $title"

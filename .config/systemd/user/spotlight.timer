@@ -2,8 +2,8 @@
 Description=Runs Spotlight daily
 
 [Timer]
-OnBootSec=1m
-OnUnitActiveSec=2h
+OnCalendar=daily
+Persistent=yes
 Unit=spotlight.service
 
 [Install]
